@@ -1,0 +1,85 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="780" height="650" version="1.1"
+     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+  <defs>
+    <marker id="arrowhead" markerWidth="12" markerHeight="8" refX="12" refY="4" orient="auto">
+      <polygon points="0,0 12,4 0,8" fill="#000000"/>
+    </marker>
+    <style type="text/css">
+      text { text-rendering: geometricprecision; }
+    </style>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#f2f2f2"/>
+
+  <rect x="280" y="30" width="360" height="590" rx="8" ry="8"
+        fill="#ffffff" stroke="#2c2e33" stroke-width="2"/>
+  <line x1="280" y1="85" x2="640" y2="85" stroke="#2c2e33" stroke-width="2"/>
+  <text x="360" y="66" font-family="'Noto Sans', Helvetica, Arial, sans-serif" font-size="14" fill="#1c1c1e">Matchmaking System</text>
+
+  <!-- MM-01: Join Queue -->
+  <ellipse cx="460" cy="150" rx="110" ry="42" fill="#aba3ff" stroke="transparent"/>
+  <text x="460" y="145" text-anchor="middle" font-family="'Roobert', Helvetica, Arial, sans-serif" font-size="14" fill="#1c1c1e">MM-01: Join</text>
+  <text x="460" y="163" text-anchor="middle" font-family="'Roobert', Helvetica, Arial, sans-serif" font-size="14" fill="#1c1c1e">Queue</text>
+
+  <!-- MM-02: View Queue Status -->
+  <ellipse cx="460" cy="260" rx="110" ry="42" fill="#aba3ff" stroke="transparent"/>
+  <text x="460" y="255" text-anchor="middle" font-family="'Roobert', Helvetica, Arial, sans-serif" font-size="14" fill="#1c1c1e">MM-02: View</text>
+  <text x="460" y="273" text-anchor="middle" font-family="'Roobert', Helvetica, Arial, sans-serif" font-size="14" fill="#1c1c1e">Queue Status</text>
+
+  <!-- MM-03: Leave Queue -->
+  <ellipse cx="460" cy="370" rx="110" ry="42" fill="#aba3ff" stroke="transparent"/>
+  <text x="460" y="365" text-anchor="middle" font-family="'Roobert', Helvetica, Arial, sans-serif" font-size="14" fill="#1c1c1e">MM-03: Leave</text>
+  <text x="460" y="383" text-anchor="middle" font-family="'Roobert', Helvetica, Arial, sans-serif" font-size="14" fill="#1c1c1e">Queue</text>
+
+  <!-- MM-04: Match Players -->
+  <ellipse cx="460" cy="480" rx="110" ry="42" fill="#aba3ff" stroke="transparent"/>
+  <text x="460" y="475" text-anchor="middle" font-family="'Roobert', Helvetica, Arial, sans-serif" font-size="14" fill="#1c1c1e">MM-04: Match</text>
+  <text x="460" y="493" text-anchor="middle" font-family="'Roobert', Helvetica, Arial, sans-serif" font-size="14" fill="#1c1c1e">Players</text>
+
+  <!-- MM-05: Notify Match Found -->
+  <ellipse cx="460" cy="570" rx="110" ry="38" fill="#aba3ff" stroke="transparent"/>
+  <text x="460" y="565" text-anchor="middle" font-family="'Roobert', Helvetica, Arial, sans-serif" font-size="13" fill="#1c1c1e">MM-05: Notify</text>
+  <text x="460" y="583" text-anchor="middle" font-family="'Roobert', Helvetica, Arial, sans-serif" font-size="13" fill="#1c1c1e">Match Found</text>
+
+  <!-- Authenticated Player (left side) -->
+  <ellipse cx="110" cy="235" rx="15" ry="15" fill="#ffffff" stroke="#2c2e33" stroke-width="2"/>
+  <line x1="110" y1="250" x2="110" y2="301" stroke="#2c2e33" stroke-width="2"/>
+  <line x1="70" y1="259" x2="150" y2="259" stroke="#2c2e33" stroke-width="2"/>
+  <line x1="78" y1="340" x2="110" y2="301" stroke="#2c2e33" stroke-width="2"/>
+  <line x1="142" y1="340" x2="110" y2="301" stroke="#2c2e33" stroke-width="2"/>
+  <text x="110" y="365" text-anchor="middle" font-family="'Open Sans', Arial, sans-serif" font-size="14" fill="#2c2e33">Authenticated</text>
+  <text x="110" y="383" text-anchor="middle" font-family="'Open Sans', Arial, sans-serif" font-size="14" fill="#2c2e33">Player</text>
+
+  <!-- Matchmaking Service (right side) -->
+  <ellipse cx="730" cy="475" rx="15" ry="15" fill="#ffffff" stroke="#2c2e33" stroke-width="2"/>
+  <line x1="730" y1="490" x2="730" y2="541" stroke="#2c2e33" stroke-width="2"/>
+  <line x1="690" y1="499" x2="770" y2="499" stroke="#2c2e33" stroke-width="2"/>
+  <line x1="698" y1="580" x2="730" y2="541" stroke="#2c2e33" stroke-width="2"/>
+  <line x1="762" y1="580" x2="730" y2="541" stroke="#2c2e33" stroke-width="2"/>
+  <text x="730" y="600" text-anchor="middle" font-family="'Open Sans', Arial, sans-serif" font-size="14" fill="#2c2e33">Matchmaking</text>
+  <text x="730" y="618" text-anchor="middle" font-family="'Open Sans', Arial, sans-serif" font-size="14" fill="#2c2e33">Service</text>
+
+  <!-- Player -> Join Queue -->
+  <line x1="150" y1="255" x2="350" y2="155" stroke="#000000" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Player -> View Queue Status -->
+  <line x1="150" y1="270" x2="350" y2="262" stroke="#000000" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Player -> Leave Queue -->
+  <line x1="150" y1="290" x2="350" y2="368" stroke="#000000" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Matchmaking Service -> Match Players -->
+  <line x1="690" y1="490" x2="570" y2="483" stroke="#000000" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Matchmaking Service -> Notify Match Found -->
+  <line x1="690" y1="510" x2="570" y2="565" stroke="#000000" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Match Players --<<include>>--> Notify Match Found -->
+  <line x1="460" y1="522" x2="460" y2="532" stroke="#000000" stroke-width="1.5"
+        stroke-dasharray="8,4" marker-end="url(#arrowhead)"/>
+  <text x="480" y="530" font-family="'Roobert', Helvetica, Arial, sans-serif" font-size="11" fill="#2c2e33" font-style="italic">&lt;&lt;include&gt;&gt;</text>
+
+</svg>

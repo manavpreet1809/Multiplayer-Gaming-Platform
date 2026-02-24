@@ -1,0 +1,70 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="720" height="520" version="1.1"
+     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+  <defs>
+    <marker id="arrowhead" markerWidth="12" markerHeight="8" refX="12" refY="4" orient="auto">
+      <polygon points="0,0 12,4 0,8" fill="#000000"/>
+    </marker>
+    <style type="text/css">
+      text { text-rendering: geometricprecision; }
+    </style>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#f2f2f2"/>
+
+  <rect x="280" y="30" width="360" height="460" rx="8" ry="8"
+        fill="#ffffff" stroke="#2c2e33" stroke-width="2"/>
+  <line x1="280" y1="85" x2="640" y2="85" stroke="#2c2e33" stroke-width="2"/>
+  <text x="380" y="66" font-family="'Noto Sans', Helvetica, Arial, sans-serif" font-size="14" fill="#1c1c1e">Party System</text>
+
+  <ellipse cx="460" cy="155" rx="110" ry="45" fill="#aba3ff" stroke="transparent"/>
+  <text x="460" y="150" text-anchor="middle" font-family="'Roobert', Helvetica, Arial, sans-serif" font-size="14" fill="#1c1c1e">UC-15a: Create</text>
+  <text x="460" y="168" text-anchor="middle" font-family="'Roobert', Helvetica, Arial, sans-serif" font-size="14" fill="#1c1c1e">Party</text>
+
+  <ellipse cx="460" cy="290" rx="110" ry="45" fill="#aba3ff" stroke="transparent"/>
+  <text x="460" y="285" text-anchor="middle" font-family="'Roobert', Helvetica, Arial, sans-serif" font-size="14" fill="#1c1c1e">UC-15b: Join</text>
+  <text x="460" y="303" text-anchor="middle" font-family="'Roobert', Helvetica, Arial, sans-serif" font-size="14" fill="#1c1c1e">Party</text>
+
+  <ellipse cx="460" cy="415" rx="100" ry="40" fill="#aba3ff" stroke="transparent"/>
+  <text x="460" y="410" text-anchor="middle" font-family="'Roobert', Helvetica, Arial, sans-serif" font-size="13" fill="#1c1c1e">Enqueue</text>
+  <text x="460" y="428" text-anchor="middle" font-family="'Roobert', Helvetica, Arial, sans-serif" font-size="13" fill="#1c1c1e">Party</text>
+
+  <!-- Party Leader (left-top) -->
+  <ellipse cx="110" cy="130" rx="15" ry="15" fill="#ffffff" stroke="#2c2e33" stroke-width="2"/>
+  <line x1="110" y1="145" x2="110" y2="196" stroke="#2c2e33" stroke-width="2"/>
+  <line x1="70" y1="154" x2="150" y2="154" stroke="#2c2e33" stroke-width="2"/>
+  <line x1="78" y1="235" x2="110" y2="196" stroke="#2c2e33" stroke-width="2"/>
+  <line x1="142" y1="235" x2="110" y2="196" stroke="#2c2e33" stroke-width="2"/>
+  <text x="110" y="258" text-anchor="middle" font-family="'Open Sans', Arial, sans-serif" font-size="14" fill="#2c2e33">Party</text>
+  <text x="110" y="276" text-anchor="middle" font-family="'Open Sans', Arial, sans-serif" font-size="14" fill="#2c2e33">Leader</text>
+
+  <!-- Authenticated Player (left-bottom) -->
+  <ellipse cx="110" cy="340" rx="15" ry="15" fill="#ffffff" stroke="#2c2e33" stroke-width="2"/>
+  <line x1="110" y1="355" x2="110" y2="406" stroke="#2c2e33" stroke-width="2"/>
+  <line x1="70" y1="364" x2="150" y2="364" stroke="#2c2e33" stroke-width="2"/>
+  <line x1="78" y1="445" x2="110" y2="406" stroke="#2c2e33" stroke-width="2"/>
+  <line x1="142" y1="445" x2="110" y2="406" stroke="#2c2e33" stroke-width="2"/>
+  <text x="110" y="468" text-anchor="middle" font-family="'Open Sans', Arial, sans-serif" font-size="14" fill="#2c2e33">Authenticated</text>
+  <text x="110" y="486" text-anchor="middle" font-family="'Open Sans', Arial, sans-serif" font-size="14" fill="#2c2e33">Player</text>
+
+  <!-- Generalization: Leader inherits from Player -->
+  <line x1="110" y1="280" x2="110" y2="325" stroke="#000000" stroke-width="2"/>
+  <polygon points="100,325 110,340 120,325" fill="#ffffff" stroke="#000000" stroke-width="1.5"/>
+
+  <!-- Leader -> Create Party -->
+  <line x1="150" y1="165" x2="350" y2="158" stroke="#000000" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Leader -> Enqueue Party -->
+  <line x1="150" y1="200" x2="360" y2="410" stroke="#000000" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Player -> Join Party -->
+  <line x1="150" y1="370" x2="350" y2="295" stroke="#000000" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Create Party --<<extend>>--> Enqueue Party -->
+  <line x1="460" y1="200" x2="460" y2="375" stroke="#000000" stroke-width="1.5"
+        stroke-dasharray="8,4" marker-end="url(#arrowhead)"/>
+  <text x="475" y="295" font-family="'Roobert', Helvetica, Arial, sans-serif" font-size="11" fill="#2c2e33" font-style="italic">&lt;&lt;extend&gt;&gt;</text>
+
+</svg>
