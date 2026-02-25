@@ -2,27 +2,26 @@
 
 ## Use Case Diagram ##
 
-For use in [editor.plantuml.com](editor.plantuml.com), SVG also attached:
+The plant uml code in the div is for use in [editor.plantuml.com](editor.plantuml.com), generated SVG below:
+<div hidden>
 
-```plantuml
 @startuml
-title UC-01: View Game List
-
+!theme plain
+actor Actor as A1
 left to right direction
-skinparam packageStyle rectangle
-
-actor "User" as User
-
-rectangle "Platform" {
-  usecase "View Game List" as UC01
-  usecase "View Game Details" as VGD
+package "Welcome Page"{
+usecase "View Games" as UC1
+usecase "View Game Details" as UC2
+usecase "Select Game" as UC3
 }
-
-User --> UC01
-UC01 ..> VGD : <<extend>>
-
+A1 --> UC1
+A1 --> UC2
+UC3 .> UC2 :<<extends>>
 @enduml
-```
+
+</div>
+
+![](./UC-01%20View%20Game%20List.svg)
 
 ---
 
