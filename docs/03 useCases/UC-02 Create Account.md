@@ -2,31 +2,30 @@
 
 ## Use Case Diagram ##
 
-For use in [editor.plantuml.com](editor.plantuml.com), SVG also attached:
-
-```plantuml
+The plant uml code in the div is for use in [editor.plantuml.com](editor.plantuml.com), generated SVG below:
+<div hidden>
 @startuml
-title UC-02: Create Account
-
+!theme plain
+!include <archimate/Archimate>
+skinparam sequenceMessageAlign up
+actor User as A1
+actor "Authenticated User" as A2
 left to right direction
-skinparam packageStyle rectangle
-
-actor "User" as User
-
-rectangle "Platform" {
-  usecase "Create Account" as UC02
-  usecase "Validate Input" as VI
-  usecase "Store Account" as SA
-  usecase "Auto-Login\n(UC-03/UC-04)" as AL
+package "Login Page"{
+usecase Login as LI
+usecase "Create Account" as CA
+usecase "Auto-Login" as ALI
 }
 
-User --> UC02
-UC02 ..> VI : <<include>>
-UC02 ..> SA : <<include>>
-UC02 ..> AL : <<extend>>
-
+A1 -> LI
+A1 --> CA
+ALI .left.>LI: <<extends>>
+A2 --> ALI
+Rel_Specialization_Right(A2,A1,"")
 @enduml
-```
+</div>
+
+![](./UC-02%20Create%20Account.svg)
 
 ---
 
