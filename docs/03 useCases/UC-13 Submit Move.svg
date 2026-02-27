@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="579px" preserveAspectRatio="none" style="width:648px;height:579px;" version="1.1" viewBox="0 0 648 579" width="648px" zoomAndPan="magnify"><defs><filter height="300%" id="fzys7mbua4n1u" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacingAndGlyphs" textLength="280" x="195.5" y="16.708">UC-13: Submit Move (Updated)</text><text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacingAndGlyphs" textLength="376" x="147.5" y="37.6611">S-2: Timeout | S-3: Resign | C-4: EventBus</text><!--MD5=[46319df2d1c5fe27116f23a003a0a914]
+cluster Platform--><rect fill="#FFFFFF" filter="url(#fzys7mbua4n1u)" height="331" style="stroke: #000000; stroke-width: 1.5;" width="469.5" x="167.5" y="237.9063"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="66" x="369.25" y="252.9014">Platform</text><ellipse cx="250.0415" cy="339.1168" fill="#FEFECE" filter="url(#fzys7mbua4n1u)" rx="66.5415" ry="23.7106" style="stroke: #A80036; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="100" x="200.0415" y="339.1333">UC-13: Submit</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="37" x="231.5415" y="355.4301">Move</text><ellipse cx="545.5794" cy="288.9221" fill="#FEFECE" filter="url(#fzys7mbua4n1u)" rx="65.5794" ry="15.5159" style="stroke: #A80036; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="95" x="498.0794" y="293.5706">Validate Move</text><ellipse cx="545.4056" cy="364.9981" fill="#FEFECE" filter="url(#fzys7mbua4n1u)" rx="52.9056" ry="25.5918" style="stroke: #A80036; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="72" x="509.4056" y="362.1488">Publish via</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="66" x="512.4056" y="378.4457">EventBus</text><ellipse cx="545.4092" cy="490.0584" fill="#FEFECE" filter="url(#fzys7mbua4n1u)" rx="75.4092" ry="24.6522" style="stroke: #A80036; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="77" x="506.9092" y="484.5174">View Game</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="109" x="490.9092" y="500.8142">Results (UC-14)</text><ellipse cx="249.9411" cy="411.9299" fill="#FEFECE" filter="url(#fzys7mbua4n1u)" rx="36.9411" ry="14.5236" style="stroke: #A80036; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="48" x="225.9411" y="416.5783">Resign</text><!--MD5=[de2effd8dc5bf946a609466312d0f75f]
+entity Player--><ellipse cx="54.5" cy="336.4063" fill="#FEFECE" filter="url(#fzys7mbua4n1u)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 1.5;"/><path d="M54.5,344.4063 L54.5,371.4063 M41.5,352.4063 L67.5,352.4063 M54.5,371.4063 L41.5,386.4063 M54.5,371.4063 L67.5,386.4063 " fill="none" filter="url(#fzys7mbua4n1u)" style="stroke: #A80036; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="97" x="6" y="404.9014">Authenticated</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="41" x="6" y="421.1982">Player</text><!--MD5=[b1435b213846e3ddcd1e6c1cd6b83b9a]
+entity Server--><ellipse cx="250" cy="59.9063" fill="#FEFECE" filter="url(#fzys7mbua4n1u)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 1.5;"/><path d="M250,67.9063 L250,94.9063 M237,75.9063 L263,75.9063 M250,94.9063 L237,109.9063 M250,94.9063 L263,109.9063 " fill="none" filter="url(#fzys7mbua4n1u)" style="stroke: #A80036; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="89" x="205.5" y="128.4014">Game Server</text><path d="M164,166.4063 L164,221.8047 L336,221.8047 L336,176.4063 L326,166.4063 L164,166.4063 " fill="#FBFB77" filter="url(#fzys7mbua4n1u)" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M326,166.4063 L326,176.4063 L336,176.4063 L326,166.4063 " fill="#FBFB77" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="74" x="170" y="183.4731">NEW (S-3)</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="151" x="170" y="198.606">Available from YourTurn</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="122" x="170" y="213.7388">and WaitingForTurn</text><path d="M459,166.4063 L459,221.8047 L632,221.8047 L632,176.4063 L622,166.4063 L459,166.4063 " fill="#FBFB77" filter="url(#fzys7mbua4n1u)" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M622,166.4063 L622,176.4063 L632,176.4063 L622,166.4063 " fill="#FBFB77" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="110" x="465" y="183.4731">UPDATED (C-4)</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="110" x="465" y="198.606">All state changes</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="152" x="465" y="213.7388">route through EventBus</text><!--MD5=[671a7ef9bfe32bb20430a6fa403adb62]
+link Player to UC13--><path d="M103.33,366.7563 C128.3,361.9863 159.17,356.0863 186.06,350.9462 " fill="none" id="Player-&gt;UC13" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="191.03,349.9963,181.4363,347.7689,186.1201,350.941,182.9479,355.6248,191.03,349.9963" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[c7455769eeecdf562bd4123f036615c1]
+link Player to RES--><path d="M103.33,384.8063 C136.55,390.9863 180.21,399.1063 211.04,404.8463 " fill="none" id="Player-&gt;RES" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="216.26,405.8162,208.1435,400.2376,211.3443,404.9017,206.6802,408.1026,216.26,405.8162" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[fd5d284e7a48b648999a28772c8dd3a4]
+link Server to VM--><path d="M294.82,99.0763 C334.56,108.5863 392.36,127.9463 429,164.9063 C453.98,190.1162 435.78,212.0763 459,238.9063 C471.75,253.6463 489.98,265.1363 506.32,273.3563 " fill="none" id="Server-&gt;VM" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="510.88,275.5963,504.5609,268.0419,506.3908,273.3946,501.0382,275.2245,510.88,275.5963" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[9578dd196d10214c10dc8a39a5d8a4a2]
+link Server to PEB--><path d="M294.76,116.4763 C308.74,125.7362 323.76,136.8963 336,148.9063 C352.84,165.4262 441.1,306.5463 459,321.9063 C470.67,331.9163 485.07,340.3162 498.71,346.9462 " fill="none" id="Server-&gt;PEB" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="503.3,349.1363,496.9041,341.6468,498.7886,346.9805,493.4549,348.865,503.3,349.1363" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[f1a78feff9fe7c4d9beebcf139c698e6]
+link UC13 to VM--><path d="M310.39,328.7863 C361.73,320.0463 435.49,307.4763 486.43,298.7963 " fill="none" id="UC13-&gt;VM" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="#A80036" points="491.6,297.9163,482.0614,295.4637,486.6692,298.7452,483.3877,303.353,491.6,297.9163" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="61" x="367" y="305.9731">«include»</text><!--MD5=[e265f6ba783024f9da9747587a7be324]
+link UC13 to PEB--><path d="M314.26,345.0863 C331.07,346.6962 349.22,348.3963 366,349.9063 C406.74,353.5662 452.74,357.4263 487.84,360.3162 " fill="none" id="UC13-&gt;PEB" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="#A80036" points="492.93,360.7263,484.2787,356.0193,487.946,360.3264,483.6389,363.9937,492.93,360.7263" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="61" x="367" y="345.9731">«include»</text><!--MD5=[7951529b4c0cf675023e1efa7bfc4fd3]
+link UC13 to UC14--><path d="M296.04,356.0063 C309.65,362.3563 324.11,370.3763 336,379.9063 C352.79,393.3663 348.78,405.0063 366,417.9063 C400.3,443.5963 445.03,461.6163 481.13,473.2063 " fill="none" id="UC13-&gt;UC14" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="#A80036" points="485.94,474.7263,478.5716,468.1912,481.1742,473.2138,476.1517,475.8164,485.94,474.7263" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="60" x="367.5" y="413.9731">«extend»</text><!--MD5=[1f3087129c68a42164a9d1ed83b9fc7a]
+link RES to UC14--><path d="M260.31,426.0463 C277.62,450.8863 317.45,501.5563 366,520.9063 C408.36,537.7963 460,525.6063 496.81,511.8663 " fill="none" id="RES-&gt;UC14" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="#A80036" points="501.68,510.0063,491.845,509.4835,497.0096,511.7916,494.7015,516.9561,501.68,510.0063" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="61" x="367" y="516.9731">«include»</text><!--MD5=[3def80cda9c89162244563b1b8ed3eab]
+link RES to PEB--><path d="M284.67,406.5163 C334.83,398.4863 429.72,383.2863 489.89,373.6563 " fill="none" id="RES-&gt;PEB" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="#A80036" points="494.88,372.8563,485.3625,370.323,489.9424,373.6434,486.622,378.2233,494.88,372.8563" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="61" x="367" y="380.9731">«include»</text><!--MD5=[101ad28b2f617c581ab8d483ce6ede25]
+link RES to GMN19--><path d="M213.88,408.4763 C185.27,403.5563 147.5,391.5762 131.25,362.4063 C112.22,328.2363 112.93,308.9563 131.25,274.4063 C143.27,251.7362 164.84,234.2863 186.33,221.5063 " fill="none" id="RES-GMN19" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><!--MD5=[ea958fce638a5d3a88b3a8a260f23449]
+link PEB to GMN22--><path d="M494.13,358.5463 C460.49,351.4163 418.93,336.3262 397.5,304.4063 C373.77,269.0663 414.45,240.6663 459.12,221.5063 " fill="none" id="PEB-GMN22" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><!--MD5=[d88f48fa65c656a57a1b78c528fe5aae]
+@startuml
+title UC-13: Submit Move (Updated)\nS-2: Timeout | S-3: Resign | C-4: EventBus
+skinparam backgroundColor white
+
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Authenticated\nPlayer" as Player
+actor "Game Server" as Server
+
+rectangle "Platform" {
+  usecase "UC-13: Submit\nMove" as UC13
+  usecase "Validate Move" as VM
+  usecase "Publish via\nEventBus" as PEB
+  usecase "View Game\nResults (UC-14)" as UC14
+  usecase "Resign" as RES
+}
+
+Player - -> UC13
+Player - -> RES
+Server - -> VM
+Server - -> PEB
+
+UC13 ..> VM : <<include>>
+UC13 ..> PEB : <<include>>
+UC13 ..> UC14 : <<extend>>
+RES ..> UC14 : <<include>>
+RES ..> PEB : <<include>>
+
+note bottom of RES
+  **NEW (S-3)**
+  Available from YourTurn
+  and WaitingForTurn
+end note
+
+note bottom of PEB
+  **UPDATED (C-4)**
+  All state changes
+  route through EventBus
+end note
+
+@enduml
+
+PlantUML version 1.2020.02(Sun Mar 01 10:22:07 UTC 2020)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 21.0.10+7-Ubuntu-124.04
+Operating System: Linux
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

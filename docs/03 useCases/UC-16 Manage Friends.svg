@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="391px" preserveAspectRatio="none" style="width:876px;height:391px;" version="1.1" viewBox="0 0 876 391" width="876px" zoomAndPan="magnify"><defs><filter height="300%" id="fsiyr0r1c4pv1" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacingAndGlyphs" textLength="271" x="314" y="16.708">UC-16: Manage Friends (NEW)</text><!--MD5=[46319df2d1c5fe27116f23a003a0a914]
+cluster Platform--><rect fill="#FFFFFF" filter="url(#fsiyr0r1c4pv1)" height="336" style="stroke: #000000; stroke-width: 1.5;" width="715" x="150" y="44.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="66" x="474.5" y="59.9482">Platform</text><ellipse cx="237.7411" cy="212.8927" fill="#FEFECE" filter="url(#fsiyr0r1c4pv1)" rx="71.7411" ry="23.9395" style="stroke: #A80036; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="107" x="184.2411" y="212.5413">UC-16: Manage</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="51" x="212.2411" y="228.8382">Friends</text><ellipse cx="513.6801" cy="340.1221" fill="#FEFECE" filter="url(#fsiyr0r1c4pv1)" rx="58.1801" ry="24.669" style="stroke: #A80036; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="83" x="472.1801" y="338.6376">Send Friend</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="59" x="484.1801" y="354.9345">Request</text><ellipse cx="513.7131" cy="255.1571" fill="#FEFECE" filter="url(#fsiyr0r1c4pv1)" rx="81.7131" ry="25.704" style="stroke: #A80036; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="113" x="457.2131" y="252.1463">Accept / Decline</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="106" x="460.7131" y="268.4432">Friend Request</text><ellipse cx="513.3344" cy="170.9963" fill="#FEFECE" filter="url(#fsiyr0r1c4pv1)" rx="57.8344" ry="23.5432" style="stroke: #A80036; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="87" x="469.8344" y="171.2858">View Friends</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="23" x="501.8344" y="187.5827">List</text><ellipse cx="513.56" cy="96.1651" fill="#FEFECE" filter="url(#fsiyr0r1c4pv1)" rx="69.06" ry="16.212" style="stroke: #A80036; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="104" x="461.56" y="100.8136">Remove Friend</text><ellipse cx="783.0092" cy="171.0213" fill="#FEFECE" filter="url(#fsiyr0r1c4pv1)" rx="66.0092" ry="25.5682" style="stroke: #A80036; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="83" x="741.5092" y="166.8365">Create / Join</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="91" x="737.5092" y="183.1333">Party (UC-15)</text><!--MD5=[de2effd8dc5bf946a609466312d0f75f]
+entity Player--><ellipse cx="54.5" cy="173.4531" fill="#FEFECE" filter="url(#fsiyr0r1c4pv1)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 1.5;"/><path d="M54.5,181.4531 L54.5,208.4531 M41.5,189.4531 L67.5,189.4531 M54.5,208.4531 L41.5,223.4531 M54.5,208.4531 L67.5,223.4531 " fill="none" filter="url(#fsiyr0r1c4pv1)" style="stroke: #A80036; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="97" x="6" y="241.9482">Authenticated</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="41" x="6" y="258.2451">Player</text><!--MD5=[f173e3c56a42a26b133a2e5f91a04132]
+link Player to UC16--><path d="M103.06,212.9531 C120.58,212.9531 140.89,212.9531 160.31,212.9531 " fill="none" id="Player-&gt;UC16" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="165.76,212.9531,156.76,208.9531,160.76,212.9531,156.76,216.9531,165.76,212.9531" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[64e248e9a36fc37e6844fe505c8c5dbd]
+link UC16 to SFR--><path d="M271.73,234.2431 C290.97,246.1131 315.89,260.7231 339,271.9531 C379.63,291.6931 427.56,310.1331 462.73,322.8131 " fill="none" id="UC16-&gt;SFR" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="#A80036" points="467.83,324.6431,460.7088,317.8395,463.1236,322.9551,458.008,325.3698,467.83,324.6431" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="60" x="340.5" y="268.02">«extend»</text><!--MD5=[a94c6c5ddbbcd62ffa607768cb94c515]
+link UC16 to ADFR--><path d="M293.22,228.1031 C307.99,231.7731 324.03,235.3731 339,237.9531 C367.92,242.9431 399.82,246.5831 428.3,249.1931 " fill="none" id="UC16-&gt;ADFR" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="#A80036" points="433.58,249.6731,424.9704,244.8903,428.5997,249.2295,424.2606,252.8588,433.58,249.6731" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="60" x="340.5" y="234.02">«extend»</text><!--MD5=[9cda01f04cfbfd482fec034f2763c0f7]
+link UC16 to VFL--><path d="M302.74,203.1031 C348.43,196.1031 409.34,186.7631 453.74,179.9631 " fill="none" id="UC16-&gt;VFL" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="#A80036" points="458.8,179.1831,449.2981,176.592,453.8576,179.9402,450.5094,184.4997,458.8,179.1831" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="61" x="340" y="185.02">«include»</text><!--MD5=[bec9e608c219c223096de0b2bbc02779]
+link UC16 to RF--><path d="M277.78,192.9031 C296.2,183.7231 318.56,172.9231 339,163.9531 C383.33,144.4931 435.12,124.5531 470.5,111.3331 " fill="none" id="UC16-&gt;RF" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="#A80036" points="475.59,109.4331,465.7601,108.8216,470.9037,111.1762,468.5491,116.3197,475.59,109.4331" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="60" x="340.5" y="135.02">«extend»</text><!--MD5=[69049787ef2f45c8ca6c7d417d77855d]
+link VFL to UC15--><path d="M571.56,170.9531 C612.4,170.9531 667.65,170.9531 711.3,170.9531 " fill="none" id="VFL-&gt;UC15" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="#A80036" points="716.56,170.9531,707.56,166.9531,711.56,170.9531,707.56,174.9531,716.56,170.9531" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="60" x="626" y="167.02">«extend»</text><!--MD5=[3831a6131b450a4720149033dcef23b3]
+@startuml
+title UC-16: Manage Friends (NEW)
+skinparam backgroundColor white
+
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Authenticated\nPlayer" as Player
+
+rectangle "Platform" {
+  usecase "UC-16: Manage\nFriends" as UC16
+  usecase "Send Friend\nRequest" as SFR
+  usecase "Accept / Decline\nFriend Request" as ADFR
+  usecase "View Friends\nList" as VFL
+  usecase "Remove Friend" as RF
+  usecase "Create / Join\nParty (UC-15)" as UC15
+}
+
+Player - -> UC16
+UC16 ..> SFR : <<extend>>
+UC16 ..> ADFR : <<extend>>
+UC16 ..> VFL : <<include>>
+UC16 ..> RF : <<extend>>
+VFL ..> UC15 : <<extend>>
+
+@enduml
+
+PlantUML version 1.2020.02(Sun Mar 01 10:22:07 UTC 2020)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 21.0.10+7-Ubuntu-124.04
+Operating System: Linux
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>
