@@ -1,191 +1,293 @@
-<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="704.91px" height="725.05px"
-		style="transform-origin: 0px 0px 0px;" version="1.1"
-		xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><style xmlns="http://www.w3.org/2000/svg" type="text/css"><![CDATA[
-		* {
-			text-rendering: geometricprecision !important;
-		}
-		]]><![CDATA[@font-face {
-  font-family: 'Noto Sans';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Noto Sans'), local('NotoSans'), url("https://mirostatic.com/app/static/a73798e3d459e1bc.woff2") format('woff2');
-}
-@font-face {
-  font-family: 'Noto Sans';
-  font-style: italic;
-  font-weight: 400;
-  src: local('Noto Sans Italic'), local('NotoSans-Italic'), url("https://mirostatic.com/app/static/a8edd710f88715d4.woff2") format('woff2');
-}
-@font-face {
-  font-family: 'Noto Sans';
-  font-style: normal;
-  font-weight: 500;
-  src: local('Noto Sans Medium'), local('NotoSans-Medium'), url("https://mirostatic.com/app/static/006d7e33e60b9e12.woff2") format('woff2');
-}
-@font-face {
-  font-family: 'Noto Sans';
-  font-style: italic;
-  font-weight: 500;
-  src: local('Noto Sans Medium Italic'), local('NotoSans-MediumItalic'), url("https://mirostatic.com/app/static/31387059566a3171.woff2") format('woff2');
-}
-@font-face {
-  font-family: 'Noto Sans';
-  font-style: normal;
-  font-weight: 600;
-  src: local('Noto Sans SemiBold'), local('NotoSans-SemiBold'), url("https://mirostatic.com/app/static/526dd53b40975c37.woff2") format('woff2');
-}
-@font-face {
-  font-family: 'Noto Sans';
-  font-style: italic;
-  font-weight: 600;
-  src: local('Noto Sans SemiBold Italic'), local('NotoSans-SemiBoldItalic'), url("https://mirostatic.com/app/static/e73d4fdd87d7e319.woff2") format('woff2');
-}
-@font-face {
-  font-family: 'Noto Sans';
-  font-style: normal;
-  font-weight: 700;
-  src: local('Noto Sans Bold'), local('NotoSans-Bold'), url("https://mirostatic.com/app/static/9f11d6779c14d2bc.woff2") format('woff2');
-}
-@font-face {
-  font-family: 'Noto Sans';
-  font-style: italic;
-  font-weight: 700;
-  src: local('Noto Sans Bold Italic'), local('NotoSans-BoldItalic'), url("https://mirostatic.com/app/static/888e13e017cedc15.woff2") format('woff2');
-}
-]]><![CDATA[@font-face {
-  font-family: 'OpenSans';
-  font-style: normal;
-  font-weight: 300;
-  font-display: swap;
-  src: url("https://mirostatic.com/app/static/800985e1502d12bf.woff2") format('woff2');
-}
-@font-face {
-  font-family: 'OpenSans';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("https://mirostatic.com/app/static/d8a7ca42a20caea5.woff2") format('woff2');
-}
-@font-face {
-  font-family: 'OpenSans';
-  font-style: italic;
-  font-weight: 400;
-  font-display: swap;
-  src: url("https://mirostatic.com/app/static/3cc74c1d3919bd5c.woff2") format('woff2');
-}
-@font-face {
-  font-family: 'OpenSans';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("https://mirostatic.com/app/static/f0481285dc248cf0.woff2") format('woff2');
-}
-@font-face {
-  font-family: 'OpenSans';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("https://mirostatic.com/app/static/2f5e8dcf6e47bf00.woff2") format('woff2');
-}
-@font-face {
-  font-family: 'OpenSans';
-  font-style: italic;
-  font-weight: 700;
-  font-display: swap;
-  src: url("https://mirostatic.com/app/static/0e625f45b71a26f1.woff2") format('woff2');
-}
-@font-face {
-  font-family: 'OpenSans';
-  font-style: normal;
-  font-weight: 800;
-  font-display: swap;
-  src: url("https://mirostatic.com/app/static/645c27eb7d93eca8.woff2") format('woff2');
-}
-]]><![CDATA[@font-face {
-  font-family: 'Noto Sans Hebrew';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Noto Sans Hebrew Regular'), local('Noto Sans Hebrew-Regular'), url("https://mirostatic.com/app/static/7ebe1dcf0343326c.woff2") format('woff2'), url("https://mirostatic.com/app/static/6c11f037d6968262.woff") format('woff');
-}
-@font-face {
-  font-family: 'Noto Sans Hebrew';
-  font-style: normal;
-  font-weight: 700;
-  src: local('Noto Sans Hebrew Bold'), local('Noto Sans Hebrew-Bold'), url("https://mirostatic.com/app/static/d2883e2f177d0dad.woff2") format('woff2'), url("https://mirostatic.com/app/static/8546991909eadbc9.woff") format('woff');
-}
-]]><![CDATA[@font-face {
-  font-family: 'Noto Sans JP';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Noto Sans Japanese Regular'), local('Noto Sans Japanese-Regular'), url("https://mirostatic.com/app/static/9320b3c07ab79383.woff2") format('woff2'), url("https://mirostatic.com/app/static/a43be2cbcfc0b250.woff") format('woff');
-}
-@font-face {
-  font-family: 'Noto Sans JP';
-  font-style: normal;
-  font-weight: 700;
-  src: local('Noto Sans Japanese Bold'), local('Noto Sans Japanese-Bold'), url("https://mirostatic.com/app/static/7ab032c73212439f.woff2") format('woff2'), url("https://mirostatic.com/app/static/29f177f4466bd7a1.woff") format('woff');
-}
-]]><![CDATA[@font-face {
-  font-family: 'Noto Sans KR';
-  font-style: normal;
-  font-weight: 400;
-  src: local(''), url("https://mirostatic.com/app/static/7a5b625774730d22.woff2") format('woff2'), url("https://mirostatic.com/app/static/2d84dc606f1fb88e.woff") format('woff');
-}
-@font-face {
-  font-family: 'Noto Sans KR';
-  font-style: normal;
-  font-weight: 700;
-  src: local(''), url("https://mirostatic.com/app/static/fa5a3d9073cdd58f.woff2") format('woff2'), url("https://mirostatic.com/app/static/7ded243557c83342.woff") format('woff');
-}
-]]><![CDATA[@font-face {
-  font-family: 'Roobert';
-  font-style: normal;
-  font-weight: 300;
-  font-display: swap;
-  src: url("https://mirostatic.com/app/static/55f96cc98126aef0.woff2") format('woff2'), url("https://mirostatic.com/app/static/92dff1f4bd2a1974.woff") format('woff');
-}
-@font-face {
-  font-family: 'Roobert';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("https://mirostatic.com/app/static/682f8d1999b4b6d4.woff2") format('woff2'), url("https://mirostatic.com/app/static/d4cf24f10a1b7162.woff") format('woff');
-}
-@font-face {
-  font-family: 'Roobert';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("https://mirostatic.com/app/static/80ff301407dffbe8.woff2") format('woff2'), url("https://mirostatic.com/app/static/b10fbb8cc51f13ff.woff") format('woff');
-}
-@font-face {
-  font-family: 'Roobert';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("https://mirostatic.com/app/static/2b8be627933a9586.woff2") format('woff2'), url("https://mirostatic.com/app/static/f55c728af700c459.woff") format('woff');
-}
-]]></style><path id="LineHeadArrow2" d="M-12.727272727272727,-7.545454545454545 L0,0 L-12.727272727272727,7.545454545454545 Z"></path></defs><rect id="svg-board-background-color" width="100%" height="100%" fill="#f2f2f2"></rect><g width="247.45px" height="668.15px"  transform="translate(400.04, 26.68) scale(1) rotate(0, 123.725, 334.075)"><g><g style="stroke: #2c2e33;stroke-width: 2;stroke-opacity: 1;stroke-dasharray: none;stroke-linecap: round;stroke-linejoin: round;fill: #ffffff;fill-opacity: 1"><rect x="0" y="0" width="247.45081879273903" height="668.1489366991668" rx="8" /></g></g><g><g style="stroke: #2c2e33;stroke-width: 2;stroke-opacity: 1;stroke-dasharray: none;stroke-linecap: round;stroke-linejoin: round;fill: transparent;fill-opacity: 0"><path d="M 0 55 L 247.45081879273903 55"/></g><g style="stroke: #2c2e33;stroke-width: 2;stroke-opacity: 1;stroke-dasharray: none;stroke-linecap: round;stroke-linejoin: round;fill: transparent;fill-opacity: 0"></g><g style="stroke: #2c2e33;stroke-width: 2;stroke-opacity: 1;stroke-dasharray: none;stroke-linecap: round;stroke-linejoin: round;fill: transparent;fill-opacity: 0"></g></g><g transform="translate(15, 4)"><text xml:space="preserve" x="34.67948807068592" y="29.5" width="148.0918426513672" textLength="148.0918426513672" lengthAdjust="spacingAndGlyphs" letter-spacing="0" font-family='"Noto Sans", Helvetica, OpenSans, Arial, sans-serif, Noto Sans Hebrew, Noto Sans, Noto Sans JP, Noto Sans KR' font-size="14" 
-				fill="#1c1c1e" direction="ltr" >Authentication System</text></g><g transform="translate(15, 70)"></g></g><g width="160px" height="80px"  transform="translate(440.27, 153.99) scale(1) rotate(0, 80, 40)"><g><g style="stroke: transparent;stroke-width: 0;stroke-opacity: 1;stroke-dasharray: none;stroke-linecap: round;stroke-linejoin: round;fill: #aba3ff;fill-opacity: 1"><ellipse cx="80" cy="40" rx="80" ry="40" /></g></g><g><g style="stroke: transparent;stroke-width: 0;stroke-opacity: 1;stroke-dasharray: none;stroke-linecap: round;stroke-linejoin: round;fill: transparent;fill-opacity: 0"></g></g><g transform="translate(23.431457505076203, 11.715728752538102)"><text xml:space="preserve" x="1.2476120139667657" y="34.2842712474619" width="110.64186096191406" textLength="110.64186096191406" lengthAdjust="spacingAndGlyphs" letter-spacing="0" font-family='"Roobert", Helvetica, OpenSans, Arial, sans-serif, Noto Sans Hebrew, Noto Sans, Noto Sans JP, Noto Sans KR' font-size="14" 
-				fill="#1c1c1e" direction="ltr" >Register Account</text></g></g><g width="80px" height="120px"  transform="translate(57.04, 133.99) scale(1) rotate(0, 40, 60)"><g><g style="stroke: #2c2e33;stroke-width: 0;stroke-opacity: 0;stroke-dasharray: none;stroke-linecap: round;stroke-linejoin: round;fill: #2c2e33;fill-opacity: 0"><rect x="0" y="0" width="80" height="120" /></g></g><g><g style="stroke: #2c2e33;stroke-width: 2;stroke-opacity: 1;stroke-dasharray: none;stroke-linecap: round;stroke-linejoin: round;fill: #ffffff;fill-opacity: 1"><ellipse cx="40" cy="15" rx="15" ry="15" /></g><g style="stroke: #2c2e33;stroke-width: 2;stroke-opacity: 1;stroke-dasharray: none;stroke-linecap: round;stroke-linejoin: round;fill: transparent;fill-opacity: 0"><path d="M 40 30 L 40 91.2 M 0 38.4 L 80 38.4 M 8 120 L 40 91.2 L 72 120"/></g><g style="stroke: #2c2e33;stroke-width: 2;stroke-opacity: 1;stroke-dasharray: none;stroke-linecap: round;stroke-linejoin: round;fill: transparent;fill-opacity: 0"></g></g><g transform="translate(-30, 128)"><rect transform="translate(54.77978515625, 0)" width="30.4404296875" height="20" fill="transparent" ></rect><text xml:space="preserve" x="54.77978515625" y="14" width="30.4404296875" textLength="30.4404296875" lengthAdjust="spacingAndGlyphs" letter-spacing="0" font-family='"OpenSans", Arial, sans-serif, Noto Sans Hebrew, Noto Sans, Noto Sans JP, Noto Sans KR' font-size="14" 
-				fill="#2c2e33" direction="ltr" >User</text></g></g><g width="303.23px" height="0px"  transform="translate(137.04, 193.99) scale(1) rotate(0, 151.615, 0)"><path stroke-linecap="butt" 
-			stroke="#000000" stroke-width="2" fill="transparent"
-			d="M 0 0 L 293.04463249825926 0" /> <use xlink:href="#LineHeadArrow2" fill="#000000"
-			 transform="translate(303.2264506800775, 0)  rotate(0) "  /> </g><g width="160px" height="80px"  transform="translate(440.27, 287.9) scale(1) rotate(0, 80, 40)"><g><g style="stroke: transparent;stroke-width: 0;stroke-opacity: 1;stroke-dasharray: none;stroke-linecap: round;stroke-linejoin: round;fill: #aba3ff;fill-opacity: 1"><ellipse cx="80" cy="40" rx="80" ry="40" /></g></g><g><g style="stroke: transparent;stroke-width: 0;stroke-opacity: 1;stroke-dasharray: none;stroke-linecap: round;stroke-linejoin: round;fill: transparent;fill-opacity: 0"></g></g><g transform="translate(23.431457505076203, 11.715728752538102)"><rect transform="translate(37.199569716603484, 20.2842712474619)" width="38.737945556640625" height="16" fill="transparent" ></rect><text xml:space="preserve" x="37.199569716603484" y="34.2842712474619" width="38.737945556640625" textLength="38.737945556640625" lengthAdjust="spacingAndGlyphs" letter-spacing="0" font-family='"Roobert", Helvetica, OpenSans, Arial, sans-serif, Noto Sans Hebrew, Noto Sans, Noto Sans JP, Noto Sans KR' font-size="14" 
-				fill="#1c1c1e" direction="ltr" >Log in</text></g></g><g width="160px" height="80px"  transform="translate(440.27, 435.37) scale(1) rotate(0, 80, 40)"><g><g style="stroke: transparent;stroke-width: 0;stroke-opacity: 1;stroke-dasharray: none;stroke-linecap: round;stroke-linejoin: round;fill: #aba3ff;fill-opacity: 1"><ellipse cx="80" cy="40" rx="80" ry="40" /></g></g><g><g style="stroke: transparent;stroke-width: 0;stroke-opacity: 1;stroke-dasharray: none;stroke-linecap: round;stroke-linejoin: round;fill: transparent;fill-opacity: 0"></g></g><g transform="translate(23.431457505076203, 11.715728752538102)"><rect transform="translate(5.888618483693328, 20.2842712474619)" width="101.35984802246094" height="16" fill="transparent" ></rect><text xml:space="preserve" x="5.888618483693328" y="34.2842712474619" width="101.35984802246094" textLength="101.35984802246094" lengthAdjust="spacingAndGlyphs" letter-spacing="0" font-family='"Roobert", Helvetica, OpenSans, Arial, sans-serif, Noto Sans Hebrew, Noto Sans, Noto Sans JP, Noto Sans KR' font-size="14" 
-				fill="#1c1c1e" direction="ltr" >Reset Password</text></g></g><g width="80px" height="120px"  transform="translate(57.04, 355.66) scale(1) rotate(0, 40, 60)"><g><g style="stroke: #2c2e33;stroke-width: 0;stroke-opacity: 0;stroke-dasharray: none;stroke-linecap: round;stroke-linejoin: round;fill: #2c2e33;fill-opacity: 0"><rect x="0" y="0" width="80" height="120" /></g></g><g><g style="stroke: #2c2e33;stroke-width: 2;stroke-opacity: 1;stroke-dasharray: none;stroke-linecap: round;stroke-linejoin: round;fill: #ffffff;fill-opacity: 1"><ellipse cx="40" cy="15" rx="15" ry="15" /></g><g style="stroke: #2c2e33;stroke-width: 2;stroke-opacity: 1;stroke-dasharray: none;stroke-linecap: round;stroke-linejoin: round;fill: transparent;fill-opacity: 0"><path d="M 40 30 L 40 91.2 M 0 38.4 L 80 38.4 M 8 120 L 40 91.2 L 72 120"/></g><g style="stroke: #2c2e33;stroke-width: 2;stroke-opacity: 1;stroke-dasharray: none;stroke-linecap: round;stroke-linejoin: round;fill: transparent;fill-opacity: 0"></g></g><g transform="translate(-30, 128)"><rect transform="translate(7.0888671875, 0)" width="125.822265625" height="20" fill="transparent" ></rect><text xml:space="preserve" x="7.0888671875" y="14" width="125.822265625" textLength="125.822265625" lengthAdjust="spacingAndGlyphs" letter-spacing="0" font-family='"OpenSans", Arial, sans-serif, Noto Sans Hebrew, Noto Sans, Noto Sans JP, Noto Sans KR' font-size="14" 
-				fill="#2c2e33" direction="ltr" >Authenticated User</text></g></g><g width="160px" height="80px"  transform="translate(440.27, 582.37) scale(1) rotate(0, 80, 40)"><g><g style="stroke: transparent;stroke-width: 0;stroke-opacity: 1;stroke-dasharray: none;stroke-linecap: round;stroke-linejoin: round;fill: #aba3ff;fill-opacity: 1"><ellipse cx="80" cy="40" rx="80" ry="40" /></g></g><g><g style="stroke: transparent;stroke-width: 0;stroke-opacity: 1;stroke-dasharray: none;stroke-linecap: round;stroke-linejoin: round;fill: transparent;fill-opacity: 0"></g></g><g transform="translate(23.431457505076203, 11.715728752538102)"><rect transform="translate(33.70656587138864, 20.2842712474619)" width="45.72395324707031" height="16" fill="transparent" ></rect><text xml:space="preserve" x="33.70656587138864" y="34.2842712474619" width="45.72395324707031" textLength="45.72395324707031" lengthAdjust="spacingAndGlyphs" letter-spacing="0" font-family='"Roobert", Helvetica, OpenSans, Arial, sans-serif, Noto Sans Hebrew, Noto Sans, Noto Sans JP, Noto Sans KR' font-size="14" 
-				fill="#1c1c1e" direction="ltr" >Logout</text></g></g><g width="0px" height="71.67px"  transform="translate(97.04, 283.99) scale(1) rotate(0, 0, 35.835)"><path stroke-linecap="butt" 
-			stroke="#000000" stroke-width="2" fill="transparent"
-			d="M 0 71.67220213314476 L 0 13.672727272727272" /> <use xlink:href="#LineHeadArrow2" stroke="#000000"
-			stroke-width="2" fill="white"
-			 transform="translate(0, 0) scale(0.9,0.9) rotate(-90) translate(-2.2222222222222223,0)"  /> </g><g width="303.23px" height="87.76px"  transform="translate(137.04, 327.9) scale(1) rotate(0, 151.615, 43.88)"><path stroke-linecap="butt" 
-			stroke="#000000" stroke-width="2" fill="transparent"
-			d="M 0 87.75577259140081 L 293.44598507726874 2.830532472853598" /> <use xlink:href="#LineHeadArrow2" fill="#000000"
-			 transform="translate(303.2264506800775, 0)  rotate(-16.14079860934813) "  /> </g><g width="303.23px" height="59.71px"  transform="translate(137.04, 415.66) scale(1) rotate(0, 151.615, 29.855)"><path stroke-linecap="butt" 
-			stroke="#000000" stroke-width="2" fill="transparent"
-			d="M 0 0 L 293.2364631417178 57.74101399441207" /> <use xlink:href="#LineHeadArrow2" fill="#000000"
-			 transform="translate(303.2264506800775, 59.7081363777483)  rotate(11.139563706978295) "  /> </g><g width="303.23px" height="206.71px"  transform="translate(137.04, 415.66) scale(1) rotate(0, 151.615, 103.355)"><path stroke-linecap="butt" 
-			stroke="#000000" stroke-width="2" fill="transparent"
-			d="M 0 0 L 294.8134741147513 200.97304729396967" /> <use xlink:href="#LineHeadArrow2" fill="#000000"
-			 transform="translate(303.2264506800775, 206.7081363777482)  rotate(34.282082043800735) "  /> </g></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   viewBox="0 0 613.33331 653.33331"
+   height="653.33331"
+   width="613.33331"
+   xml:space="preserve"
+   id="svg2"
+   version="1.1"><metadata
+     id="metadata8"><rdf:RDF><cc:Work
+         rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
+     id="defs6" /><g
+     transform="matrix(1.3333333,0,0,1.3333333,0,1.3e-5)"
+     id="g10"><g
+       transform="translate(40,120)"
+       id="g12"><path
+         id="path14"
+         style="fill:#ffffff;fill-opacity:0;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         d="m 37.5,7.5 c 0,3.865993 -3.134007,7 -7,7 -3.865993,0 -7,-3.134007 -7,-7 0,-3.865993 3.134007,-7 7,-7 3.865993,0 7,3.134007 7,7" /><path
+         id="path16"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         d="m 9.5,21.5 v 0 h 42" /><path
+         id="path18"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         d="m 30.5,14.5 v 0 28" /><path
+         id="path20"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         d="m 30.5,42.5 v 0 l -14,28" /><path
+         id="path22"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         d="m 30.5,42.5 v 0 l 14,28" /><g
+         transform="matrix(1,0,0,-1,0,490)"
+         id="g24"><text
+           id="text28"
+           style="font-variant:normal;font-weight:normal;font-size:12px;font-family:NotoSans;-inkscape-font-specification:NotoSans;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           transform="matrix(1,0,0,-1,16.87793,397.72945)"><tspan
+             id="tspan26"
+             y="0"
+             x="0 8.7714844 14.519531 21.287109">User</tspan></text>
+</g><g
+         transform="translate(-30,180)"
+         id="g30"><path
+           id="path32"
+           style="fill:#ffffff;fill-opacity:0;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+           d="m 67.5,7.5 c 0,3.865993 -3.134007,7 -7,7 -3.865993,0 -7,-3.134007 -7,-7 0,-3.865993 3.134007,-7 7,-7 3.865993,0 7,3.134007 7,7" /><path
+           id="path34"
+           style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+           d="m 39.5,21.5 v 0 h 42" /><path
+           id="path36"
+           style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+           d="m 60.5,14.5 v 0 28" /><path
+           id="path38"
+           style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+           d="m 60.5,42.5 v 0 l -14,28" /><path
+           id="path40"
+           style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+           d="m 60.5,42.5 v 0 l 14,28" /><g
+           transform="matrix(1,0,0,-1,0,490)"
+           id="g42"><text
+             id="text46"
+             style="font-variant:normal;font-weight:normal;font-size:12px;font-family:NotoSans;-inkscape-font-specification:NotoSans;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+             transform="matrix(1,0,0,-1,5.610352,397.72945)"><tspan
+               id="tspan44"
+               y="0"
+               x="0 7.6699219 15.087891 19.417969 26.835938 33.603516 41.021484 45.351562 48.445312 54.205078 60.9375 65.267578 72.035156 79.417969 82.535156 91.306641 97.054688 103.82227">Authenticated User</tspan></text>
+</g><g
+           transform="translate(170,-290)"
+           id="g48"><path
+             id="path50"
+             style="fill:#ffffff;fill-opacity:0;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+             d="m 0.5,0.5 h 270 v 470 H 0.5 Z" /><g
+             transform="matrix(1,0,0,-1,0,490)"
+             id="g52"><text
+               id="text56"
+               style="font-variant:normal;font-weight:normal;font-size:12px;font-family:NotoSans;-inkscape-font-specification:NotoSans;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+               transform="matrix(1,0,0,-1,71.537109,472.72945)"><tspan
+                 id="tspan54"
+                 y="0"
+                 x="0 7.6699219 15.087891 19.417969 26.835938 33.603516 41.021484 45.351562 48.445312 54.205078 60.9375 65.267578 68.361328 75.621094 83.039062 86.15625 92.742188 98.859375 104.60742 108.9375 115.70508">Authentication System</tspan></text>
+</g><path
+             id="path58"
+             style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+             d="m 0.5,22.5 v 0 h 269" /><g
+             transform="translate(50,350)"
+             id="g60"><path
+               id="path62"
+               style="fill:#0000ff;fill-opacity:0.49019602;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+               d="m 0.5,20.5 c 0,-11.045696 26.862913,-20 60,-20 33.137087,0 60,8.954304 60,20 0,11.045696 -26.862913,20 -60,20 -33.137087,0 -60,-8.954304 -60,-20" /><g
+               transform="matrix(1,0,0,-1,0,490)"
+               id="g64"><text
+                 id="text68"
+                 style="font-variant:normal;font-weight:normal;font-size:12px;font-family:NotoSans;-inkscape-font-specification:NotoSans;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+                 transform="matrix(1,0,0,-1,15.700195,465.22945)"><tspan
+                   id="tspan66"
+                   y="0"
+                   x="0 7.4648438 14.232422 19.980469 26.748047 31.078125 34.195312 41.455078 48.1875 53.935547 59.683594 69.117188 76.376953 81.216797">Reset Password</tspan></text>
+</g><g
+               transform="translate(0,-230)"
+               id="g70"><path
+                 id="path72"
+                 style="fill:#0000ff;fill-opacity:0.49019602;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+                 d="m 0.5,20.5 c 0,-11.045696 26.862913,-20 60,-20 33.137087,0 60,8.954304 60,20 0,11.045696 -26.862913,20 -60,20 -33.137087,0 -60,-8.954304 -60,-20" /><g
+                 transform="matrix(1,0,0,-1,0,490)"
+                 id="g74"><text
+                   id="text78"
+                   style="font-variant:normal;font-weight:normal;font-size:12px;font-family:NotoSans;-inkscape-font-specification:NotoSans;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+                   transform="matrix(1,0,0,-1,42.234375,465.22945)"><tspan
+                     id="tspan76"
+                     y="0"
+                     x="0 6.2871094 13.546875 20.929688 24.046875 28.113281">Log In</tspan></text>
+</g><g
+                 transform="translate(0,80)"
+                 id="g80"><path
+                   id="path82"
+                   style="fill:#0000ff;fill-opacity:0.49019602;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+                   d="m 0.5,20.5 c 0,-11.045696 26.862913,-20 60,-20 33.137087,0 60,8.954304 60,20 0,11.045696 -26.862913,20 -60,20 -33.137087,0 -60,-8.954304 -60,-20" /><g
+                   transform="matrix(1,0,0,-1,0,490)"
+                   id="g84"><text
+                     id="text88"
+                     style="font-variant:normal;font-weight:normal;font-size:12px;font-family:NotoSans;-inkscape-font-specification:NotoSans;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+                     transform="matrix(1,0,0,-1,30.583008,472.72945)"><tspan
+                       id="tspan86"
+                       y="0"
+                       x="0 6.2871094 13.546875 20.929688 24.023438 31.441406 34.558594 43.992188 47.085938 51.416016">Login with</tspan></text>
+</g><g
+                   transform="matrix(1,0,0,-1,0,490)"
+                   id="g90"><text
+                     id="text94"
+                     style="font-variant:normal;font-weight:normal;font-size:12px;font-family:NotoSans;-inkscape-font-specification:NotoSans;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+                     transform="matrix(1,0,0,-1,17.100585,457.72945)"><tspan
+                       id="tspan92"
+                       y="0"
+                       x="0 6.5859375 13.353516 19.113281 26.53125 31.371094 38.138672 41.255859 48.638672 53.478516 60.621094 66.714844 69.808594 77.191406 83.958984">Secure provider</tspan></text>
+</g><g
+                   transform="translate(0,210)"
+                   id="g96"><path
+                     id="path98"
+                     style="fill:#0000ff;fill-opacity:0.49019602;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+                     d="m 0.5,20.5 c 0,-11.045696 26.862913,-20 60,-20 33.137087,0 60,8.954304 60,20 0,11.045696 -26.862913,20 -60,20 -33.137087,0 -60,-8.954304 -60,-20" /><g
+                     transform="matrix(1,0,0,-1,0,490)"
+                     id="g100"><text
+                       id="text104"
+                       style="font-variant:normal;font-weight:normal;font-size:12px;font-family:NotoSans;-inkscape-font-specification:NotoSans;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+                       transform="matrix(1,0,0,-1,40.03125,465.22945)"><tspan
+                         id="tspan102"
+                         y="0"
+                         x="0 6.2871094 13.546875 20.929688 28.189453 35.607422">Logout</tspan></text>
+</g><g
+                     transform="translate(0,-120)"
+                     id="g106"><path
+                       id="path108"
+                       style="fill:#0000ff;fill-opacity:0.49019602;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+                       d="m 0.5,20.5 c 0,-11.045696 26.862913,-20 60,-20 33.137087,0 60,8.954304 60,20 0,11.045696 -26.862913,20 -60,20 -33.137087,0 -60,-8.954304 -60,-20" /><g
+                       transform="matrix(1,0,0,-1,0,490)"
+                       id="g110"><text
+                         id="text114"
+                         style="font-variant:normal;font-weight:normal;font-size:12px;font-family:NotoSans;-inkscape-font-specification:NotoSans;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+                         transform="matrix(1,0,0,-1,30.583008,472.72945)"><tspan
+                           id="tspan112"
+                           y="0"
+                           x="0 6.2871094 13.546875 20.929688 24.023438 31.441406 34.558594 43.992188 47.085938 51.416016">Login with</tspan></text>
+</g><g
+                       transform="matrix(1,0,0,-1,0,490)"
+                       id="g116"><text
+                         id="text120"
+                         style="font-variant:normal;font-weight:normal;font-size:12px;font-family:NotoSans;-inkscape-font-specification:NotoSans;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+                         transform="matrix(1,0,0,-1,11.340821,457.72945)"><tspan
+                           id="tspan118"
+                           y="0"
+                           x="0 6.5859375 13.318359 19.412109 26.179688 33.5625 36.679688 44.261719 49.101562 55.869141 63.251953 70.019531 77.4375 81.767578 84.861328 91.59375 94.6875">Saved Credentials</tspan></text>
+</g><g
+                       transform="translate(0,-250)"
+                       id="g122"><path
+                         id="path124"
+                         style="fill:#0000ff;fill-opacity:0.49019602;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+                         d="m 0.5,20.5 c 0,-11.045696 26.862913,-20 60,-20 33.137087,0 60,8.954304 60,20 0,11.045696 -26.862913,20 -60,20 -33.137087,0 -60,-8.954304 -60,-20" /><g
+                         transform="matrix(1,0,0,-1,0,490)"
+                         id="g126"><text
+                           id="text130"
+                           style="font-variant:normal;font-weight:normal;font-size:12px;font-family:NotoSans;-inkscape-font-specification:NotoSans;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+                           transform="matrix(1,0,0,-1,12.37793,465.22945)"><tspan
+                             id="tspan128"
+                             y="0"
+                             x="0 7.4648438 14.232422 21.615234 24.708984 30.457031 34.787109 41.554688 46.511719 49.628906 57.298828 63.058594 68.818359 76.078125 83.496094 90.914062">Register Account</tspan></text>
+</g><g
+                         transform="translate(-170,160)"
+                         id="g132"><path
+                           id="path134"
+                           style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+                           d="m 10.5,11.5 v 0 79" /><path
+                           id="path136"
+                           style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+                           d="m 3.5,21.5 v 0 l 7,-11 6,11 h -13" /><g
+                           transform="translate(30,130)"
+                           id="g138"><path
+                             id="path140"
+                             style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+                             d="m 139.5,99.5 v 0 l -129,-89" /><path
+                             id="path142"
+                             style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+                             d="m 134.5,87.5 v 0 l 5,12 -13,-1" /><g
+                             id="g144"><path
+                               id="path146"
+                               style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+                               d="m 139.5,39.5 v 0 l -129,-29" /><path
+                               id="path148"
+                               style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+                               d="m 130.5,31.5 v 0 l 9,8 -12,4" /><g
+                               transform="translate(0,-30)"
+                               id="g150"><path
+                                 id="path152"
+                                 style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+                                 d="m 139.5,10.5 v 0 l -129,30" /><path
+                                 id="path154"
+                                 style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+                                 d="m 127.5,6.5 v 0 l 12,4 -9,8" /><g
+                                 transform="translate(190,-230)"
+                                 id="g156"><path
+                                   id="path158"
+                                   style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:6, 6;stroke-dashoffset:0;stroke-opacity:1"
+                                   d="m 10.5,49.5 v 0 -39" /><path
+                                   id="path160"
+                                   style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+                                   d="m 16.5,38.5 v 0 l -6,11 -7,-11" /><g
+                                   transform="matrix(1,0,0,-1,0,490)"
+                                   id="g162"><text
+                                   id="text166"
+                                   style="font-variant:normal;font-weight:normal;font-size:12px;font-family:NotoSans;-inkscape-font-specification:NotoSans;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+                                   transform="matrix(1,0,0,-1,14,452.22945)"><tspan
+                                   id="tspan164"
+                                   y="0"
+                                   x="0 6.1054688 12.755859 19.101562 23.431641 30.199219 37.617188 45 50.748047">«extends»</tspan></text>
+</g><g
+                                   transform="translate(0,80)"
+                                   id="g168"><path
+                                   id="path170"
+                                   style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:6, 6;stroke-dashoffset:0;stroke-opacity:1"
+                                   d="m 10.5,11.5 v 0 39" /><path
+                                   id="path172"
+                                   style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+                                   d="m 3.5,21.5 v 0 l 7,-11 6,11" /><g
+                                   transform="matrix(1,0,0,-1,0,490)"
+                                   id="g174"><text
+                                   id="text178"
+                                   style="font-variant:normal;font-weight:normal;font-size:12px;font-family:NotoSans;-inkscape-font-specification:NotoSans;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+                                   transform="matrix(1,0,0,-1,14,452.22945)"><tspan
+                                   id="tspan176"
+                                   y="0"
+                                   x="0 6.1054688 12.755859 19.101562 23.431641 30.199219 37.617188 45 50.748047">«extends»</tspan></text>
+</g><g
+                                   transform="translate(60,-20)"
+                                   id="g180"><path
+                                   id="path182"
+                                   style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:6, 6;stroke-dashoffset:0;stroke-opacity:1"
+                                   d="m 10.5,10.5 v 0 l 30,90" /><path
+                                   id="path184"
+                                   style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:6, 6;stroke-dashoffset:0;stroke-opacity:1"
+                                   d="m 40.5,100.5 v 0 l -30,80" /><path
+                                   id="path186"
+                                   style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+                                   d="m 7.5,23.5 v 0 l 3,-13 9,9" /><g
+                                   transform="matrix(1,0,0,-1,0,490)"
+                                   id="g188"><text
+                                   id="text192"
+                                   style="font-variant:normal;font-weight:normal;font-size:12px;font-family:NotoSans;-inkscape-font-specification:NotoSans;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+                                   transform="matrix(1,0,0,-1,42.509256,386.70168)"><tspan
+                                   id="tspan190"
+                                   y="0"
+                                   x="0 6.1054688 12.755859 19.101562 23.431641 30.199219 37.617188 45 50.748047">«extends»</tspan></text>
+</g><g
+                                   transform="translate(-250)"
+                                   id="g194"><path
+                                   id="path196"
+                                   style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+                                   d="m 139.5,89.5 v 0 l -129,-79" /><path
+                                   id="path198"
+                                   style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+                                   d="m 133.5,78.5 v 0 l 6,11 h -13" /><g
+                                   transform="translate(0,-80)"
+                                   id="g200"><path
+                                   id="path202"
+                                   style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+                                   d="m 139.5,10.5 v 0 l -129,80" /><path
+                                   id="path204"
+                                   style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+                                   d="m 126.5,10.5 v 0 h 13 l -6,11" /><g
+                                   transform="translate(-80,-230)"
+                                   id="g206" /></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></g></svg>
