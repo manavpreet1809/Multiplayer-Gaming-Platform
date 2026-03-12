@@ -3,6 +3,10 @@
 Use this checklist **before you start working** on the project.  
 If all items pass, your environment is correctly set up.
 
+## Tech Stack
+- Database: MongoDB Shared Cluster (Stubbed for now)
+- Backend: Django (python)
+- Frontend: React frameowrk with Typescript
 ---
 
 ## 1. Required Software
