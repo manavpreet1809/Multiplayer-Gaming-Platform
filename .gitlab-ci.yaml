@@ -1,6 +1,16 @@
 stages:
   - verify
-  - build
+
+hello-world:
+  stage: verify
+  script:
+    - echo "Hello from GitLab CI"
+    - echo "Branch: $CI_COMMIT_BRANCH"
+    - echo "Commit: $CI_COMMIT_SHA"
+    - uname -a
+# stages:
+#   - verify
+#   - build
 
 # variables:
 #   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
