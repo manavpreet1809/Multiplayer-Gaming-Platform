@@ -4,10 +4,11 @@ stages:
 hello-world:
   stage: verify
   script:
-    - echo "Hello from GitLab CI"
-    - echo "Branch: $CI_COMMIT_BRANCH"
-    - echo "Commit: $CI_COMMIT_SHA"
-    - uname -a
+    - 'echo "Hello from GitLab CI"'
+    - 'echo "Branch: $CI_COMMIT_BRANCH"'
+    - 'echo "Commit: $CI_COMMIT_SHA"'
+
+
 # stages:
 #   - verify
 #   - build
