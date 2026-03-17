@@ -1,11 +1,16 @@
+import { useState } from 'react';
 import Login from './components/Login';
+import GameBoardDemo from './components/GameBoardDemo';
 import './App.css';
 
 function App() {
+  const [view, setView] = useState('login');
+
   const handleLogin = async (identifier, password) => {
     // TODO: Replace with real authentication logic (User Store Stub lookup)
     console.log('Login attempt:', identifier);
-    throw new Error('Authentication not yet implemented.');
+    // For demo purposes, any login goes to the board demo
+    setView('demo');
   };
 
   const handleForgotPassword = () => {
@@ -17,6 +22,10 @@ function App() {
     // TODO: Navigate to registration view (AUTH-01)
     console.log('Navigate to register');
   };
+
+  if (view === 'demo') {
+    return <GameBoardDemo />;
+  }
 
   return (
     <Login
