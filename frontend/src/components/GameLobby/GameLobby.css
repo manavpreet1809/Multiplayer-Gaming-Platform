@@ -1,0 +1,154 @@
+.game-lobby {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.game-lobby-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.game-lobby-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.game-lobby-id {
+  font-size: 0.75rem;
+  color: #999;
+}
+
+.game-lobby-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.game-lobby-status {
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.25rem 0.6rem;
+  border-radius: 12px;
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.game-lobby-status--started {
+  background-color: #c8e6c9;
+  color: #2e7d32;
+}
+
+.game-lobby-leave {
+  background: none;
+  border: 1px solid #d32f2f;
+  border-radius: 4px;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.875rem;
+  color: #d32f2f;
+  cursor: pointer;
+}
+
+.game-lobby-leave:hover {
+  background-color: #fdecea;
+}
+
+.game-lobby-players h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.75rem;
+}
+
+.game-lobby-player-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.game-lobby-player {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  background: #fff;
+}
+
+.game-lobby-player--empty {
+  background: #fafafa;
+  border-style: dashed;
+}
+
+.game-lobby-player-name {
+  font-weight: 500;
+  color: #333;
+}
+
+.game-lobby-player--empty .game-lobby-player-name {
+  color: #bbb;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.game-lobby-player-status {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #999;
+}
+
+.game-lobby-player-status--ready {
+  color: #2e7d32;
+}
+
+.game-lobby-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.game-lobby-ready {
+  padding: 0.625rem 1.25rem;
+  border: 1px solid #1976d2;
+  border-radius: 4px;
+  background: #fff;
+  color: #1976d2;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.game-lobby-ready:hover {
+  background-color: #e3f2fd;
+}
+
+.game-lobby-start {
+  padding: 0.625rem 1.25rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #2e7d32;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.game-lobby-start:hover {
+  background-color: #1b5e20;
+}
+
+.game-lobby-chat {
+  margin-top: 2rem;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 1.5rem;
+}
