@@ -15,26 +15,26 @@
   margin: 0;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #333;
+  color: #662691;
 }
 
 .profile-back {
   background: none;
-  border: 1px solid #ccc;
+  border: 1px solid #BEB8EB;
   border-radius: 4px;
   padding: 0.4rem 0.75rem;
   font-size: 0.875rem;
   cursor: pointer;
-  color: #333;
+  color: #662691;
 }
 
 .profile-back:hover {
-  background-color: #f5f5f5;
+  background-color: #ebe8f5;
 }
 
 .profile-info {
   background: #fff;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #BEB8EB;
   border-radius: 8px;
   padding: 1.25rem;
   margin-bottom: 1.5rem;
@@ -44,7 +44,7 @@
   display: flex;
   justify-content: space-between;
   padding: 0.5rem 0;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid #ebe8f5;
 }
 
 .profile-field:last-child {
@@ -65,7 +65,7 @@
 .profile-game-stats h3 {
   font-size: 1.125rem;
   font-weight: 600;
-  color: #333;
+  color: #662691;
   margin-bottom: 0.75rem;
 }
 
@@ -80,7 +80,7 @@
   text-align: center;
   padding: 1rem;
   background: #fff;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #BEB8EB;
   border-radius: 8px;
 }
 
@@ -88,7 +88,7 @@
   display: block;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1976d2;
+  color: #662691;
 }
 
 .profile-stat-label {
@@ -112,14 +112,14 @@
 .profile-table td {
   text-align: left;
   padding: 0.625rem 0.75rem;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #BEB8EB;
   font-size: 0.875rem;
 }
 
 .profile-table th {
   font-weight: 600;
-  color: #555;
-  background: #fafafa;
+  color: #662691;
+  background: #ebe8f5;
 }
 
 .profile-actions {
@@ -128,7 +128,7 @@
 
 .profile-edit {
   padding: 0.625rem 1.25rem;
-  background-color: #1976d2;
+  background-color: #662691;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -138,5 +138,5 @@
 }
 
 .profile-edit:hover {
-  background-color: #1565c0;
+  background-color: #4e1d6e;
 }
