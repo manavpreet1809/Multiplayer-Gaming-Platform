@@ -1,24 +1,29 @@
-import logo from './logo.svg';
+import Login from './components/Login';
 import './App.css';
 
 function App() {
+  const handleLogin = async (identifier, password) => {
+    // TODO: Replace with real authentication logic (User Store Stub lookup)
+    console.log('Login attempt:', identifier);
+    throw new Error('Authentication not yet implemented.');
+  };
+
+  const handleForgotPassword = () => {
+    // TODO: Navigate to reset-password view (AUTH-03)
+    console.log('Navigate to forgot password');
+  };
+
+  const handleRegister = () => {
+    // TODO: Navigate to registration view (AUTH-01)
+    console.log('Navigate to register');
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Login
+      onLogin={handleLogin}
+      onForgotPassword={handleForgotPassword}
+      onRegister={handleRegister}
+    />
   );
 }
 
