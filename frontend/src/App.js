@@ -1,10 +1,18 @@
 import { useState } from 'react';
 import Login from './components/Login';
 import GameBoardDemo from './components/GameBoardDemo';
+import ScreenshotPage from './ScreenshotPage';
 import './App.css';
+
+// Render screenshot page when ?screenshots is in the URL
+const isScreenshotMode = new URLSearchParams(window.location.search).has('screenshots');
 
 function App() {
   const [view, setView] = useState('login');
+
+  if (isScreenshotMode) {
+    return <ScreenshotPage />;
+  }
 
   const handleLogin = async (identifier, password) => {
     // TODO: Replace with real authentication logic (User Store Stub lookup)
