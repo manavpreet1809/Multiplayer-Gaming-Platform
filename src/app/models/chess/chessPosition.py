@@ -5,3 +5,9 @@ class chessPosition:
             pass
         self.row = row
         self.col = col
+
+    def __eq__(self, other):
+        return isinstance(other, chessPosition) and self.row == other.row and self.col == other.col
+
+    def __hash__(self):
+        return hash((self.row, self.col))
