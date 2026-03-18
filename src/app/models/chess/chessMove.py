@@ -3,7 +3,7 @@ from chessPiece import PieceType
 from typing import Optional
 
 class chessMove:
-    def __init__(self, from_pos: chessPosition, to_pos: chessPosition, promotion: Optional[PieceType] = None):
-        self.from_pos = from_pos
-        self.to_pos = to_pos
+    def __init__(self, fromPos: chessPosition, toPos: chessPosition, promotion: Optional[PieceType] = None):
+        self.fromPos = fromPos
+        self.toPos = toPos
         self.promotion = promotion

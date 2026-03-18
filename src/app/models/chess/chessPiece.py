@@ -14,7 +14,7 @@ class Color(Enum):
     BLACK = "BLACK"
 
 class ChessPiece:
-    def __init__(self, piece_type: PieceType, color: Color, has_moved: bool = False):
-        self.piece_type = piece_type
+    def __init__(self, pieceType: PieceType, color: Color, hasMoved: bool = False):
+        self.pieceType = pieceType
         self.color = color
-        self.has_moved = has_moved
+        self.hasMoved = hasMoved

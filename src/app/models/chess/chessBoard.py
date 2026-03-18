@@ -10,7 +10,7 @@ class chessBoard:
             [None for _ in range(8)] for _ in range(8)
         ]
 
-    def setup_initial_position(self):
+    def setupInitialPosition(self):
         # Pawns
         for col in range(8):
             self.grid[1][col] = ChessPiece(PieceType.PAWN, Color.WHITE)
@@ -42,11 +42,11 @@ class chessBoard:
         self.grid[0][4] = ChessPiece(PieceType.KING, Color.WHITE)
         self.grid[7][4] = ChessPiece(PieceType.KING, Color.BLACK)
 
-    def get_piece(self, position: chessPosition) -> Optional[ChessPiece]:
+    def getPiece(self, position: chessPosition) -> Optional[ChessPiece]:
         return self.grid[position.row][position.col]
 
-    def set_piece(self, position: chessPosition, piece: ChessPiece):
+    def setPiece(self, position: chessPosition, piece: ChessPiece):
         self.grid[position.row][position.col] = piece
 
-    def remove_piece(self, position: chessPosition):
+    def removePiece(self, position: chessPosition):
         self.grid[position.row][position.col] = None
