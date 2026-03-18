@@ -1,8 +1,9 @@
 from typing import List, Optional
 from modules.gameEngine import GameEngine
 from app.models.chess.chessBoard import chessBoard
-from app.models.chess.chessPiece import Color
+from app.models.chess.chessPiece import Color, PieceType
 from app.models.chess.chessMove import chessMove
+from app.models.chess.chessPosition import chessPosition
 
 class ChessEngine(GameEngine):
     def createInitialState(self, players: List[str]) -> dict:
@@ -29,10 +30,34 @@ class ChessEngine(GameEngine):
     def applyMove(self, state: dict, move: chessMove) -> dict:
         board = state["board"]
         piece = board.getPiece(move.fromPos)
+        captured = board.getPiece(move.toPos)
 
+        # basic move
         board.removePiece(move.fromPos)
         board.setPiece(move.toPos, piece)
         piece.hasMoved = True
+
+        # TODO: if castling, move the rook
+        # TODO: if promotion, promote the pawn
+
+        # en passant capture
+        if piece.pieceType == PieceType.PAWN and move.toPos == state["enPassantTarget"]:
+            capturedPawnRow = move.fromPos.row
+            board.removePiece(chessPosition(capturedPawnRow, move.toPos.col))
+            captured = True
+
+        # en passant target
+        if piece.pieceType == PieceType.PAWN and abs(move.toPos.row - move.fromPos.row) == 2:
+            skippedRow = (move.fromPos.row + move.toPos.row) // 2
+            enPassantTarget = chessPosition(skippedRow, move.toPos.col)
+        else:
+            enPassantTarget = None
+
+        # halfmove clock
+        if captured or piece.pieceType == PieceType.PAWN:
+            halfmoveClock = 0
+        else:
+            halfmoveClock = state["halfmoveClock"] + 1
 
         newColor = Color.BLACK if state["activeColor"] == Color.WHITE else Color.WHITE
 
@@ -41,8 +66,8 @@ class ChessEngine(GameEngine):
             "players": state["players"],
             "activeColor": newColor,
             "castlingRights": state["castlingRights"],
-            "enPassantTarget": None,  # TODO: set if pawn double-push
-            "halfmoveClock": state["halfmoveClock"] + 1,  # TODO: reset on pawn move/capture
+            "enPassantTarget": enPassantTarget,
+            "halfmoveClock": halfmoveClock,
         }
 
     def evaluateEnd(self, state: dict) -> Optional[dict]:
