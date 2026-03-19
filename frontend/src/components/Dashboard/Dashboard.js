@@ -35,7 +35,7 @@ function Dashboard({
   return (
     <div className="dashboard">
       <header className="dashboard-header">
-        <h1 className="dashboard-title">Dashboard</h1>
+        <h1 className="dashboard-title">Chalant-Auramaxxers</h1>
         <div className="dashboard-user-info">
           <span className="dashboard-username">{username}</span>
           <span className={`dashboard-status dashboard-status--${status}`}>
@@ -60,7 +60,9 @@ function Dashboard({
           )}
         </nav>
       </header>
+      <div className="content-body">
 
+      </div>
       {notifications.length > 0 && (
         <section className="dashboard-notifications">
           <h3>Notifications</h3>
