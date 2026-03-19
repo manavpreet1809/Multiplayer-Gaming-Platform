@@ -321,5 +321,17 @@ class ChessEngine(GameEngine):
             ),
             "halfmoveClock": state["halfmoveClock"],
         }
+
+    def findKing(self, board: chessBoard, color: Color) -> chessPosition:
+        # search board
+        for r in range(8):
+            for c in range(8):
+                piece = board.getPiece(chessPosition(r, c))
+                # if piece found is king, return king position
+                if piece is not None and piece.color == color and piece.pieceType == PieceType.KING:
+                    return chessPosition(r, c)
+        raise ValueError("King not found")
+
+
     def evaluateEnd(self, state: dict) -> Optional[dict]:
         return None
