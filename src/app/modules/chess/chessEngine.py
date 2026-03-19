@@ -1,5 +1,5 @@
 from typing import List, Optional
-from modules.gameEngine import GameEngine
+from app.modules.gameEngine import GameEngine
 from app.models.chess.chessBoard import chessBoard
 from app.models.chess.chessPiece import Color, PieceType, ChessPiece
 from app.models.chess.chessMove import chessMove
@@ -332,14 +332,6 @@ class ChessEngine(GameEngine):
                     return chessPosition(r, c)
         raise ValueError("King not found")
 
-    def findKing(self, board: chessBoard, color: Color) -> chessPosition:
-        for r in range(8):
-            for c in range(8):
-                piece = board.getPiece(chessPosition(r, c))
-                if piece is not None and piece.color == color and piece.pieceType == PieceType.KING:
-                    return chessPosition(r, c)
-        raise ValueError("King not found")
-
     def isSquareAttacked(self, board: chessBoard, pos: chessPosition, attackerColor: Color) -> bool:
         # loop through board
         for r in range(8):
@@ -447,7 +439,7 @@ class ChessEngine(GameEngine):
         in_check = self.isSquareAttacked(board, king_pos, opponent)
 
         # does the active player have at least one legal move
-        has_legal_move = self._hasAnyLegalMove(state, active_color)
+        has_legal_move = self.hasAnyLegalMove(state, active_color)
 
         # checkmate - in check and no legal moves
         if in_check and not has_legal_move:
