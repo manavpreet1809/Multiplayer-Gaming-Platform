@@ -426,4 +426,88 @@ class ChessEngine(GameEngine):
         return self.isSquareAttacked(temp_state["board"], king_pos, opponent)
 
     def evaluateEnd(self, state: dict) -> Optional[dict]:
+        active_color = state["activeColor"]
+        board = state["board"]
+
+        # 50 move rule: 100 halfmoves without pawn move or capture
+        if state["halfmoveClock"] >= 100:
+            return {
+                "isOver": True,
+                "result": "draw",
+                "reason": "50-move rule"
+            }
+
+        # find the active players king
+        king_pos = self.findKing(board, active_color)
+
+        # determine opponent color
+        opponent = Color.BLACK if active_color == Color.WHITE else Color.WHITE
+
+        # is the active player's king currently under attack
+        in_check = self.isSquareAttacked(board, king_pos, opponent)
+
+        # does the active player have at least one legal move
+        has_legal_move = self._hasAnyLegalMove(state, active_color)
+
+        # checkmate - in check and no legal moves
+        if in_check and not has_legal_move:
+            winner = Color.BLACK if active_color == Color.WHITE else Color.WHITE
+            return {
+                "isOver": True,
+                "result": "win",
+                "winner": winner,
+                "reason": "checkmate"
+            }
+
+        # stalemate - not in check and no legal moves
+        if not in_check and not has_legal_move:
+            return {
+                "isOver": True,
+                "result": "draw",
+                "reason": "stalemate"
+            }
+
+        # Otherwise game continues
         return None
+
+    def hasAnyLegalMove(self, state: dict, color: Color) -> bool:
+        board = state["board"]
+
+        # temporarily build a state where it is this colors turn,
+        # so validateMove checks the correct side.
+        test_state = self.cloneState(state)
+        test_state["activeColor"] = color
+
+        for from_row in range(8):
+            for from_col in range(8):
+                from_pos = chessPosition(from_row, from_col)
+                piece = board.getPiece(from_pos)
+
+                # skip empty squares or opponent pieces
+                if piece is None or piece.color != color:
+                    continue
+
+                # try every destination square on the board
+                for to_row in range(8):
+                    for to_col in range(8):
+                        to_pos = chessPosition(to_row, to_col)
+
+                        # skip same square moves
+                        if from_row == to_row and from_col == to_col:
+                            continue
+
+                        # handle normal moves first
+                        move = chessMove(from_pos, to_pos)
+
+                        if self.validateMove(test_state, move):
+                            return True
+
+                        # handle promotion moves if a pawn reaches the back rank
+                        if piece.pieceType == PieceType.PAWN:
+                            last_row = 7 if color == Color.WHITE else 0
+                            if to_row == last_row:
+                                for promo in [PieceType.QUEEN, PieceType.ROOK, PieceType.BISHOP, PieceType.KNIGHT]:
+                                    promo_move = chessMove(from_pos, to_pos, promo)
+                                    if self.validateMove(test_state, promo_move):
+                                        return True
+        return False
