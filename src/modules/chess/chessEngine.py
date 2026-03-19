@@ -248,9 +248,9 @@ class ChessEngine(GameEngine):
                 return False
 
             # king cannot pass through or land on attacked squares
-            if self._isSquareAttacked(board, chessPosition(row, 5), opponent):
+            if self.isSquareAttacked(board, chessPosition(row, 5), opponent):
                 return False
-            if self._isSquareAttacked(board, chessPosition(row, 6), opponent):
+            if self.isSquareAttacked(board, chessPosition(row, 6), opponent):
                 return False
 
             return True
@@ -286,7 +286,7 @@ class ChessEngine(GameEngine):
         # get current board from the state
         old_board = state["board"]
 
-        # create a brand new empty baord
+        # create a brand new empty board
         new_board = chessBoard()
 
         # loop through every square on board
@@ -332,6 +332,98 @@ class ChessEngine(GameEngine):
                     return chessPosition(r, c)
         raise ValueError("King not found")
 
+    def findKing(self, board: chessBoard, color: Color) -> chessPosition:
+        for r in range(8):
+            for c in range(8):
+                piece = board.getPiece(chessPosition(r, c))
+                if piece is not None and piece.color == color and piece.pieceType == PieceType.KING:
+                    return chessPosition(r, c)
+        raise ValueError("King not found")
+
+    def isSquareAttacked(self, board: chessBoard, pos: chessPosition, attackerColor: Color) -> bool:
+        # loop through board
+        for r in range(8):
+            for c in range(8):
+
+                # potential attacking piece
+                attacker_pos = chessPosition(r, c)
+                piece = board.getPiece(attacker_pos)
+
+                # skip if there is no piece or piece is not attacking colour
+                if piece is None or piece.color != attackerColor:
+                    continue
+
+                # compute distance from target square
+                dr = pos.row - r
+                dc = pos.col - c
+
+                # Pawn attacks
+                if piece.pieceType == PieceType.PAWN:
+                    # pawn attacks diagonally forward
+                    direction = 1 if piece.color == Color.WHITE else -1
+
+                    # check if pawn can attack target square
+                    if dr == direction and abs(dc) == 1:
+                        return True
+
+                # Knight attacks
+                elif piece.pieceType == PieceType.KNIGHT:
+                    # knight moves in L-shape
+                    if (abs(dr), abs(dc)) in [(2, 1), (1, 2)]:
+                        return True
+
+                # Bishop attacks
+                elif piece.pieceType == PieceType.BISHOP:
+                    # Must be diagonal and path must be clear
+                    if abs(dr) == abs(dc) and self.isPathClear(board, attacker_pos, pos):
+                        return True
+
+                # Rook attacks
+                elif piece.pieceType == PieceType.ROOK:
+                    # must be straight line and path must be clear
+                    if (dr == 0 or dc == 0) and self.isPathClear(board, attacker_pos, pos):
+                        return True
+
+                # Queen attacks
+                elif piece.pieceType == PieceType.QUEEN:
+                    # combination of rook and bishop movement
+                    if ((dr == 0 or dc == 0) or abs(dr) == abs(dc)) and self.isPathClear(board, attacker_pos, pos):
+                        return True
+
+                # King attacks
+                elif piece.pieceType == PieceType.KING:
+                    # attacks any adjacent square
+                    if max(abs(dr), abs(dc)) == 1:
+                        return True
+
+        return False
+
+    def wouldLeaveKingInCheck(self, state: dict, move: chessMove) -> bool:
+        # make copy of current game to test move
+        temp_state = self.cloneState(state)
+
+        # create fresh copy of move using fresh position objects (separates simulated move)
+        temp_move = chessMove(
+            chessPosition(move.fromPos.row, move.fromPos.col),
+            chessPosition(move.toPos.row, move.toPos.col),
+            move.promotion
+        )
+
+        # apply move to copied state
+        temp_state = self.applyMove(temp_state, temp_move)
+
+        # colour that made move is activeColour
+        moved_color = state["activeColor"]
+
+        # determine opponents colour
+        opponent = Color.BLACK if moved_color == Color.WHITE else Color.WHITE
+
+        # find the moved players king on simulated board
+        king_pos = self.findKing(temp_state["board"], moved_color)
+
+        # If the opponent attacks the king's square after this move,
+        # then the move is illegal because it leaves the king in check
+        return self.isSquareAttacked(temp_state["board"], king_pos, opponent)
 
     def evaluateEnd(self, state: dict) -> Optional[dict]:
         return None
