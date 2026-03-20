@@ -15,7 +15,10 @@ from slowapi.util import get_remote_address
 from src.app.db.validUser_mongo import users_collection, revoked_tokens_collection
 from src.app.schemas.auth import TokenData, UserCreate, UserInDB, UserPublic
 
-SECRET_KEY = os.getenv("SECRET_KEY", "")
+from dotenv import load_dotenv
+load_dotenv()
+
+SECRET_KEY = os.getenv("SECRET_KEY", "CHANGE_ME_TO_A_LONG_RANDOM_SECRET")
 if not SECRET_KEY or SECRET_KEY == "CHANGE_ME_TO_A_LONG_RANDOM_SECRET":
     raise RuntimeError(
         "SECRET_KEY environment variable is not set or is still the default. "
