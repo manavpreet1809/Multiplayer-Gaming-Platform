@@ -93,14 +93,14 @@ async def revoke_token(token: str) -> None:
 
     expires_at = datetime.fromtimestamp(exp, tz=timezone.utc)
 
-    # insert_one with ignore on duplicate — harmless if already revoked
+    # insert_one with ignore on duplicate: harmless if already revoked
     try:
         await revoked_tokens_collection.insert_one({
             "jti": jti,
             "expires_at": expires_at,
         })
     except DuplicateKeyError:
-        pass  # already revoked, fine
+        pass  # already revoked
     # all other DB errors (connection loss, write timeout) now propagate naturally
 
 
