@@ -4,8 +4,6 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel
-from slowapi import Limiter
-from slowapi.util import get_remote_address
 
 from src.app.schemas.auth import Token, UserCreate, UserPublic
 from src.app.services.authServices import (
@@ -13,17 +11,23 @@ from src.app.services.authServices import (
     authenticate_user,
     create_access_token,
     create_refresh_token,
-    create_user,
     decode_refresh_token,
+    create_user,
     get_current_user,
     get_user_by_username,
     limiter,
+    oauth2_scheme,
+    revoke_token,
 )
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
 class RefreshRequest(BaseModel):
+    refresh_token: str
+
+
+class LogoutRequest(BaseModel):
     refresh_token: str
 
 
@@ -46,9 +50,9 @@ async def register(user: UserCreate):
 
 
 @router.post("/login", response_model=TokenPair)
-@limiter.limit("10/minute")  #protect against brute-force attacks on login
+@limiter.limit("10/minute")
 async def login(
-    request: Request,  # required by slowapi
+    request: Request,
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
 ):
     user = await authenticate_user(form_data.username, form_data.password)
@@ -73,11 +77,14 @@ async def login(
 @limiter.limit("20/minute")
 async def refresh(request: Request, body: RefreshRequest):
     """Exchange a valid refresh token for a new access + refresh token pair."""
-    username = decode_refresh_token(body.refresh_token)
+    username = await decode_refresh_token(body.refresh_token)
     user = await get_user_by_username(username)
 
     if user is None or user.disabled:
         raise HTTPException(status_code=401, detail="User not found or inactive")
+
+    # Revoke the consumed refresh token so it cannot be replayed
+    await revoke_token(body.refresh_token)
 
     access_token = create_access_token(
         data={"sub": username},
@@ -86,6 +93,22 @@ async def refresh(request: Request, body: RefreshRequest):
     new_refresh_token = create_refresh_token(data={"sub": username})
 
     return TokenPair(access_token=access_token, refresh_token=new_refresh_token)
+
+
+@router.post("/logout", status_code=status.HTTP_204_NO_CONTENT)
+async def logout(
+    body: LogoutRequest,
+    current_user: Annotated[UserPublic, Depends(get_current_user)],
+    access_token: Annotated[str, Depends(oauth2_scheme)],
+):
+    """
+    Revoke both the current access token and the provided refresh token.
+    Client must send:
+      Authorization: Bearer <access_token>         (header)
+      { "refresh_token": "<refresh_token>" }       (body)
+    """
+    await revoke_token(access_token)
+    await revoke_token(body.refresh_token)
 
 
 @router.get("/me", response_model=UserPublic)
