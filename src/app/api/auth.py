@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel
 
-from src.app.schemas.auth import Token, UserCreate, UserPublic
+from src.app.schemas.auth import UserCreate, UserPublic
 from src.app.services.authServices import (
     ACCESS_TOKEN_EXPIRE_MINUTES,
     authenticate_user,

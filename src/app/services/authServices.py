@@ -154,9 +154,7 @@ async def get_user_by_username(username: str) -> UserInDB | None:
 
 
 async def create_user(user: UserCreate) -> UserPublic:
-    existing_user = await users_collection.find_one({"username": user.username})
-    if existing_user:
-        raise ValueError("Username already exists")
+
 
     user_doc = {
         "username": user.username,
@@ -166,12 +164,11 @@ async def create_user(user: UserCreate) -> UserPublic:
         "disabled": False,
         "created_at": datetime.now(timezone.utc),
     }
-    await users_collection.insert_one(user_doc)
 
     try:
         await users_collection.insert_one(user_doc)
     except DuplicateKeyError as e:
-        # The index name tells us which field conflicted
+        # The index name tells which field conflicted
         if "email" in str(e):
             raise ValueError("Email already in use")
         raise ValueError("Username already exists")
