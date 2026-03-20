@@ -9,7 +9,7 @@ A FastAPI authentication backend with MongoDB. Provides JWT-based registration, 
 This service handles everything related to user identity: creating accounts, proving who you are, and revoking access when you log out. Here's what each piece does:
 
 ### User Registration
-When a user registers, their password is validated against a set of rules (8+ characters, uppercase, lowercase, digit, special character) before anything hits the database. The password is then hashed using Argon2 (via `pwdlib`) and stored — the plaintext password is never saved anywhere. A unique index on both `username` and `email` in MongoDB enforces that no two users can share either.
+When a user registers, their password is validated against a set of rules (8+ characters, uppercase, lowercase, digit, special character) before anything hits the database. The password is then hashed using Argon2 (via `pwdlib`) and stored the plaintext password is never saved anywhere. A unique index on both `username` and `email` in MongoDB enforces that no two users can share either.
 
 ### Login & JWT Tokens
 Login accepts a username and password. If valid, the service issues two tokens:
@@ -22,7 +22,7 @@ Both tokens are signed with `SECRET_KEY` using HS256. This means the server can 
 Every token has a unique `jti` (JWT ID). When a user logs out or refreshes, the old token's `jti` is written to a `revoked_tokens` collection in MongoDB. On every protected request, the service does a single indexed lookup to check if the token has been revoked. MongoDB's TTL index automatically deletes blocklist entries once the token would have expired anyway, keeping the collection small.
 
 ### Refresh Token Rotation
-When a refresh token is used to get a new token pair, the old refresh token is immediately revoked. This means each refresh token can only be used once — if an attacker steals one and tries to use it after the legitimate user already has, it will be rejected.
+When a refresh token is used to get a new token pair, the old refresh token is immediately revoked. This means each refresh token can only be used once if an attacker steals one and tries to use it after the legitimate user already has, it will be rejected.
 
 ### Logout
 Logout revokes both the access token and the refresh token simultaneously, immediately invalidating the session on the server side.
@@ -232,7 +232,7 @@ The interactive Swagger UI at `http://localhost:8000/docs` lets you test all end
 
 **Failure cases**
 - Wrong password → expect `401`
-- Non-existent username → expect `401` (same error message as wrong password — this is intentional, it prevents username enumeration)
+- Non-existent username → expect `401` (same error message as wrong password this is intentional, it prevents username enumeration)
 - Sending JSON instead of form data → expect `422`
 
 **Rate limiting**
@@ -278,10 +278,10 @@ The interactive Swagger UI at `http://localhost:8000/docs` lets you test all end
 
 ### Things to be aware of
 
-- **MongoDB must be running** before starting the server — if it isn't, the app will start but all requests will fail with 500 errors
-- **`.env` must have `SECRET_KEY` set** — the app will refuse to start without it
-- **Token expiry times are configurable** via `.env` — set `ACCESS_TOKEN_EXPIRE_MINUTES` to a low number like `1` to test expiry scenarios without waiting
-- **The blocklist is in MongoDB** — if you wipe the `revoked_tokens` collection manually, previously revoked tokens will become valid again until they naturally expire
+- **MongoDB must be running** before starting the server: if it isn't, the app will start but all requests will fail with 500 errors
+- **`.env` must have `SECRET_KEY` set**: the app will refuse to start without it
+- **Token expiry times are configurable** via `.env`: set `ACCESS_TOKEN_EXPIRE_MINUTES` to a low number like `1` to test expiry scenarios without waiting
+- **The blocklist is in MongoDB**: if you wipe the `revoked_tokens` collection manually, previously revoked tokens will become valid again until they naturally expire
 
 ---
 
@@ -295,7 +295,7 @@ npm install axios
 
 ### Token storage
 
-Store both tokens in memory (a React context or Zustand store). Do **not** store them in `localStorage` — it is accessible to JavaScript and vulnerable to XSS attacks.
+Store both tokens in memory (a React context or Zustand store). Do **not** store them in `localStorage` it is accessible to JavaScript and vulnerable to XSS attacks.
 
 ```ts
 // src/auth/tokenStore.ts
