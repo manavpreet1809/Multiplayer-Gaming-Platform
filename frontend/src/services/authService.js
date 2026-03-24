@@ -25,7 +25,7 @@ export function clearTokens() {
   refreshToken = null;
 }
 
-// ─── Helper ─────────────────────────────────────────────────────────
+// ─── Helpers ────────────────────────────────────────────────────────
 
 async function apiFetch(path, options = {}) {
   const res = await fetch(`${API_BASE}${path}`, {
@@ -37,11 +37,44 @@ async function apiFetch(path, options = {}) {
 
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
-    throw new Error(body.detail || `Request failed (${res.status})`);
+    const err = new Error(body.detail || `Request failed (${res.status})`);
+    err.status = res.status;
+    throw err;
   }
 
   if (res.status === 204) return null;
   return res.json();
+}
+
+/**
+ * Fetch wrapper for authenticated requests.  Automatically attaches the
+ * access token and retries once after refreshing if a 401 is returned.
+ */
+export async function authFetch(path, options = {}) {
+  const withAuth = (token) => ({
+    ...options,
+    headers: {
+      ...(options.headers || {}),
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  try {
+    return await apiFetch(path, withAuth(accessToken));
+  } catch (err) {
+    if (err.status !== 401 || !refreshToken) throw err;
+
+    // Attempt a single token refresh
+    try {
+      await refresh();
+    } catch {
+      clearTokens();
+      throw err;
+    }
+
+    // Retry the original request with the new token
+    return apiFetch(path, withAuth(accessToken));
+  }
 }
 
 // ─── Public API ─────────────────────────────────────────────────────
@@ -101,12 +134,9 @@ export async function refresh() {
  */
 export async function logout() {
   try {
-    await apiFetch('/auth/logout', {
+    await authFetch('/auth/logout', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ refresh_token: refreshToken }),
     });
   } finally {
@@ -129,7 +159,5 @@ export async function resetPassword(identifier, newPassword) {
  * Fetch the current user's profile.
  */
 export async function getMe() {
-  return apiFetch('/auth/me', {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
+  return authFetch('/auth/me');
 }

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import validatePassword from '../../utils/validatePassword';
 import './Register.css';
 
 /**
@@ -30,12 +31,7 @@ function Register({ onRegister, onLogin }) {
       return;
     }
 
-    const pwdErrors = [];
-    if (password.length < 8) pwdErrors.push('at least 8 characters');
-    if (!/[A-Z]/.test(password)) pwdErrors.push('an uppercase letter');
-    if (!/[a-z]/.test(password)) pwdErrors.push('a lowercase letter');
-    if (!/\d/.test(password)) pwdErrors.push('a digit');
-    if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~]/.test(password)) pwdErrors.push('a special character');
+    const pwdErrors = validatePassword(password);
     if (pwdErrors.length > 0) {
       setError('Password must contain ' + pwdErrors.join(', ') + '.');
       return;

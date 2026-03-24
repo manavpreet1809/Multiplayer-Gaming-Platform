@@ -6,28 +6,27 @@
   min-height: 100vh;
   padding: 2rem;
   text-align: center;
-  background-color: #f5f5f5;
+  background-color: var(--color-bg);
 }
 
 .error-boundary-title {
   font-size: 1.5rem;
-  color: #F56476;
+  color: var(--color-error);
   margin-bottom: 0.75rem;
 }
 
 .error-boundary-message {
-  color: #555;
+  color: var(--color-text-muted);
   margin-bottom: 1.5rem;
   max-width: 400px;
 }
 
 .error-boundary-button {
   padding: 0.75rem 2rem;
-  background-color: #662691;
+  background-color: var(--color-primary);
   color: #fff;
   border: none;
   border-radius: 4px;
-  font-family: 'Roboto', sans-serif;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -35,5 +34,5 @@
 }
 
 .error-boundary-button:hover {
-  background-color: #4e1d6e;
+  background-color: var(--color-primary-dark);
 }

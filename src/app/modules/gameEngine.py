@@ -18,3 +18,15 @@ class GameEngine(ABC):
     @abstractmethod
     def evaluateEnd(self, state: dict) -> Optional[dict]:
         pass
+
+    @abstractmethod
+    def serializeState(self, state: dict) -> dict:
+        pass
+
+    @abstractmethod
+    def serializeEndResult(self, end_result: dict, state: dict = None) -> Optional[dict]:
+        pass
+
+    @abstractmethod
+    def deserializeMove(self, move_dict: dict, state: dict = None):
+        pass

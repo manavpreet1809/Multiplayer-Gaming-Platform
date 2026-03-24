@@ -462,11 +462,15 @@ class ChessEngine(GameEngine):
         # Otherwise game continues
         return None
 
-    def serializeEndResult(self, end_result: dict) -> dict:
+    def serializeEndResult(self, end_result: dict, state: dict = None) -> dict:
         """Convert evaluateEnd() output to a JSON-serializable dict.
 
         Converts the Color enum winner to a "white"/"black" string so the
         frontend adapter can determine win/loss/draw relative to the local player.
+
+        Args:
+            end_result: output from evaluateEnd()
+            state: game state (unused for chess, accepted for polymorphism with TTT)
         """
         if end_result is None:
             return None
@@ -508,11 +512,15 @@ class ChessEngine(GameEngine):
             "halfmoveClock": state["halfmoveClock"],
         }
 
-    def deserializeMove(self, move_dict: dict) -> chessMove:
+    def deserializeMove(self, move_dict: dict, state: dict = None) -> chessMove:
         """Convert a frontend move dict back to an internal chessMove.
 
         Frontend sends {from: {row, col}, to: {row, col}, promotion?: string}
         with row 0 = rank 8.  This flips rows back to backend convention.
+
+        Args:
+            move_dict: frontend move payload
+            state: game state (unused for chess, accepted for polymorphism with TTT)
         """
         from_pos = chessPosition(7 - move_dict["from"]["row"], move_dict["from"]["col"])
         to_pos = chessPosition(7 - move_dict["to"]["row"], move_dict["to"]["col"])
