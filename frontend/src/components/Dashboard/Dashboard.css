@@ -2,6 +2,8 @@
   max-width: 95%;
   margin: 0 auto;
   padding: 2rem;
+  height:94vh;
+  background-color: #eee;
 }
 
 .dashboard-header {
@@ -9,9 +11,8 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
-  margin-bottom: 2rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 2px solid var(--theme-purple);
 }
 
 .dashboard-title {
@@ -84,12 +85,32 @@
 .dashboard-sidebar{
   grid-column: 11 /span 2;
   display: flex;
-  flex-direction: row;
+  min-height: 80vh;
+  flex-direction: column;
+  background-color:#ccc;
 }
 
 .dashboard-sidebar div{
   border-bottom:#333;
-  border-bottom-width:0.5em;
+  border-style:none none solid none;
+  border-bottom-width:0.2em;
+  width:100%;
+}
+
+.dashboard-sidebar button{
+  background-color:inherit;
+  text-align: left;
+  font-size:1.0em;
+  border:none;
+  background-color:"";
+  margin-bottom:0.2em;
+  padding:.5em;
+  padding-top:0em;
+  cursor: pointer;
+}
+
+.dashboard-sidebar::before{
+  padding-top:.5em;
 }
 
 .dashboard-nav-link:hover {
@@ -195,4 +216,14 @@
 
 .dashboard-action--primary:hover {
   background-color: #1565c0;
+}
+
+.sidebar-footer{
+  align-self:flex-end;
+  margin-top:auto;
+}
+
+.sidebar-requests{
+  background-color: 333;
+  color:#ddd;
 }

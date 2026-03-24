@@ -1,4 +1,7 @@
 import React from 'react';
+import Chat from '../Chat/Chat.js';
+import Profile from '../Profile/Profile.js';
+import '../../index.css';
 import './Dashboard.css';
 
 /**
@@ -18,7 +21,8 @@ import './Dashboard.css';
  *   onLeaderboard()   – navigate to leaderboard (UC-12)
  *   onLogout()        – log out (AUTH-04)
  */
-function Dashboard({
+
+export default function Dashboard({
   username,
   status = 'idle',
   notifications = [],
@@ -31,6 +35,7 @@ function Dashboard({
   onViewProfile,
   onLeaderboard,
   onLogout,
+  friends = [],
 }) {
   return (
     <div className="dashboard">
@@ -60,8 +65,47 @@ function Dashboard({
           )}
         </nav>
       </header>
-      <div className="content-body">
-
+      <div className="dashboard-container">
+        <div className="dashboard-action-grid">
+          {onBrowseGames && (
+            <button className="dashboard-action" onClick={onBrowseGames}>
+              Browse Games
+            </button>
+          )}
+          {onCreateGame && (
+            <button className="dashboard-action" onClick={onCreateGame}>
+              Create Game
+            </button>
+          )}
+          {onJoinGame && (
+            <button className="dashboard-action" onClick={onJoinGame}>
+              Join Game
+            </button>
+          )}
+          {onEnqueue && (
+            <button className="dashboard-action" onClick={onEnqueue}>
+              Find Match
+            </button>
+          )}
+          {onOpenChat && (
+            <button className="dashboard-action" onClick={onOpenChat}>
+              Open Chat
+            </button>
+          )}
+        </div>
+        <div className="dashboard-sidebar">
+          {/* Can include Friend request pane on request
+          pendingRequest >=0 && (<div className="sidebar-requests">
+          Requests
+          </div>)*/}
+          <div className='sidebar-chat'>
+          </div>
+          <div className='sidebar-footer'>
+            <button className='button-about'>About</button>
+            <br/>
+            <button className='button-account-settings'>Account Settings</button>
+          </div>
+        </div>
       </div>
       {notifications.length > 0 && (
         <section className="dashboard-notifications">
@@ -95,38 +139,6 @@ function Dashboard({
         </div>
       )}
 
-      <section className="dashboard-actions">
-        <h2>What would you like to do?</h2>
-        <div className="dashboard-action-grid">
-          {onBrowseGames && (
-            <button className="dashboard-action" onClick={onBrowseGames}>
-              Browse Games
-            </button>
-          )}
-          {onCreateGame && (
-            <button className="dashboard-action" onClick={onCreateGame}>
-              Create Game
-            </button>
-          )}
-          {onJoinGame && (
-            <button className="dashboard-action" onClick={onJoinGame}>
-              Join Game
-            </button>
-          )}
-          {onEnqueue && (
-            <button className="dashboard-action" onClick={onEnqueue}>
-              Find Match
-            </button>
-          )}
-          {onOpenChat && (
-            <button className="dashboard-action" onClick={onOpenChat}>
-              Open Chat
-            </button>
-          )}
-        </div>
-      </section>
     </div>
   );
 }
-
-export default Dashboard;
