@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import ErrorBoundary from './components/ErrorBoundary';
 import Login from './components/Login';
 import GameBoardDemo from './components/GameBoardDemo';
 import ScreenshotPage from './ScreenshotPage';
@@ -31,15 +32,21 @@ function App() {
   };
 
   if (view === 'demo') {
-    return <GameBoardDemo />;
+    return (
+      <ErrorBoundary>
+        <GameBoardDemo />
+      </ErrorBoundary>
+    );
   }
 
   return (
-    <Login
-      onLogin={handleLogin}
-      onForgotPassword={handleForgotPassword}
-      onRegister={handleRegister}
-    />
+    <ErrorBoundary>
+      <Login
+        onLogin={handleLogin}
+        onForgotPassword={handleForgotPassword}
+        onRegister={handleRegister}
+      />
+    </ErrorBoundary>
   );
 }
 
