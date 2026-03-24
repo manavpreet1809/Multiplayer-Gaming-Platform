@@ -94,13 +94,17 @@ export function buildTttMove(index) {
 // ─── Game Results ────────────────────────────────────────────────────
 
 /**
- * Convert the backend's evaluateEnd() result into GameResults component props.
+ * Convert the backend's serializeEndResult() output into GameResults component props.
  *
- * @param {object} endResult    – from engine.evaluateEnd() (e.g. {isOver, result, winner, reason})
- * @param {string} localPlayer  – the local player identifier ("white"/"black" or "X"/"O")
- * @returns {object} props subset for <GameResults />
+ * @param {object} endResult      – serialized end result (e.g. {isOver, result, winner, reason})
+ *                                  winner is already a string: "white"/"black" (chess) or "X"/"O" (ttt)
+ * @param {string} localPlayer    – the local player identifier ("white"/"black" or "X"/"O")
+ * @param {object} [playerNames]  – optional map of identifiers to display names,
+ *                                  e.g. {white: "Alice", black: "Bob"} or {X: "Alice", O: "Bob"}
+ * @param {object} [rankInfo]     – optional {mmrChange, newRank} from the server
+ * @returns {object} props for <GameResults />, or null if game is not over
  */
-export function endResultToProps(endResult, localPlayer) {
+export function endResultToProps(endResult, localPlayer, playerNames = {}, rankInfo = {}) {
   if (!endResult || !endResult.isOver) return null;
 
   let result;
@@ -112,9 +116,14 @@ export function endResultToProps(endResult, localPlayer) {
     result = 'loss';
   }
 
+  // Resolve winner identifier to a display username if mapping is available
+  const winnerKey = endResult.winner ?? null;
+  const winnerUsername = (winnerKey && playerNames[winnerKey]) || winnerKey;
+
   return {
     result,
-    winnerUsername: endResult.winner ?? null,
-    reason: endResult.reason ?? null,
+    winnerUsername,
+    mmrChange: rankInfo.mmrChange ?? null,
+    newRank: rankInfo.newRank ?? null,
   };
 }

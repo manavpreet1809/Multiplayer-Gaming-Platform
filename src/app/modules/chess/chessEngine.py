@@ -462,6 +462,19 @@ class ChessEngine(GameEngine):
         # Otherwise game continues
         return None
 
+    def serializeEndResult(self, end_result: dict) -> dict:
+        """Convert evaluateEnd() output to a JSON-serializable dict.
+
+        Converts the Color enum winner to a "white"/"black" string so the
+        frontend adapter can determine win/loss/draw relative to the local player.
+        """
+        if end_result is None:
+            return None
+        serialized = dict(end_result)
+        if "winner" in serialized and serialized["winner"] is not None:
+            serialized["winner"] = "white" if serialized["winner"] == Color.WHITE else "black"
+        return serialized
+
     def serializeState(self, state: dict) -> dict:
         """Convert internal state to a JSON-serializable dict for the frontend.
 

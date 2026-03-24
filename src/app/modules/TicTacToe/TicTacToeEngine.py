@@ -102,3 +102,17 @@ class TicTacToeEngine(GameEngine):
             return {"isOver": True, "result": "draw"}
 
         return None
+
+    def serializeEndResult(self, end_result: dict, state: dict) -> dict:
+        """Convert evaluateEnd() output to a JSON-serializable dict.
+
+        Maps the raw player-name winner to the "X"/"O" symbol so the
+        frontend adapter can determine win/loss/draw relative to the local player.
+        """
+        if end_result is None:
+            return None
+        sym = self._symbolMap(state)
+        serialized = dict(end_result)
+        if "winner" in serialized and serialized["winner"] is not None:
+            serialized["winner"] = sym.get(serialized["winner"], serialized["winner"])
+        return serialized
