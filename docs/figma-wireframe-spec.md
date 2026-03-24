@@ -80,14 +80,14 @@ Use this document as a reference when building wireframes in the [Design Guide](
 │    │                       │    │
 │    │  Username or Email    │    │
 │    │  ┌─────────────────┐  │    │
-│    │  │ text input       │  │    │
+│    │  │ text input      │  │    │
 │    │  └─────────────────┘  │    │
 │    │  Password             │    │
 │    │  ┌─────────────────┐  │    │
-│    │  │ password input   │  │    │
+│    │  │ password input  │  │    │
 │    │  └─────────────────┘  │    │
 │    │  ┌─────────────────┐  │    │
-│    │  │    LOG IN btn    │  │    │
+│    │  │    LOG IN btn   │  │    │
 │    │  └─────────────────┘  │    │
 │    │                       │    │
 │    │  Forgot password?     │    │
