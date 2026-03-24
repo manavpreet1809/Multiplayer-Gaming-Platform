@@ -1,6 +1,6 @@
-from src.app.modules.TicTacToe.TicTacToeEngine import TicTacToeEngine
-from src.app.models.tictactoe.TicTacToeMove import TicTacToeMove
-from src.app.models.tictactoe.TicTacToePosition import TicTacToePosition
+from app.modules.TicTacToe.TicTacToeEngine import TicTacToeEngine
+from app.models.tictactoe.TicTacToeMove import TicTacToeMove
+from app.models.tictactoe.TicTacToePosition import TicTacToePosition
 
 
 def print_board(board):

@@ -1,8 +1,8 @@
 from typing import Optional, List
-from src.app.modules.gameEngine import GameEngine
-from src.app.models.tictactoe.TicTacToeBoard import TicTacToeBoard
-from src.app.models.tictactoe.TicTacToeMove import TicTacToeMove
-from src.app.models.tictactoe.TicTacToePosition import TicTacToePosition
+from app.modules.gameEngine import GameEngine
+from app.models.tictactoe.TicTacToeBoard import TicTacToeBoard
+from app.models.tictactoe.TicTacToeMove import TicTacToeMove
+from app.models.tictactoe.TicTacToePosition import TicTacToePosition
 
 
 class TicTacToeEngine(GameEngine):
@@ -25,17 +25,26 @@ class TicTacToeEngine(GameEngine):
         return board.getCell(pos) is None
 
     def applyMove(self, state: dict, move: TicTacToeMove) -> dict:
-        board = state["board"]
         pos = move.position
         player = state["currentPlayer"]
-
-        board.setCell(pos, player)
-        state["moves"] += 1
-
         players = state["players"]
-        state["currentPlayer"] = players[1] if player == players[0] else players[0]
 
-        return state
+        # Clone the board so the original state is not mutated
+        new_board = TicTacToeBoard()
+        for r in range(3):
+            for c in range(3):
+                cell = state["board"].grid[r][c]
+                if cell is not None:
+                    new_board.grid[r][c] = cell
+
+        new_board.setCell(pos, player)
+
+        return {
+            "board": new_board,
+            "players": list(players),
+            "currentPlayer": players[1] if player == players[0] else players[0],
+            "moves": state["moves"] + 1,
+        }
 
     def _symbolMap(self, state: dict) -> dict:
         """Build a mapping from player names to 'X'/'O'.

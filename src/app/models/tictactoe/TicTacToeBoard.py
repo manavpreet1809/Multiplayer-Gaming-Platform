@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from src.app.models.tictactoe.TicTacToePosition import TicTacToePosition
+from app.models.tictactoe.TicTacToePosition import TicTacToePosition
 
 
 class TicTacToeBoard:

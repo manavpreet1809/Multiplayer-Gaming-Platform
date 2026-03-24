@@ -1,6 +1,6 @@
 from typing import Optional, List
-from chessPosition import chessPosition
-from chessPiece import ChessPiece, PieceType, Color
+from app.models.chess.chessPosition import chessPosition
+from app.models.chess.chessPiece import ChessPiece, PieceType, Color
 
 
 class chessBoard:

@@ -1,5 +1,5 @@
-from chessPosition import chessPosition
-from chessPiece import PieceType
+from app.models.chess.chessPosition import chessPosition
+from app.models.chess.chessPiece import PieceType
 from typing import Optional
 
 class chessMove:
