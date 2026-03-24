@@ -37,6 +37,37 @@ class TicTacToeEngine(GameEngine):
 
         return state
 
+    def _symbolMap(self, state: dict) -> dict:
+        """Build a mapping from player names to 'X'/'O'.
+
+        The first player is always 'X', the second is 'O'.
+        """
+        players = state["players"]
+        return {players[0]: "X", players[1]: "O"}
+
+    def serializeState(self, state: dict) -> dict:
+        """Convert internal state to a JSON-serializable dict for the frontend.
+
+        Handles:
+        - 2D grid → flat 9-element array
+        - Player names → "X"/"O" symbols
+        """
+        sym = self._symbolMap(state)
+        current = sym[state["currentPlayer"]]
+        return {
+            "board": state["board"].toList(sym),
+            "currentPlayer": current,
+            "players": {sym[p]: p for p in state["players"]},
+            "moves": state["moves"],
+        }
+
+    def deserializeMove(self, move_dict: dict, state: dict):
+        """Convert a frontend move (cell index 0-8) to an internal TicTacToeMove."""
+        index = move_dict["index"]
+        row = index // 3
+        col = index % 3
+        return TicTacToeMove(TicTacToePosition(row, col))
+
     def evaluateEnd(self, state: dict) -> Optional[dict]:
         board = state["board"].grid
 

@@ -462,6 +462,56 @@ class ChessEngine(GameEngine):
         # Otherwise game continues
         return None
 
+    def serializeState(self, state: dict) -> dict:
+        """Convert internal state to a JSON-serializable dict for the frontend.
+
+        Handles:
+        - Board row-flip (backend row 0 = white's back rank → frontend row 0 = rank 8)
+        - Piece objects → single-character codes (uppercase=white, lowercase=black)
+        - Color enums → "white"/"black" strings
+        - Position objects → {row, col} dicts (in frontend coordinate space)
+        """
+        board = state["board"]
+        active = "white" if state["activeColor"] == Color.WHITE else "black"
+
+        # Convert en-passant target to frontend coords (flip row)
+        ep = state["enPassantTarget"]
+        en_passant = None
+        if ep is not None:
+            en_passant = {"row": 7 - ep.row, "col": ep.col}
+
+        return {
+            "board": board.toList(),
+            "activeColor": active,
+            "players": {
+                "white": state["players"][Color.WHITE],
+                "black": state["players"][Color.BLACK],
+            },
+            "castlingRights": {
+                "white": dict(state["castlingRights"][Color.WHITE]),
+                "black": dict(state["castlingRights"][Color.BLACK]),
+            },
+            "enPassantTarget": en_passant,
+            "halfmoveClock": state["halfmoveClock"],
+        }
+
+    def deserializeMove(self, move_dict: dict) -> chessMove:
+        """Convert a frontend move dict back to an internal chessMove.
+
+        Frontend sends {from: {row, col}, to: {row, col}, promotion?: string}
+        with row 0 = rank 8.  This flips rows back to backend convention.
+        """
+        from_pos = chessPosition(7 - move_dict["from"]["row"], move_dict["from"]["col"])
+        to_pos = chessPosition(7 - move_dict["to"]["row"], move_dict["to"]["col"])
+
+        promotion = None
+        if "promotion" in move_dict and move_dict["promotion"]:
+            promo_map = {"Q": PieceType.QUEEN, "R": PieceType.ROOK,
+                         "B": PieceType.BISHOP, "N": PieceType.KNIGHT}
+            promotion = promo_map.get(move_dict["promotion"].upper())
+
+        return chessMove(from_pos, to_pos, promotion)
+
     def hasAnyLegalMove(self, state: dict, color: Color) -> bool:
         board = state["board"]
 

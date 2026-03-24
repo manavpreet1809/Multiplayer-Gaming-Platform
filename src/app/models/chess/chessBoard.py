@@ -50,3 +50,19 @@ class chessBoard:
 
     def removePiece(self, position: chessPosition):
         self.grid[position.row][position.col] = None
+
+    def toList(self) -> list:
+        """Serialize to an 8x8 list of piece codes (or None) for the frontend.
+
+        The frontend expects row 0 = rank 8 (black's back rank), but the
+        backend stores row 0 = rank 1 (white's back rank).  This method
+        reverses the row order so the output matches the frontend convention.
+        """
+        result = []
+        for r in reversed(range(8)):          # row 7 → 0 in backend = row 0 → 7 for frontend
+            row = []
+            for c in range(8):
+                piece = self.grid[r][c]
+                row.append(piece.toCode() if piece is not None else None)
+            result.append(row)
+        return result
