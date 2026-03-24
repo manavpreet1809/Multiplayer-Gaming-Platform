@@ -1,9 +1,11 @@
+:root{
+  background-color:#eee;
+}
 .dashboard {
-  max-width: 95%;
+  max-width: 90%;
   margin: 0 auto;
   padding: 2rem;
   height:94vh;
-  background-color: #eee;
 }
 
 .dashboard-header {
