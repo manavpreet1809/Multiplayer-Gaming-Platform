@@ -1,9 +1,9 @@
 from typing import Optional, List
-from app.models.chess.chessPosition import chessPosition
+from app.models.chess.chessPosition import ChessPosition
 from app.models.chess.chessPiece import ChessPiece, PieceType, Color
 
 
-class chessBoard:
+class ChessBoard:
     def __init__(self):
         # 8x8 grid initialized to None
         self.grid: List[List[Optional[ChessPiece]]] = [
@@ -42,9 +42,9 @@ class chessBoard:
         self.grid[0][4] = ChessPiece(PieceType.KING, Color.WHITE)
         self.grid[7][4] = ChessPiece(PieceType.KING, Color.BLACK)
 
-    def clone(self) -> "chessBoard":
+    def clone(self) -> "ChessBoard":
         """Return a deep copy — new board with independent piece instances."""
-        new_board = chessBoard()
+        new_board = ChessBoard()
         for r in range(8):
             for c in range(8):
                 piece = self.grid[r][c]
@@ -54,13 +54,13 @@ class chessBoard:
                     )
         return new_board
 
-    def getPiece(self, position: chessPosition) -> Optional[ChessPiece]:
+    def getPiece(self, position: ChessPosition) -> Optional[ChessPiece]:
         return self.grid[position.row][position.col]
 
-    def setPiece(self, position: chessPosition, piece: ChessPiece):
+    def setPiece(self, position: ChessPosition, piece: ChessPiece):
         self.grid[position.row][position.col] = piece
 
-    def removePiece(self, position: chessPosition):
+    def removePiece(self, position: ChessPosition):
         self.grid[position.row][position.col] = None
 
     def toList(self) -> list:

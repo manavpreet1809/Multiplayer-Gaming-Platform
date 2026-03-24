@@ -1,13 +1,13 @@
 from typing import List, Optional
 from app.modules.gameEngine import GameEngine
-from app.models.chess.chessBoard import chessBoard
+from app.models.chess.chessBoard import ChessBoard
 from app.models.chess.chessPiece import Color, PieceType, ChessPiece
-from app.models.chess.chessMove import chessMove
-from app.models.chess.chessPosition import chessPosition
+from app.models.chess.chessMove import ChessMove
+from app.models.chess.chessPosition import ChessPosition
 
 class ChessEngine(GameEngine):
     def createInitialState(self, players: List[str]) -> dict:
-        board = chessBoard()
+        board = ChessBoard()
         board.setupInitialPosition()
         return {
             "board": board,
@@ -24,7 +24,7 @@ class ChessEngine(GameEngine):
             "halfmoveClock": 0,
         }
 
-    def validateMove(self, state: dict, move: chessMove) -> bool:
+    def validateMove(self, state: dict, move: ChessMove) -> bool:
         board = state["board"]
         piece = board.getPiece(move.fromPos)
         target = board.getPiece(move.toPos)
@@ -49,7 +49,7 @@ class ChessEngine(GameEngine):
 
         return True
 
-    def applyMove(self, state: dict, move: chessMove) -> dict:
+    def applyMove(self, state: dict, move: ChessMove) -> dict:
         import copy
         board = state["board"].clone()
         castlingRights = copy.deepcopy(state["castlingRights"])
@@ -66,15 +66,15 @@ class ChessEngine(GameEngine):
         if piece.pieceType == PieceType.KING and abs(move.toPos.col - move.fromPos.col) == 2:
             if move.toPos.col > move.fromPos.col:
                 # kingside: rook goes from col 7 to col 5
-                rook = board.getPiece(chessPosition(move.fromPos.row, 7))
-                board.removePiece(chessPosition(move.fromPos.row, 7))
-                board.setPiece(chessPosition(move.fromPos.row, 5), rook)
+                rook = board.getPiece(ChessPosition(move.fromPos.row, 7))
+                board.removePiece(ChessPosition(move.fromPos.row, 7))
+                board.setPiece(ChessPosition(move.fromPos.row, 5), rook)
                 rook.hasMoved = True
             else:
                 # queenside: rook goes from col 0 to col 3
-                rook = board.getPiece(chessPosition(move.fromPos.row, 0))
-                board.removePiece(chessPosition(move.fromPos.row, 0))
-                board.setPiece(chessPosition(move.fromPos.row, 3), rook)
+                rook = board.getPiece(ChessPosition(move.fromPos.row, 0))
+                board.removePiece(ChessPosition(move.fromPos.row, 0))
+                board.setPiece(ChessPosition(move.fromPos.row, 3), rook)
                 rook.hasMoved = True
             castlingRights[piece.color]["kingside"] = False
             castlingRights[piece.color]["queenside"] = False
@@ -97,14 +97,14 @@ class ChessEngine(GameEngine):
         # en passant capture
         if piece.pieceType == PieceType.PAWN and move.toPos == state["enPassantTarget"]:
             capturedPawnRow = move.fromPos.row
-            capturedPos = chessPosition(capturedPawnRow, move.toPos.col)
+            capturedPos = ChessPosition(capturedPawnRow, move.toPos.col)
             captured = board.getPiece(capturedPos)
             board.removePiece(capturedPos)
 
         # en passant target
         if piece.pieceType == PieceType.PAWN and abs(move.toPos.row - move.fromPos.row) == 2:
             skippedRow = (move.fromPos.row + move.toPos.row) // 2
-            enPassantTarget = chessPosition(skippedRow, move.toPos.col)
+            enPassantTarget = ChessPosition(skippedRow, move.toPos.col)
         else:
             enPassantTarget = None
 
@@ -125,7 +125,7 @@ class ChessEngine(GameEngine):
             "halfmoveClock": halfmoveClock,
         }
 
-    def isLegalMove(self, state: dict, move: chessMove, piece: ChessPiece, target: Optional[ChessPiece]) -> bool:
+    def isLegalMove(self, state: dict, move: ChessMove, piece: ChessPiece, target: Optional[ChessPiece]) -> bool:
         board = state["board"]
         # change in row/ col (delta row, delta column)
         dr = move.toPos.row - move.fromPos.row
@@ -176,7 +176,7 @@ class ChessEngine(GameEngine):
 
             # two squares forward
             if dc == 0 and dr == 2 * direction and move.fromPos.row == start_row:
-                middle = chessPosition(move.fromPos.row + direction, move.fromPos.col)
+                middle = ChessPosition(move.fromPos.row + direction, move.fromPos.col)
                 if board.getPiece(middle) is None and target is None:
                     return move.promotion is None
                 return False
@@ -197,7 +197,7 @@ class ChessEngine(GameEngine):
 
         return False
 
-    def isPathClear(self, board: chessBoard, fromPos: chessPosition, toPos: chessPosition) -> bool:
+    def isPathClear(self, board: ChessBoard, fromPos: ChessPosition, toPos: ChessPosition) -> bool:
         # Compute how far we are moving in rows and columns
         dr = toPos.row - fromPos.row
         dc = toPos.col - fromPos.col
@@ -215,13 +215,13 @@ class ChessEngine(GameEngine):
         # Walk along the path toward the destination square
         while r != toPos.row or c != toPos.col:
             # If any square in between has a piece, path is blocked
-            if board.getPiece(chessPosition(r, c)) is not None:
+            if board.getPiece(ChessPosition(r, c)) is not None:
                 return False
             r += step_r
             c += step_c
         return True
 
-    def isValidCastle(self, state: dict, move: chessMove, piece: ChessPiece) -> bool:
+    def isValidCastle(self, state: dict, move: ChessMove, piece: ChessPiece) -> bool:
         board = state["board"]
         row = move.fromPos.row
         opponent = Color.BLACK if piece.color == Color.WHITE else Color.WHITE
@@ -240,21 +240,21 @@ class ChessEngine(GameEngine):
                 return False
 
             # rook must be in correct position
-            rook_pos = chessPosition(row, 7)
+            rook_pos = ChessPosition(row, 7)
             rook = board.getPiece(rook_pos)
             if rook is None or rook.pieceType != PieceType.ROOK or rook.color != piece.color:
                 return False
 
             # squares between king and rook must be empty
-            if board.getPiece(chessPosition(row, 5)) is not None:
+            if board.getPiece(ChessPosition(row, 5)) is not None:
                 return False
-            if board.getPiece(chessPosition(row, 6)) is not None:
+            if board.getPiece(ChessPosition(row, 6)) is not None:
                 return False
 
             # king cannot pass through or land on attacked squares
-            if self.isSquareAttacked(board, chessPosition(row, 5), opponent):
+            if self.isSquareAttacked(board, ChessPosition(row, 5), opponent):
                 return False
-            if self.isSquareAttacked(board, chessPosition(row, 6), opponent):
+            if self.isSquareAttacked(board, ChessPosition(row, 6), opponent):
                 return False
 
             return True
@@ -265,23 +265,23 @@ class ChessEngine(GameEngine):
             if not state["castlingRights"][piece.color]["queenside"]:
                 return False
             # rook must be in correct position
-            rook_pos = chessPosition(row, 0)
+            rook_pos = ChessPosition(row, 0)
             rook = board.getPiece(rook_pos)
             if rook is None or rook.pieceType != PieceType.ROOK or rook.color != piece.color:
                 return False
 
             # squares between king and rook must be empty
-            if board.getPiece(chessPosition(row, 1)) is not None:
+            if board.getPiece(ChessPosition(row, 1)) is not None:
                 return False
-            if board.getPiece(chessPosition(row, 2)) is not None:
+            if board.getPiece(ChessPosition(row, 2)) is not None:
                 return False
-            if board.getPiece(chessPosition(row, 3)) is not None:
+            if board.getPiece(ChessPosition(row, 3)) is not None:
                 return False
 
             # king cannot pass through or land on attacked squares
-            if self.isSquareAttacked(board, chessPosition(row, 3), opponent):
+            if self.isSquareAttacked(board, ChessPosition(row, 3), opponent):
                 return False
-            if self.isSquareAttacked(board, chessPosition(row, 2), opponent):
+            if self.isSquareAttacked(board, ChessPosition(row, 2), opponent):
                 return False
 
             return True
@@ -291,7 +291,7 @@ class ChessEngine(GameEngine):
         old_board = state["board"]
 
         # create a brand new empty board
-        new_board = chessBoard()
+        new_board = ChessBoard()
 
         # loop through every square on board
         for r in range(8):
@@ -319,30 +319,30 @@ class ChessEngine(GameEngine):
             },
 
             # copy en passant target position, if it exists
-            "enPassantTarget": None if state["enPassantTarget"] is None else chessPosition(
+            "enPassantTarget": None if state["enPassantTarget"] is None else ChessPosition(
                 state["enPassantTarget"].row,
                 state["enPassantTarget"].col
             ),
             "halfmoveClock": state["halfmoveClock"],
         }
 
-    def findKing(self, board: chessBoard, color: Color) -> chessPosition:
+    def findKing(self, board: ChessBoard, color: Color) -> ChessPosition:
         # search board
         for r in range(8):
             for c in range(8):
-                piece = board.getPiece(chessPosition(r, c))
+                piece = board.getPiece(ChessPosition(r, c))
                 # if piece found is king, return king position
                 if piece is not None and piece.color == color and piece.pieceType == PieceType.KING:
-                    return chessPosition(r, c)
+                    return ChessPosition(r, c)
         raise ValueError("King not found")
 
-    def isSquareAttacked(self, board: chessBoard, pos: chessPosition, attackerColor: Color) -> bool:
+    def isSquareAttacked(self, board: ChessBoard, pos: ChessPosition, attackerColor: Color) -> bool:
         # loop through board
         for r in range(8):
             for c in range(8):
 
                 # potential attacking piece
-                attacker_pos = chessPosition(r, c)
+                attacker_pos = ChessPosition(r, c)
                 piece = board.getPiece(attacker_pos)
 
                 # skip if there is no piece or piece is not attacking colour
@@ -394,14 +394,14 @@ class ChessEngine(GameEngine):
 
         return False
 
-    def wouldLeaveKingInCheck(self, state: dict, move: chessMove) -> bool:
+    def wouldLeaveKingInCheck(self, state: dict, move: ChessMove) -> bool:
         # make copy of current game to test move
         temp_state = self.cloneState(state)
 
         # create fresh copy of move using fresh position objects (separates simulated move)
-        temp_move = chessMove(
-            chessPosition(move.fromPos.row, move.fromPos.col),
-            chessPosition(move.toPos.row, move.toPos.col),
+        temp_move = ChessMove(
+            ChessPosition(move.fromPos.row, move.fromPos.col),
+            ChessPosition(move.toPos.row, move.toPos.col),
             move.promotion
         )
 
@@ -516,8 +516,8 @@ class ChessEngine(GameEngine):
             "halfmoveClock": state["halfmoveClock"],
         }
 
-    def deserializeMove(self, move_dict: dict, state: dict = None) -> chessMove:
-        """Convert a frontend move dict back to an internal chessMove.
+    def deserializeMove(self, move_dict: dict, state: dict = None) -> ChessMove:
+        """Convert a frontend move dict back to an internal ChessMove.
 
         Frontend sends {from: {row, col}, to: {row, col}, promotion?: string}
         with row 0 = rank 8.  This flips rows back to backend convention.
@@ -526,8 +526,8 @@ class ChessEngine(GameEngine):
             move_dict: frontend move payload
             state: game state (unused for chess, accepted for polymorphism with TTT)
         """
-        from_pos = chessPosition(7 - move_dict["from"]["row"], move_dict["from"]["col"])
-        to_pos = chessPosition(7 - move_dict["to"]["row"], move_dict["to"]["col"])
+        from_pos = ChessPosition(7 - move_dict["from"]["row"], move_dict["from"]["col"])
+        to_pos = ChessPosition(7 - move_dict["to"]["row"], move_dict["to"]["col"])
 
         promotion = None
         if "promotion" in move_dict and move_dict["promotion"]:
@@ -535,7 +535,7 @@ class ChessEngine(GameEngine):
                          "B": PieceType.BISHOP, "N": PieceType.KNIGHT}
             promotion = promo_map.get(move_dict["promotion"].upper())
 
-        return chessMove(from_pos, to_pos, promotion)
+        return ChessMove(from_pos, to_pos, promotion)
 
     def hasAnyLegalMove(self, state: dict, color: Color) -> bool:
         board = state["board"]
@@ -547,7 +547,7 @@ class ChessEngine(GameEngine):
 
         for from_row in range(8):
             for from_col in range(8):
-                from_pos = chessPosition(from_row, from_col)
+                from_pos = ChessPosition(from_row, from_col)
                 piece = board.getPiece(from_pos)
 
                 # skip empty squares or opponent pieces
@@ -557,14 +557,14 @@ class ChessEngine(GameEngine):
                 # try every destination square on the board
                 for to_row in range(8):
                     for to_col in range(8):
-                        to_pos = chessPosition(to_row, to_col)
+                        to_pos = ChessPosition(to_row, to_col)
 
                         # skip same square moves
                         if from_row == to_row and from_col == to_col:
                             continue
 
                         # handle normal moves first
-                        move = chessMove(from_pos, to_pos)
+                        move = ChessMove(from_pos, to_pos)
 
                         if self.validateMove(test_state, move):
                             return True
@@ -574,7 +574,7 @@ class ChessEngine(GameEngine):
                             last_row = 7 if color == Color.WHITE else 0
                             if to_row == last_row:
                                 for promo in [PieceType.QUEEN, PieceType.ROOK, PieceType.BISHOP, PieceType.KNIGHT]:
-                                    promo_move = chessMove(from_pos, to_pos, promo)
+                                    promo_move = ChessMove(from_pos, to_pos, promo)
                                     if self.validateMove(test_state, promo_move):
                                         return True
         return False

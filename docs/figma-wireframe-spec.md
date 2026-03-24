@@ -8,37 +8,37 @@ Use this document as a reference when building wireframes in the [Design Guide](
 
 ### Color Palette
 
-| Name | Hex | Usage |
-|------|-----|-------|
-| Purple (Primary) | `#662691` | Buttons, links, headings, active states, board grid lines |
-| Lavender (Secondary) | `#BEB8EB` | Borders, dividers, secondary surfaces, table headers |
-| Coral (Danger) | `#F56476` | Errors, logout, loss states, O marks |
-| Mint (Success) | `#ADFCF9` | Success banners, ready status, win states, winning cells |
-| Yellow (Warning) | `#F8F4A6` | Notifications, queue status, selected squares, draw states |
+| Name                 | Hex       | Usage                                                      |
+| -------------------- | --------- | ---------------------------------------------------------- |
+| Purple (Primary)     | `#662691` | Buttons, links, headings, active states, board grid lines  |
+| Lavender (Secondary) | `#BEB8EB` | Borders, dividers, secondary surfaces, table headers       |
+| Coral (Danger)       | `#F56476` | Errors, logout, loss states, O marks                       |
+| Mint (Success)       | `#ADFCF9` | Success banners, ready status, win states, winning cells   |
+| Yellow (Warning)     | `#F8F4A6` | Notifications, queue status, selected squares, draw states |
 
 **Derived tints:**
 
-| Name | Hex | Derived From | Usage |
-|------|-----|-------------|-------|
-| Dark Purple | `#4e1d6e` | Purple | Hover states |
-| Light Purple | `#ebe8f5` | Purple | Hover backgrounds, light surfaces |
-| Light Coral | `#fde2e5` | Coral | Error backgrounds |
-| Dark Mint | `#0a7a6f` | Mint | Success text |
-| Dark Yellow | `#7a6f00` | Yellow | Warning text |
+| Name         | Hex       | Derived From | Usage                             |
+| ------------ | --------- | ------------ | --------------------------------- |
+| Dark Purple  | `#4e1d6e` | Purple       | Hover states                      |
+| Light Purple | `#ebe8f5` | Purple       | Hover backgrounds, light surfaces |
+| Light Coral  | `#fde2e5` | Coral        | Error backgrounds                 |
+| Dark Mint    | `#0a7a6f` | Mint         | Success text                      |
+| Dark Yellow  | `#7a6f00` | Yellow       | Warning text                      |
 
 ### Typography
 
 - **Font Family:** Roboto (Google Fonts)
 - **Weights:** 300 (Light), 400 (Regular), 500 (Medium), 700 (Bold)
 
-| Element | Size | Weight |
-|---------|------|--------|
-| Page title (h1) | 1.75rem (28px) | 700 |
-| Section title (h2) | 1.5rem (24px) | 700 |
-| Subsection (h3) | 1.125rem (18px) | 600 |
-| Body text | 1rem (16px) | 400 |
-| Labels | 0.875rem (14px) | 600 |
-| Small / Captions | 0.75rem (12px) | 500 |
+| Element            | Size            | Weight |
+| ------------------ | --------------- | ------ |
+| Page title (h1)    | 1.75rem (28px)  | 700    |
+| Section title (h2) | 1.5rem (24px)   | 700    |
+| Subsection (h3)    | 1.125rem (18px) | 600    |
+| Body text          | 1rem (16px)     | 400    |
+| Labels             | 0.875rem (14px) | 600    |
+| Small / Captions   | 0.75rem (12px)  | 500    |
 
 ### Spacing & Layout
 
@@ -53,13 +53,13 @@ Use this document as a reference when building wireframes in the [Design Guide](
 
 ### Button Styles
 
-| Variant | Background | Text | Border | Hover BG |
-|---------|-----------|------|--------|----------|
-| Primary | `#662691` | White | None | `#4e1d6e` |
-| Outline | White | `#662691` | 1px `#662691` | `#ebe8f5` |
-| Secondary | White | `#662691` | 1px `#BEB8EB` | `#ebe8f5` |
-| Danger | White | `#F56476` | 1px `#F56476` | `#fde2e5` |
-| Link | Transparent | `#662691` | None | — (underline) |
+| Variant   | Background  | Text      | Border        | Hover BG      |
+| --------- | ----------- | --------- | ------------- | ------------- |
+| Primary   | `#662691`   | White     | None          | `#4e1d6e`     |
+| Outline   | White       | `#662691` | 1px `#662691` | `#ebe8f5`     |
+| Secondary | White       | `#662691` | 1px `#BEB8EB` | `#ebe8f5`     |
+| Danger    | White       | `#F56476` | 1px `#F56476` | `#fde2e5`     |
+| Link      | Transparent | `#662691` | None          | — (underline) |
 
 ---
 
@@ -98,6 +98,7 @@ Use this document as a reference when building wireframes in the [Design Guide](
 ```
 
 **Elements:**
+
 - Card: white, 8px radius, shadow, 2rem padding, 400px max-width
 - Title: "Log In", 1.5rem, 700 weight, `#333`, centered
 - Error bar: `#fde2e5` bg, `#F56476` text, 4px radius, 0.875rem
@@ -143,6 +144,7 @@ Use this document as a reference when building wireframes in the [Design Guide](
 **Layout:** Same centered card, two-step flow
 
 **Step 1 — Identify:**
+
 ```
 ┌───────────────────────┐
 │  Reset Password (h2)  │
@@ -157,6 +159,7 @@ Use this document as a reference when building wireframes in the [Design Guide](
 ```
 
 **Step 2 — New Password:**
+
 ```
 ┌───────────────────────┐
 │  Reset Password (h2)  │
@@ -208,6 +211,7 @@ Use this document as a reference when building wireframes in the [Design Guide](
 ```
 
 **Elements:**
+
 - Header: flex row, title + user info + nav buttons
 - Status badge: pill (12px radius), bg color per status
 - Nav buttons: outline style, `#BEB8EB` border; Log Out uses danger style
@@ -226,9 +230,9 @@ Use this document as a reference when building wireframes in the [Design Guide](
 │  Browse Games (h2)                         [Back]  │
 │                                                    │
 │  ┌──────────────┐  ┌──────────────┐                │
-│  │  Chess        │  │  Tic-Tac-Toe │                │
-│  │  Classic game │  │  Classic 3x3 │                │
-│  │  42 online    │  │  18 online   │                │
+│  │  Chess        │  │  Tic-Tac-Toe │               │
+│  │  Classic game │  │  Classic 3x3 │               │
+│  │  42 online    │  │  18 online   │               │
 │  └──────────────┘  └──────────────┘                │
 │     240px min cards, grid layout                   │
 │                                                    │
@@ -271,6 +275,7 @@ Use this document as a reference when building wireframes in the [Design Guide](
 ```
 
 **Elements:**
+
 - Status pill: yellow bg for "Waiting", mint bg for "Started"
 - Leave button: danger outline
 - Player rows: lavender borders, 4px radius
@@ -410,6 +415,7 @@ Use this document as a reference when building wireframes in the [Design Guide](
 ```
 
 **Board tokens:**
+
 - Grid lines: `#662691` (4px gap)
 - Cells: white bg, hover → `#ebe8f5`
 - X marks: `#662691`, 3rem, 700 weight
@@ -448,6 +454,7 @@ Use this document as a reference when building wireframes in the [Design Guide](
 ```
 
 **Board tokens:**
+
 - Light squares: `#ebe8f5`
 - Dark squares: `#BEB8EB`
 - Board border: 2px `#662691`
