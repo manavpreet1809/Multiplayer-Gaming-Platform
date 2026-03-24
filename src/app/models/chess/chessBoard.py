@@ -42,6 +42,18 @@ class chessBoard:
         self.grid[0][4] = ChessPiece(PieceType.KING, Color.WHITE)
         self.grid[7][4] = ChessPiece(PieceType.KING, Color.BLACK)
 
+    def clone(self) -> "chessBoard":
+        """Return a deep copy — new board with independent piece instances."""
+        new_board = chessBoard()
+        for r in range(8):
+            for c in range(8):
+                piece = self.grid[r][c]
+                if piece is not None:
+                    new_board.grid[r][c] = ChessPiece(
+                        piece.pieceType, piece.color, piece.hasMoved
+                    )
+        return new_board
+
     def getPiece(self, position: chessPosition) -> Optional[ChessPiece]:
         return self.grid[position.row][position.col]
 

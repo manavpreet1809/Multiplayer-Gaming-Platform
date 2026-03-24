@@ -50,7 +50,10 @@ class ChessEngine(GameEngine):
         return True
 
     def applyMove(self, state: dict, move: chessMove) -> dict:
-        board = state["board"]
+        import copy
+        board = state["board"].clone()
+        castlingRights = copy.deepcopy(state["castlingRights"])
+
         piece = board.getPiece(move.fromPos)
         captured = board.getPiece(move.toPos)
 
@@ -73,18 +76,18 @@ class ChessEngine(GameEngine):
                 board.removePiece(chessPosition(move.fromPos.row, 0))
                 board.setPiece(chessPosition(move.fromPos.row, 3), rook)
                 rook.hasMoved = True
-            state["castlingRights"][piece.color]["kingside"] = False
-            state["castlingRights"][piece.color]["queenside"] = False
+            castlingRights[piece.color]["kingside"] = False
+            castlingRights[piece.color]["queenside"] = False
 
         # revoke castling rights on king/rook move
         if piece.pieceType == PieceType.KING:
-            state["castlingRights"][piece.color]["kingside"] = False
-            state["castlingRights"][piece.color]["queenside"] = False
+            castlingRights[piece.color]["kingside"] = False
+            castlingRights[piece.color]["queenside"] = False
         elif piece.pieceType == PieceType.ROOK:
             if move.fromPos.col == 7:
-                state["castlingRights"][piece.color]["kingside"] = False
+                castlingRights[piece.color]["kingside"] = False
             elif move.fromPos.col == 0:
-                state["castlingRights"][piece.color]["queenside"] = False
+                castlingRights[piece.color]["queenside"] = False
 
         # pawn promotion
         if piece.pieceType == PieceType.PAWN and (move.toPos.row == 0 or move.toPos.row == 7):
@@ -94,8 +97,9 @@ class ChessEngine(GameEngine):
         # en passant capture
         if piece.pieceType == PieceType.PAWN and move.toPos == state["enPassantTarget"]:
             capturedPawnRow = move.fromPos.row
-            board.removePiece(chessPosition(capturedPawnRow, move.toPos.col))
-            captured = True
+            capturedPos = chessPosition(capturedPawnRow, move.toPos.col)
+            captured = board.getPiece(capturedPos)
+            board.removePiece(capturedPos)
 
         # en passant target
         if piece.pieceType == PieceType.PAWN and abs(move.toPos.row - move.fromPos.row) == 2:
@@ -116,7 +120,7 @@ class ChessEngine(GameEngine):
             "board": board,
             "players": state["players"],
             "activeColor": newColor,
-            "castlingRights": state["castlingRights"],
+            "castlingRights": castlingRights,
             "enPassantTarget": enPassantTarget,
             "halfmoveClock": halfmoveClock,
         }

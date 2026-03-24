@@ -11,14 +11,14 @@
   gap: 1rem;
   margin-bottom: 2rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #BEB8EB;
+  border-bottom: 1px solid var(--color-secondary);
 }
 
 .dashboard-title {
   margin: 0;
   font-size: 1.75rem;
   font-weight: 700;
-  color: #662691;
+  color: var(--color-primary);
 }
 
 .dashboard-user-info {
@@ -30,7 +30,7 @@
 
 .dashboard-username {
   font-weight: 500;
-  color: #555;
+  color: var(--color-text-muted);
 }
 
 .dashboard-status {
@@ -39,23 +39,23 @@
   text-transform: capitalize;
   padding: 0.2rem 0.5rem;
   border-radius: 12px;
-  background-color: #BEB8EB;
-  color: #662691;
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
 }
 
 .dashboard-status--game-ready {
-  background-color: #ADFCF9;
+  background-color: var(--color-accent);
   color: #0a7a6f;
 }
 
 .dashboard-status--in-queue {
-  background-color: #F8F4A6;
+  background-color: var(--color-warning);
   color: #7a6f00;
 }
 
 .dashboard-status--in-lobby {
-  background-color: #BEB8EB;
-  color: #662691;
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
 }
 
 .dashboard-nav {
@@ -65,30 +65,30 @@
 
 .dashboard-nav-link {
   background: none;
-  border: 1px solid #BEB8EB;
+  border: 1px solid var(--color-secondary);
   border-radius: 4px;
   padding: 0.4rem 0.75rem;
   font-size: 0.875rem;
   cursor: pointer;
-  color: #662691;
+  color: var(--color-primary);
   transition: background-color 0.2s;
 }
 
 .dashboard-nav-link:hover {
-  background-color: #ebe8f5;
+  background-color: var(--color-primary-light);
 }
 
 .dashboard-nav-link--logout {
-  color: #F56476;
-  border-color: #F56476;
+  color: var(--color-error);
+  border-color: var(--color-error);
 }
 
 .dashboard-nav-link--logout:hover {
-  background-color: #fde2e5;
+  background-color: var(--color-error-bg);
 }
 
 .dashboard-notifications {
-  background-color: #F8F4A6;
+  background-color: var(--color-warning);
   border: 1px solid #e8e09a;
   border-radius: 8px;
   padding: 1rem;
@@ -111,7 +111,7 @@
 .dashboard-notification {
   padding: 0.25rem 0;
   font-size: 0.875rem;
-  color: #555;
+  color: var(--color-text-muted);
 }
 
 .dashboard-banner {
@@ -125,24 +125,24 @@
 }
 
 .dashboard-banner--game-ready {
-  background-color: #ADFCF9;
+  background-color: var(--color-accent);
   color: #0a7a6f;
 }
 
 .dashboard-banner--in-queue {
-  background-color: #F8F4A6;
+  background-color: var(--color-warning);
   color: #7a6f00;
 }
 
 .dashboard-banner--in-lobby {
-  background-color: #ebe8f5;
-  color: #662691;
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
 }
 
 .dashboard-actions h2 {
   font-size: 1.125rem;
   font-weight: 500;
-  color: #333;
+  color: var(--color-text);
   margin-bottom: 1rem;
 }
 
@@ -154,27 +154,27 @@
 
 .dashboard-action {
   padding: 1.25rem 1rem;
-  border: 1px solid #BEB8EB;
+  border: 1px solid var(--color-secondary);
   border-radius: 8px;
-  background: #fff;
+  background: var(--color-surface);
   font-size: 1rem;
   font-weight: 500;
-  color: #333;
+  color: var(--color-text);
   cursor: pointer;
   transition: box-shadow 0.2s, border-color 0.2s;
 }
 
 .dashboard-action:hover {
-  border-color: #662691;
+  border-color: var(--color-primary);
   box-shadow: 0 2px 8px rgba(102, 38, 145, 0.15);
 }
 
 .dashboard-action--primary {
-  background-color: #662691;
+  background-color: var(--color-primary);
   color: #fff;
-  border-color: #662691;
+  border-color: var(--color-primary);
 }
 
 .dashboard-action--primary:hover {
-  background-color: #4e1d6e;
+  background-color: var(--color-primary-dark);
 }

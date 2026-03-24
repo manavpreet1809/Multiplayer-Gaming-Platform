@@ -25,5 +25,5 @@ async def create_indexes():
     ])
 
 
-def close_mongo_connection():
+async def close_mongo_connection():
     client.close()
