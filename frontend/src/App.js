@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Login from './components/Login';
 import GameBoardDemo from './components/GameBoardDemo';
 import ScreenshotPage from './ScreenshotPage';
+import { login as authLogin } from './services/authService';
 import './App.css';
 
 // Render screenshot page when ?screenshots is in the URL
@@ -15,9 +16,7 @@ function App() {
   }
 
   const handleLogin = async (identifier, password) => {
-    // TODO: Replace with real authentication logic (User Store Stub lookup)
-    console.log('Login attempt:', identifier);
-    // For demo purposes, any login goes to the board demo
+    await authLogin(identifier, password);
     setView('demo');
   };
 
