@@ -30,8 +30,14 @@ function Register({ onRegister, onLogin }) {
       return;
     }
 
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters.');
+    const pwdErrors = [];
+    if (password.length < 8) pwdErrors.push('at least 8 characters');
+    if (!/[A-Z]/.test(password)) pwdErrors.push('an uppercase letter');
+    if (!/[a-z]/.test(password)) pwdErrors.push('a lowercase letter');
+    if (!/\d/.test(password)) pwdErrors.push('a digit');
+    if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~]/.test(password)) pwdErrors.push('a special character');
+    if (pwdErrors.length > 0) {
+      setError('Password must contain ' + pwdErrors.join(', ') + '.');
       return;
     }
 

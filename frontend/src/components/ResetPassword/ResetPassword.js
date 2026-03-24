@@ -36,8 +36,14 @@ function ResetPassword({ onResetPassword, onBackToLogin }) {
       return;
     }
 
-    if (newPassword.length < 6) {
-      setError('Password must be at least 6 characters.');
+    const pwdErrors = [];
+    if (newPassword.length < 8) pwdErrors.push('at least 8 characters');
+    if (!/[A-Z]/.test(newPassword)) pwdErrors.push('an uppercase letter');
+    if (!/[a-z]/.test(newPassword)) pwdErrors.push('a lowercase letter');
+    if (!/\d/.test(newPassword)) pwdErrors.push('a digit');
+    if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~]/.test(newPassword)) pwdErrors.push('a special character');
+    if (pwdErrors.length > 0) {
+      setError('Password must contain ' + pwdErrors.join(', ') + '.');
       return;
     }
 

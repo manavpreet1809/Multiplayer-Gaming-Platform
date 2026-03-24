@@ -115,6 +115,17 @@ export async function logout() {
 }
 
 /**
+ * Reset a user's password given their username or email.
+ */
+export async function resetPassword(identifier, newPassword) {
+  return apiFetch('/auth/reset-password', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ identifier, new_password: newPassword }),
+  });
+}
+
+/**
  * Fetch the current user's profile.
  */
 export async function getMe() {

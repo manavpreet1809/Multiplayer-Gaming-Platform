@@ -5,8 +5,9 @@ from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel
 
-from src.app.schemas.auth import UserCreate, UserPublic
-from src.app.services.authServices import (
+from app.schemas.auth import UserCreate, UserPublic
+from app.schemas.auth import PasswordResetRequest
+from app.services.authServices import (
     ACCESS_TOKEN_EXPIRE_MINUTES,
     authenticate_user,
     create_access_token,
@@ -17,6 +18,7 @@ from src.app.services.authServices import (
     get_user_by_username,
     limiter,
     oauth2_scheme,
+    reset_password,
     revoke_token,
 )
 
@@ -109,6 +111,17 @@ async def logout(
     """
     await revoke_token(access_token)
     await revoke_token(body.refresh_token)
+
+
+@router.post("/reset-password", status_code=status.HTTP_200_OK)
+@limiter.limit("5/minute")
+async def reset_password_route(request: Request, body: PasswordResetRequest):
+    """Reset a user's password given their username or email."""
+    try:
+        await reset_password(body.identifier, body.new_password)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    return {"detail": "Password has been reset"}
 
 
 @router.get("/me", response_model=UserPublic)
