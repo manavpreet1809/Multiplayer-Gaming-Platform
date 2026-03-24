@@ -38,6 +38,7 @@ function Login({ onLogin, onForgotPassword, onRegister }) {
 
   return (
     <div className="login-container">
+    <title>Log In</title>
       <form className="login-form" onSubmit={handleSubmit} noValidate>
         <h2 className="login-title">Log In</h2>
 

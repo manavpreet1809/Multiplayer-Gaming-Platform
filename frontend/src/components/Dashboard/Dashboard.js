@@ -39,8 +39,9 @@ export default function Dashboard({
 }) {
   return (
     <div className="dashboard">
+      <title>Chalant Auramaxxers</title>
       <header className="dashboard-header">
-        <h1 className="dashboard-title">Chalant-Auramaxxers</h1>
+        <h1 className="dashboard-title">Chalant Auramaxxers</h1>
         <div className="dashboard-user-info">
           <span className="dashboard-username">{username}</span>
           <span className={`dashboard-status dashboard-status--${status}`}>
