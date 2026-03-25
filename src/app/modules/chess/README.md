@@ -38,8 +38,8 @@ validateMove() checks the following:
 4. Can the target piece be taken? - Move is rejected if target piece is the same as the current player's colour
 5. Can the current piece actually apply the move? - These implementations are abstracted within the isLegalMove() helper method, but are applicable to all piece types. Move is rejected accordingly to the rules of the corresponding piece type:
 - King: 1 move in any direction
-- Queen: diagonal or horizontal moves
-- Rook: horizontal moves only
+- Queen: horizontal, vertical, or diagonal moves
+- Rook: horizontal or vertical moves only
 - Bishop: diagonal moves only
 - Knight: L-shape moves only
 - Pawn: 1 or 2 moves forward if the pawn has not yet moved, 1 move forward only otherwise
@@ -72,17 +72,17 @@ After a move is applied, evaluateEnd() determines whether the game has ended and
 
 1. 50-move draw rule
 
-If 100 halfmoves (50 moves per player) have passed without the capture or movement of a pawn, the game is declared a draw. evaluateEnd() declares game state over, result as draw, and reason by 50-move rule as a dictionary.
+If 100 halfmoves (50 moves per player) have passed without the capture or movement of a pawn, the game is declared a draw. evaluateEnd() returns game state over, result as draw, and reason by 50-move rule as a dictionary.
 
 2. Checkmate
 
-If the active player's king is currently under attack and does not have any legal moves, the game results in a checkmate. evaluateEnd() declares game state over, result as win, assigns the winning player, and reason by checkmate as a dictionary.
+If the active player's king is currently under attack and does not have any legal moves, the game results in a checkmate. evaluateEnd() returns game state over, result as win, assigns the winning player, and reason by checkmate as a dictionary.
 
 3. Stalemate
 
-If the active player's king is not currently under attack and does not have any legal moves, the game results in a stalemate. evaluateEnd() declares game state over, result as draw, and reason by stalemate as a dictionary.
+If the active player's king is not currently under attack and does not have any legal moves, the game results in a stalemate. evaluateEnd() returns game state over, result as draw, and reason by stalemate as a dictionary.
 
-Otherwise, if none of the events above happen, the game simply continues and applyMove() returns None.
+Otherwise, if none of the events above happen, the game simply continues and evaluateEnd() returns None.
 
 ## 4. Validation Rules
 
