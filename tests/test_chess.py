@@ -54,3 +54,17 @@ def test_valid_moves():
     bishop_promo = chessMove(chessPosition(6, 0), chessPosition(7, 0), promotion=PieceType.BISHOP)
     knight_promo = chessMove(chessPosition(6, 0), chessPosition(7, 0), promotion=PieceType.KNIGHT)
     assert bishop_promo.promotion != knight_promo.promotion
+
+
+# Category 3: Board setup checks
+def test_board_setup():
+    board = chessBoard()
+    board.setupInitialPosition()
+
+    # white pawns should be only on row 1 after initial setup
+    white_pawn_left = board.getPiece(chessPosition(1, 0))
+    white_pawn_right = board.getPiece(chessPosition(1, 7))
+    assert white_pawn_left.pieceType == PieceType.PAWN
+    assert white_pawn_left.color == Color.WHITE
+    assert white_pawn_right.pieceType == PieceType.PAWN
+    print(f"\nwhite pawns on row 1 passed... piece={white_pawn_left.pieceType.value}, color={white_pawn_left.color.value}")
