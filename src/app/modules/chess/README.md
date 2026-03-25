@@ -42,7 +42,7 @@ validateMove() checks the following:
 - Rook: horizontal or vertical moves only
 - Bishop: diagonal moves only
 - Knight: L-shape moves only
-- Pawn: 1 or 2 moves forward if the pawn has not yet moved, 1 move forward only otherwise
+- Pawn: 1 or 2 moves forward if the pawn has not yet moved, 1 move forward only otherwise. It can also do diagonal captures and special rules (promotion and en passant, which are handled seperately)
 6. Would this move leave the king in check? - Also abstracted within the wouldLeaveKingInCheck() helper method, however the general idea is that if the opponent can immediately capture the king on the next move, it is considered invalid and must be rejected.
 
 Otherwise, if all validation steps pass, the method accepts the move and returns True.
@@ -64,7 +64,7 @@ After a move has been validated, applyMove() updates the game state accordingly 
 - En passant target update: If a pawn moves two squares forward, the skipped square is marked as the new en passant target
 5. Halfmove clock - Is reset to zero if a pawn was moved or a piece was captured. Otherwise, it is incremented
 
-applyMove() then returns the game state in the form of a dictionary, including the board, player states, new active player's colour, castling rights, en passant target (if any), and the halfmove clock. 
+applyMove() then returns the game state in the form of a dictionary, including the board, player states, new active player's colour, castling rights, en passant target (if any), and the halfmove clock. Importantly, it also ensures that the original state is not directly mutated.
 
 ### evaluateEnd() -> Optional[dict]
 
