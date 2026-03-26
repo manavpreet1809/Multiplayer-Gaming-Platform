@@ -5,6 +5,7 @@ target/
 
 ### Environment Files ###
 .env
+*.env.local
 
 ### IntelliJ IDEA ###
 .idea/
@@ -19,12 +20,15 @@ out/
 ### Mac OS ###
 .DS_Store
 
-# Python cache files
+### Python ###
 __pycache__/
+venv/
+.venv/
+env/
+*.pyc
 
-# --- Logs ---
+### Node ###
+node_modules/
+
+### Logs ###
 *.log
-
-# --- Environment variables ---
-.env
-*.env.local

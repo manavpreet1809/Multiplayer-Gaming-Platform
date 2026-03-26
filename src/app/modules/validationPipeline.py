@@ -1,16 +1,16 @@
-from typing import Optional, Any  # mainly for
-from app.modules.gameEngine import GameEngine # type hints
+from typing import Optional, Any
+from app.modules.gameEngine import GameEngine
+
 
 class ValidationPipeline:
-    def __init__(self, engine: GameEngine): # pass ChessEngine or TicTacToeEngine
+    def __init__(self, engine: GameEngine):
         self.engine = engine
 
     def processMove(self, state: dict, playerId: str, move: Any) -> dict:
-        # check the turn (considers both game engines)
         if "activeColor" in state:
-            active_player = state["players"][state["activeColor"]] # for ChessEngine
+            active_player = state["players"][state["activeColor"]]
         else:
-            active_player = state["currentPlayer"] # for TicTacToeEngine
+            active_player = state["currentPlayer"]
 
         if active_player != playerId:
             return {
@@ -19,8 +19,7 @@ class ValidationPipeline:
                 "state": None,
                 "result": None
             }
-        
-        # validate the move
+
         if not self.engine.validateMove(state, move):
             return {
                 "success": False,
@@ -28,12 +27,11 @@ class ValidationPipeline:
                 "state": None,
                 "result": None
             }
-        
-        # apply the move
+
         new_state = self.engine.applyMove(state, move)
 
-        # evaluate if the game reached an end state
-        result: Optional[dict] = self.engine.evaluateEnd(new_state)
+        raw_result: Optional[dict] = self.engine.evaluateEnd(new_state)
+        result = self.engine.serializeEndResult(raw_result, new_state) if raw_result else None
 
         return {
             "success": True,

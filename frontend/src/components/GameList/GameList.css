@@ -57,12 +57,12 @@
 
 .game-card:hover {
   border-color: var(--color-primary);
-  box-shadow: 0 2px 8px rgba(102, 38, 145, 0.15);
+  box-shadow: var(--shadow-primary-sm);
 }
 
 .game-card--selected {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px rgba(102, 38, 145, 0.3);
+  box-shadow: var(--shadow-primary-ring);
 }
 
 .game-card-name {
@@ -110,7 +110,7 @@
   margin-top: 1rem;
   padding: 0.625rem 1.5rem;
   background-color: var(--color-primary);
-  color: #fff;
+  color: var(--color-text-on-primary);
   border: none;
   border-radius: 4px;
   font-size: 1rem;

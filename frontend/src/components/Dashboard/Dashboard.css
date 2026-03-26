@@ -45,12 +45,12 @@
 
 .dashboard-status--game-ready {
   background-color: var(--color-accent);
-  color: #0a7a6f;
+  color: var(--color-success-text);
 }
 
 .dashboard-status--in-queue {
   background-color: var(--color-warning);
-  color: #7a6f00;
+  color: var(--color-warning-text);
 }
 
 .dashboard-status--in-lobby {
@@ -89,7 +89,7 @@
 
 .dashboard-notifications {
   background-color: var(--color-warning);
-  border: 1px solid #e8e09a;
+  border: 1px solid var(--color-warning-border);
   border-radius: 8px;
   padding: 1rem;
   margin-bottom: 1.5rem;
@@ -99,7 +99,7 @@
   margin: 0 0 0.5rem;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #7a6f00;
+  color: var(--color-warning-text);
 }
 
 .dashboard-notifications ul {
@@ -126,12 +126,12 @@
 
 .dashboard-banner--game-ready {
   background-color: var(--color-accent);
-  color: #0a7a6f;
+  color: var(--color-success-text);
 }
 
 .dashboard-banner--in-queue {
   background-color: var(--color-warning);
-  color: #7a6f00;
+  color: var(--color-warning-text);
 }
 
 .dashboard-banner--in-lobby {
@@ -166,12 +166,12 @@
 
 .dashboard-action:hover {
   border-color: var(--color-primary);
-  box-shadow: 0 2px 8px rgba(102, 38, 145, 0.15);
+  box-shadow: var(--shadow-primary-sm);
 }
 
 .dashboard-action--primary {
   background-color: var(--color-primary);
-  color: #fff;
+  color: var(--color-text-on-primary);
   border-color: var(--color-primary);
 }
 

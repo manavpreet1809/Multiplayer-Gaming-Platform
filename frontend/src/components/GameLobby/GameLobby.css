@@ -39,12 +39,12 @@
   padding: 0.25rem 0.6rem;
   border-radius: 12px;
   background-color: var(--color-warning);
-  color: #7a6f00;
+  color: var(--color-warning-text);
 }
 
 .game-lobby-status--started {
   background-color: var(--color-accent);
-  color: #0a7a6f;
+  color: var(--color-success-text);
 }
 
 .game-lobby-leave {
@@ -96,7 +96,7 @@
 }
 
 .game-lobby-player--empty .game-lobby-player-name {
-  color: #bbb;
+  color: var(--color-text-disabled);
   font-weight: 400;
   font-style: italic;
 }
@@ -108,7 +108,7 @@
 }
 
 .game-lobby-player-status--ready {
-  color: #0a7a6f;
+  color: var(--color-success-text);
 }
 
 .game-lobby-actions {
@@ -137,7 +137,7 @@
   border: none;
   border-radius: 4px;
   background-color: var(--color-primary);
-  color: #fff;
+  color: var(--color-text-on-primary);
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;

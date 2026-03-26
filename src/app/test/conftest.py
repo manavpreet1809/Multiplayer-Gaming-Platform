@@ -1,8 +1,6 @@
 import pytest
-import asyncio
 from typing import AsyncGenerator
 from contextlib import asynccontextmanager
-from unittest.mock import MagicMock
 from pymongo import AsyncMongoClient
 
 # Import the app and modules to patch
@@ -39,12 +37,12 @@ def patch_lifespan():
         validUser_mongo.users_collection = new_db["users"]
         validUser_mongo.revoked_tokens_collection = new_db["revoked_tokens"]
 
-        # Patch close_mongo_connection to be a no-op, since we close it manually
-        # and the original function is synchronous which causes a RuntimeWarning
-        # We must overwrite it in both validUser_mongo (source) and main (where it's imported)
-        validUser_mongo.close_mongo_connection = lambda: None
+        # Patch close_mongo_connection to an async no-op since we close manually below.
+        # Must overwrite in both validUser_mongo (source) and main (where it's imported).
+        async def _noop(): pass
+        validUser_mongo.close_mongo_connection = _noop
         import app.main
-        app.main.close_mongo_connection = lambda: None
+        app.main.close_mongo_connection = _noop
         
         # 3. Patch authServices because it imports these collections directly
         authServices.users_collection = validUser_mongo.users_collection

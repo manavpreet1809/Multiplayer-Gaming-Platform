@@ -24,7 +24,7 @@
 .error-boundary-button {
   padding: 0.75rem 2rem;
   background-color: var(--color-primary);
-  color: #fff;
+  color: var(--color-text-on-primary);
   border: none;
   border-radius: 4px;
   font-size: 1rem;
