@@ -1,6 +1,8 @@
 import pytest
+from pydantic import ValidationError
 from fastapi.testclient import TestClient
 from src.app.main import app
+from src.app.schemas.auth import UserCreate
 from src.app.services.authServices import limiter
 import random
 import string
@@ -38,6 +40,45 @@ def register_and_login(client):
     assert login_res.status_code == 200, login_res.text
     data = login_res.json()
     return username, data["access_token"], data["refresh_token"]
+
+# --- Unit Tests for authServices.py ---
+
+
+# --- Unit Tests for schemas/auth.py ---
+
+@pytest.mark.parametrize(
+    "password,expected_message",
+    [
+        ("Aa1!aaa", "at least 8 characters"),
+        ("mypassword1!", "at least one uppercase letter"),
+        ("MYPASSWORD1!", "at least one lowercase letter"),
+        ("MyPassword!", "at least one digit"),
+        ("MyPassword1", "at least one special character"),
+    ],
+)
+def test_usercreate_password_rules(password, expected_message):
+    """Each password rule violation should raise a schema validation error."""
+    with pytest.raises(ValidationError) as exc_info:
+        UserCreate(
+            username=f"user_{random_string()}",
+            password=password,
+            email=f"{random_string()}@example.com",
+        )
+
+    assert expected_message in str(exc_info.value)
+
+
+def test_usercreate_invalid_email_format():
+    """Invalid email format should be rejected by EmailStr validation."""
+    with pytest.raises(ValidationError) as exc_info:
+        UserCreate(
+            username=f"user_{random_string()}",
+            password="MyPassword1!",
+            email="user@com",
+        )
+
+    assert "valid email address" in str(exc_info.value).lower()
+
 
 # --- Integration Tests ---
 
