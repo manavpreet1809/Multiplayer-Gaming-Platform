@@ -1,6 +1,7 @@
 import pytest
 from fastapi.testclient import TestClient
 from src.app.main import app
+from src.app.services.authServices import limiter
 import random
 import string
 
@@ -8,6 +9,35 @@ import string
 def random_string(length=10):
     """Generate a random string for unique usernames/emails."""
     return ''.join(random.choices(string.ascii_letters, k=length))
+
+
+@pytest.fixture(autouse=True)
+def clear_rate_limiter_state():
+    """Reset shared rate-limit buckets so tests don't interfere with each other."""
+    storage = getattr(limiter, "_storage", None)
+    if storage and hasattr(storage, "reset"):
+        storage.reset()
+    yield
+    storage = getattr(limiter, "_storage", None)
+    if storage and hasattr(storage, "reset"):
+        storage.reset()
+
+def register_and_login(client):
+    """Register a fresh user and log in, returning (username, access_token, refresh_token)."""
+    username = f"user_{random_string()}"
+    password = "MyPassword1!"
+    client.post("/auth/register", json={
+        "username": username,
+        "password": password,
+        "email": f"{username}@example.com",
+    })
+    login_res = client.post("/auth/login", data={
+        "username": username,
+        "password": password,
+    })
+    assert login_res.status_code == 200, login_res.text
+    data = login_res.json()
+    return username, data["access_token"], data["refresh_token"]
 
 # --- Integration Tests ---
 
@@ -64,8 +94,9 @@ def test_register_weak_password():
             "password": "weak"  # Too short, no numbers/specials
         })
 
-        # Pydantic validation errors return 422 by default
         assert response.status_code == 422
+        detail = response.json()["detail"]
+        assert any("password" in str(e).lower() for e in detail)
 
 
 def test_register_duplicate_email():
@@ -234,3 +265,60 @@ def test_rate_limit():
         assert hit_limit is True
         # precise error message depends on slowapi default or custom config
         assert "Too Many Requests" in response.text or "Rate limit exceeded" in response.text
+
+def test_refresh_revokes_old_token():
+    """Test that a used refresh token cannot be replayed."""
+    with TestClient(app) as client:
+        _, _, refresh_token = register_and_login(client)
+
+        # First refresh succeeds
+        client.post("/auth/refresh", json={"refresh_token": refresh_token})
+
+        # Same token should now be revoked
+        response = client.post("/auth/refresh", json={"refresh_token": refresh_token})
+        assert response.status_code == 401
+
+
+def test_logout():
+    """Test that logout revokes tokens and blocks subsequent /me calls."""
+    with TestClient(app) as client:
+        _, access_token, refresh_token = register_and_login(client)
+
+        response = client.post("/auth/logout",
+            headers={"Authorization": f"Bearer {access_token}"},
+            json={"refresh_token": refresh_token},
+        )
+        assert response.status_code == 204
+
+        # Access token should now be revoked
+        me_res = client.get("/auth/me", headers={
+            "Authorization": f"Bearer {access_token}"
+        })
+        assert me_res.status_code == 401
+
+
+@pytest.mark.xfail(reason="/auth/reset-password endpoint is not implemented yet")
+def test_reset_password():
+    """Test resetting a user's password and logging in with the new one."""
+    with TestClient(app) as client:
+        username, _, _ = register_and_login(client)
+        new_password = "NewPassword2@"
+
+        response = client.post("/auth/reset-password", json={
+            "identifier": username,
+            "new_password": new_password,
+        })
+        assert response.status_code == 200
+
+        # Old password should fail
+        old_login = client.post("/auth/login", data={
+            "username": username, "password": "MyPassword1!"
+        })
+        assert old_login.status_code == 401
+
+        # New password should work
+        new_login = client.post("/auth/login", data={
+            "username": username, "password": new_password
+        })
+        assert new_login.status_code == 200
+        assert "access_token" in new_login.json()
