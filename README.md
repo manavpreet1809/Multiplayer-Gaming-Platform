@@ -1,144 +1,78 @@
-# First-Day Setup Checklist — JavaFX Maven Project
-
-Use this checklist **before you start working** on the project.  
-If all items pass, your environment is correctly set up.
-
 ## Tech Stack
-- Database: MongoDB Shared Cluster (Stubbed for now)
-- Backend: Django (python)
-- Frontend: React frameowrk with Typescript
+
+- Database: MongoDB
+- Backend: FastAPI (Python)
+- Frontend: React.js (JavaScript)
+
 ---
 
 ## 1. Required Software
 
-Confirm you have **all** of the following:
+Python 3.11+
+Node.js 18+ (for React frontend)
+npm or yarn (frontend package manager)
+MongoDB Compass (local database)
 
-- ✅ **JDK 25** installed
-- ✅ **IntelliJ IDEA** (Community or Ultimate)
-- ✅ Git installed
+## 2. Run the Project
 
-> ⚠ **IntelliJ is the expected IDE for this course.**  
-> Students using any other IDE may encounter setup and collaboration issues when working in groups that use IntelliJ exclusively.  
-> If you use something other than IntelliJ, you are responsible for resolving any IDE-specific issues.
+### Backend (FastAPI)
 
----
+#### 1. Install Python dependencies:
 
-## 2. Clone the Repository
+pip install -r requirements.txt
 
-Clone the starter repository using Git (HTTPS or SSH):
+#### 2. Create .env in project root directory with following contents:
 
-```
-git clone <repo-url>
-cd <repo-directory>
-```
+\# Generate with: python -c "import secrets; print(secrets.token_hex(32)) and place here"
+SECRET_KEY=
 
-Do not copy files manually between machines.
+\# MongoDB
+MONGODB_URL=mongodb://localhost:27017
+DB_NAME=myapp
 
----
+\# Token expiry
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+REFRESH_TOKEN_EXPIRE_DAYS=7
 
-## 3. Open the Project in IntelliJ
+#### 3. Start the backend server:
 
-1. Open IntelliJ IDEA
-2. Choose Open
-3. Select the root folder of the repository
-4. When prompted:
-    - Trust the project
-    - Allow IntelliJ to import the Maven project
+uvicorn src.app.main:app --reload
 
-IntelliJ should detect this as a Maven project automatically.
+FastAPI server runs at localhost:8000
+API docs available at localhost:8000/docs
 
----
+### Frontend (React)
 
-## 4. Verify the JDK in IntelliJ
+#### 1. Navigate to the frontend folder
 
-In IntelliJ:
+cd frontend
 
-1. File -> Project Structure -> Project
-2. Confirm:
-    - Project SDK: JDK 25
-    - Language level: 25
+#### 2. Install Node dependencies
 
-If this is incorrect, fix it before continuing.
+##### If using npm:
 
----
+npm install
 
-## 5. Do NOT Run MainApp Directly
+##### If using yarn:
 
-Do not click the green Run button on MainApp.
+yarn
 
-Doing so will result in the following error:
+#### 3. Start the frontend server
 
-```
-JavaFX runtime components are missing
-```
+##### If using npm
 
-This project must be run using Maven, which correctly configures JavaFX.
+npm start
 
----
+##### If using yarn
 
-## 6. Run the Project (Choose One Method)
+yarn start
 
-### Option A - Run in IntelliJ (recommended)
+React frontend runs at http://localhost:3000
 
-1. Open the Maven tool window
-2. Expand:
-   Project
-   -> Plugins
-   -> javafx
-3. Double-click:
-   javafx:run
+## 3. Expected Result
 
-A JavaFX window should open.
+Login page loads in browser (http://localhost:3000)
+Backend API accessible and routes respond (stubbed if database is not fully connected)
+FastAPI docs visible at /docs
 
----
-
-### Option B - Run from the Terminal (Maven Wrapper)
-
-This project uses the Maven Wrapper.
-You do not need to install Maven.
-
-Windows (PowerShell):
-
-```
-.\mvnw.cmd javafx:run
-```
-
-macOS or Linux:
-
-```
-./mvnw javafx:run
-```
-
-First run note:
-The first run may take one to two minutes while dependencies download. This is normal.
-
----
-
-## 7. Expected Result
-
-If everything is correct:
-- A JavaFX window opens
-- No JavaFX runtime errors appear
-- No additional setup is required
-
-You are ready to start the project.
-
----
-
-## 8. Common Problems (Quick Check)
-
-If something goes wrong, check these first:
-
-- Running MainApp directly instead of javafx:run
-- Wrong JDK selected in IntelliJ
-- Installing JavaFX manually
-- Using mvn instead of mvnw or mvnw.cmd
-
-If the JavaFX window opens, your setup is correct.
-
----
-
-## Summary
-
-If the project runs using javafx:run, your setup is correct and you may begin work.
-
+## 4. Common Problems
