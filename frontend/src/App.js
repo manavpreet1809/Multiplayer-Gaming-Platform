@@ -1,5 +1,7 @@
-import Login from './components/Login';
+//import Login from './components/Login';
+import Dashboard from './components/Dashboard';
 import './App.css';
+import './index.css';
 
 function App() {
   const handleLogin = async (identifier, password) => {
@@ -19,11 +21,13 @@ function App() {
   };
 
   return (
-    <Login
+   /* <Login
       onLogin={handleLogin}
       onForgotPassword={handleForgotPassword}
       onRegister={handleRegister}
     />
+    */
+   <Dashboard/>
   );
 }
 
