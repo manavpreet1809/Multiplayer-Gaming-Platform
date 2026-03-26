@@ -205,41 +205,23 @@ def test_register_missing_required_fields():
 def test_login_success():
     """Test that a registered user can log in and get tokens."""
     with TestClient(app) as client:
-        # 1. Register first
-        username = f"user_{random_string()}"
-        password = "MyPassword1!"
-        client.post("/auth/register", json={
-            "username": username,
-            "password": password,
-            "email": f"{username}@example.com"
-        })
-
-        # 2. Login (Remember: OAuth2 uses form-data, not JSON)
-        response = client.post("/auth/login", data={
-            "username": username,
-            "password": password
-        })
-
-        assert response.status_code == 200
-        data = response.json()
-        assert "access_token" in data
-        assert "refresh_token" in data
-        assert data["token_type"] == "bearer"
+        # Use helper to register and login
+        username, access_token, refresh_token = register_and_login(client)
+        
+        # Verify tokens are present and correct
+        assert access_token is not None
+        assert refresh_token is not None
+        assert len(access_token) > 0
+        assert len(refresh_token) > 0
 
 
 def test_login_invalid_credentials():
     """Test that wrong password returns 401."""
     with TestClient(app) as client:
-        # 1. Register
-        username = f"user_{random_string()}"
-        password = "MyPassword1!"
-        client.post("/auth/register", json={
-            "username": username,
-            "password": password,
-            "email": f"{username}@example.com"
-        })
+        # Register a user via helper (implicitly successful)
+        username, _, _ = register_and_login(client)
 
-        # 2. Login with wrong password
+        # Login with wrong password
         response = client.post("/auth/login", data={
             "username": username,
             "password": "WrongPassword1!"
@@ -272,20 +254,10 @@ def test_login_missing_form_fields():
 def test_protected_route_me():
     """Test accessing a protected route with a valid token."""
     with TestClient(app) as client:
-        # 1. Register & Login
-        username = f"user_{random_string()}"
-        password = "MyPassword1!"
-        
-        client.post("/auth/register", json={
-            "username": username, 
-            "password": password,
-            "email": f"{username}@example.com"
-        })
-        
-        login_res = client.post("/auth/login", data={"username": username, "password": password})
-        access_token = login_res.json()["access_token"]
+        # Use helper to register and login
+        username, access_token, _ = register_and_login(client)
 
-        # 2. Access /auth/me with the token
+        # Access /auth/me with the token
         response = client.get("/auth/me", headers={
             "Authorization": f"Bearer {access_token}"
         })
@@ -296,15 +268,8 @@ def test_protected_route_me():
 def test_rate_limit():
     """Test that rate limiting works on the login endpoint."""
     with TestClient(app) as client:
-        username = f"user_{random_string()}"
-        password = "MyPassword1!"
-        
-        # Register the user
-        client.post("/auth/register", json={
-            "username": username, 
-            "password": password,
-            "email": f"{username}@example.com"
-        })
+        # Register the user via helper
+        username, _, _ = register_and_login(client)
         
         # Keep trying until the limiter trips. This avoids coupling with prior tests
         # that may have already used part of the shared 10/minute budget.
