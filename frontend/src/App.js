@@ -1,34 +1,52 @@
-//import Login from './components/Login';
+// import Login from './components/Login';
 import Dashboard from './components/Dashboard';
+import { useState } from 'react';
+// import Login from './components/Login';
+import GameBoardDemo from './components/GameBoardDemo';
+import ScreenshotPage from './ScreenshotPage';
 import './App.css';
 import './index.css';
 
+// Render screenshot page when ?screenshots is in the URL
+const isScreenshotMode = new URLSearchParams(window.location.search).has('screenshots');
+
 function App() {
-  const handleLogin = async (identifier, password) => {
-    // TODO: Replace with real authentication logic (User Store Stub lookup)
-    console.log('Login attempt:', identifier);
-    throw new Error('Authentication not yet implemented.');
-  };
+    const [view, setView] = useState('login');
 
-  const handleForgotPassword = () => {
-    // TODO: Navigate to reset-password view (AUTH-03)
-    console.log('Navigate to forgot password');
-  };
+    if (isScreenshotMode) {
+        return <ScreenshotPage />;
+    }
 
-  const handleRegister = () => {
-    // TODO: Navigate to registration view (AUTH-01)
-    console.log('Navigate to register');
-  };
+    const handleLogin = async (identifier, password) => {
+        // TODO: Replace with real authentication logic (User Store Stub lookup)
+        console.log('Login attempt:', identifier);
+        // For demo purposes, any login goes to the board demo
+        setView('demo');
+    };
 
-  return (
-   /* <Login
-      onLogin={handleLogin}
-      onForgotPassword={handleForgotPassword}
-      onRegister={handleRegister}
-    />
-    */
-   <Dashboard/>
-  );
+    const handleForgotPassword = () => {
+        // TODO: Navigate to reset-password view (AUTH-03)
+        console.log('Navigate to forgot password');
+    };
+
+    const handleRegister = () => {
+        // TODO: Navigate to registration view (AUTH-01)
+        console.log('Navigate to register');
+    };
+
+    if (view === 'demo') {
+        return <GameBoardDemo />;
+    }
+
+    return (
+        /* <Login
+           onLogin={handleLogin}
+           onForgotPassword={handleForgotPassword}
+           onRegister={handleRegister}
+         />
+         */
+        <Dashboard />
+    );
 }
 
 export default App;

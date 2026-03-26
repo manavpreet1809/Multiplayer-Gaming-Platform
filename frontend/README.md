@@ -65,7 +65,12 @@ Optional features (nav links, action buttons) only render when their correspondi
 ### Consistent Styling
 
 - **Font**: Roboto (300/400/500/700 weights), set on `body` in `index.css` and explicitly on form elements (`<input>`, `<button>`) which don't inherit by default
-- **Color palette**: Primary blue `#1976d2`, error red `#b71c1c`, success green `#2e7d32`
+- **Color palette**:
+  - `#662691` (purple) — primary buttons, links, headings
+  - `#BEB8EB` (lavender) — borders, secondary surfaces
+  - `#F56476` (coral) — errors, danger, logout
+  - `#ADFCF9` (mint) — success, ready, info
+  - `#F8F4A6` (yellow) — warnings, notifications, highlights
 - **Layout**: Centered card forms for auth flows; max-width containers for dashboard views
 
 ---

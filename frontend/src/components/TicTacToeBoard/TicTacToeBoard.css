@@ -27,8 +27,8 @@
 }
 
 .ttt-player--active {
-  color: #1976d2;
-  background-color: #e3f2fd;
+  color: #662691;
+  background-color: #ebe8f5;
   font-weight: 700;
 }
 
@@ -49,7 +49,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 4px;
-  background-color: #333;
+  background-color: #662691;
   border-radius: 8px;
   overflow: hidden;
   width: 300px;
@@ -68,7 +68,7 @@
 }
 
 .ttt-cell:hover:not(:disabled) {
-  background-color: #f0f7ff;
+  background-color: #ebe8f5;
 }
 
 .ttt-cell:disabled {
@@ -76,7 +76,7 @@
 }
 
 .ttt-cell--winning {
-  background-color: #c8e6c9;
+  background-color: #ADFCF9;
 }
 
 /* Marks */
@@ -88,9 +88,9 @@
 }
 
 .ttt-cell--x .ttt-mark {
-  color: #1976d2;
+  color: #662691;
 }
 
 .ttt-cell--o .ttt-mark {
-  color: #d32f2f;
+  color: #F56476;
 }
