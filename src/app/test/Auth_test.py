@@ -1,8 +1,10 @@
 import pytest
+from datetime import datetime, timedelta, timezone
 from pydantic import ValidationError
 from fastapi.testclient import TestClient
 from src.app.main import app
-from src.app.schemas.auth import UserCreate
+from src.app.services.authServices import create_access_token
+from src.app.schemas.auth import UserCreate, UserInDB
 from src.app.services.authServices import limiter
 import random
 import string
@@ -261,6 +263,105 @@ def test_protected_route_me():
 
         assert response.status_code == 200
         assert response.json()["username"] == username
+
+
+def test_me_with_refresh_token_returns_401():
+    """/auth/me should reject refresh tokens (wrong token type)."""
+    with TestClient(app) as client:
+        _, _, refresh_token = register_and_login(client)
+
+        response = client.get("/auth/me", headers={
+            "Authorization": f"Bearer {refresh_token}"
+        })
+
+        assert response.status_code == 401
+
+
+def test_me_with_malformed_token_returns_401():
+    """/auth/me should reject malformed bearer tokens."""
+    with TestClient(app) as client:
+        response = client.get("/auth/me", headers={
+            "Authorization": "Bearer definitely-not-a-jwt"
+        })
+
+        assert response.status_code == 401
+
+
+def test_me_with_expired_access_token_returns_401():
+    """/auth/me should reject expired access tokens."""
+    with TestClient(app) as client:
+        username = f"user_{random_string()}"
+        password = "MyPassword1!"
+        client.post("/auth/register", json={
+            "username": username,
+            "password": password,
+            "email": f"{username}@example.com"
+        })
+
+        expired_access_token = create_access_token(
+            data={"sub": username},
+            expires_delta=timedelta(minutes=-1),
+        )
+
+        response = client.get("/auth/me", headers={
+            "Authorization": f"Bearer {expired_access_token}"
+        })
+
+        assert response.status_code == 401
+
+
+def test_me_with_disabled_user_returns_400(monkeypatch):
+    """/auth/me should return inactive-user error for disabled accounts."""
+    username = f"user_{random_string()}"
+
+    async def fake_get_user_by_username(requested_username: str):
+        if requested_username != username:
+            return None
+        return UserInDB(
+            username=username,
+            email=f"{username}@example.com",
+            full_name="Disabled User",
+            disabled=True,
+            hashed_password="unused",
+            created_at=datetime.now(timezone.utc),
+        )
+
+    monkeypatch.setattr(
+        "src.app.services.authServices.get_user_by_username",
+        fake_get_user_by_username,
+    )
+
+    with TestClient(app) as client:
+        access_token = create_access_token(data={"sub": username})
+
+        response = client.get("/auth/me", headers={
+            "Authorization": f"Bearer {access_token}"
+        })
+
+        assert response.status_code == 400
+        assert response.json()["detail"] == "Inactive user"
+
+
+def test_me_with_deleted_user_returns_401(monkeypatch):
+    """/auth/me should return 401 if token subject no longer exists."""
+    username = f"user_{random_string()}"
+
+    async def fake_get_user_by_username(_: str):
+        return None
+
+    monkeypatch.setattr(
+        "src.app.services.authServices.get_user_by_username",
+        fake_get_user_by_username,
+    )
+
+    with TestClient(app) as client:
+        access_token = create_access_token(data={"sub": username})
+
+        response = client.get("/auth/me", headers={
+            "Authorization": f"Bearer {access_token}"
+        })
+
+        assert response.status_code == 401
 
 def test_rate_limit():
     """Test that rate limiting works on the login endpoint."""
