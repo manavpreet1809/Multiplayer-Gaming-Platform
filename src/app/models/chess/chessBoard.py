@@ -1,9 +1,9 @@
 from typing import Optional, List
-from chessPosition import chessPosition
-from chessPiece import ChessPiece, PieceType, Color
+from app.models.chess.chessPosition import ChessPosition
+from app.models.chess.chessPiece import ChessPiece, PieceType, Color
 
 
-class chessBoard:
+class ChessBoard:
     def __init__(self):
         # 8x8 grid initialized to None
         self.grid: List[List[Optional[ChessPiece]]] = [
@@ -42,11 +42,39 @@ class chessBoard:
         self.grid[0][4] = ChessPiece(PieceType.KING, Color.WHITE)
         self.grid[7][4] = ChessPiece(PieceType.KING, Color.BLACK)
 
-    def getPiece(self, position: chessPosition) -> Optional[ChessPiece]:
+    def clone(self) -> "ChessBoard":
+        """Return a deep copy — new board with independent piece instances."""
+        new_board = ChessBoard()
+        for r in range(8):
+            for c in range(8):
+                piece = self.grid[r][c]
+                if piece is not None:
+                    new_board.grid[r][c] = ChessPiece(
+                        piece.pieceType, piece.color, piece.hasMoved
+                    )
+        return new_board
+
+    def getPiece(self, position: ChessPosition) -> Optional[ChessPiece]:
         return self.grid[position.row][position.col]
 
-    def setPiece(self, position: chessPosition, piece: ChessPiece):
+    def setPiece(self, position: ChessPosition, piece: ChessPiece):
         self.grid[position.row][position.col] = piece
 
-    def removePiece(self, position: chessPosition):
+    def removePiece(self, position: ChessPosition):
         self.grid[position.row][position.col] = None
+
+    def toList(self) -> list:
+        """Serialize to an 8x8 list of piece codes (or None) for the frontend.
+
+        The frontend expects row 0 = rank 8 (black's back rank), but the
+        backend stores row 0 = rank 1 (white's back rank).  This method
+        reverses the row order so the output matches the frontend convention.
+        """
+        result = []
+        for r in reversed(range(8)):          # row 7 → 0 in backend = row 0 → 7 for frontend
+            row = []
+            for c in range(8):
+                piece = self.grid[r][c]
+                row.append(piece.toCode() if piece is not None else None)
+            result.append(row)
+        return result

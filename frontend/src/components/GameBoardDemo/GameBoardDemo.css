@@ -1,0 +1,70 @@
+.demo {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.demo-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  text-align: center;
+}
+
+.demo-subtitle {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+}
+
+.demo-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.demo-tab {
+  padding: 0.5rem 1.5rem;
+  border: 1px solid var(--color-secondary);
+  border-radius: 4px;
+  background: var(--color-surface);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--color-primary);
+  transition: background-color 0.2s;
+}
+
+.demo-tab:hover {
+  background-color: var(--color-primary-light);
+}
+
+.demo-tab--active {
+  background-color: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+}
+
+.demo-board-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.demo-reset {
+  margin-top: 1rem;
+  padding: 0.5rem 1.25rem;
+  border: 1px solid var(--color-secondary);
+  border-radius: 4px;
+  background: var(--color-surface);
+  font-size: 0.875rem;
+  color: var(--color-primary);
+  cursor: pointer;
+}
+
+.demo-reset:hover {
+  background-color: var(--color-primary-light);
+}

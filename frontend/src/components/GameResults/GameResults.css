@@ -12,18 +12,18 @@
 }
 
 .game-results-banner--win {
-  background-color: #c8e6c9;
-  color: #1b5e20;
+  background-color: var(--color-accent);
+  color: #0a7a6f;
 }
 
 .game-results-banner--loss {
-  background-color: #fdecea;
-  color: #b71c1c;
+  background-color: var(--color-error-bg);
+  color: var(--color-error);
 }
 
 .game-results-banner--draw {
-  background-color: #fff3e0;
-  color: #e65100;
+  background-color: var(--color-warning);
+  color: #7a6f00;
 }
 
 .game-results-label {
@@ -52,7 +52,7 @@
 
 .game-results-stat-label {
   font-size: 0.75rem;
-  color: #999;
+  color: var(--color-text-light);
   text-transform: uppercase;
   margin-bottom: 0.25rem;
 }
@@ -60,15 +60,15 @@
 .game-results-stat-value {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #333;
+  color: var(--color-text);
 }
 
 .game-results-stat-value--positive {
-  color: #2e7d32;
+  color: #0a7a6f;
 }
 
 .game-results-stat-value--negative {
-  color: #d32f2f;
+  color: var(--color-error);
 }
 
 .game-results-actions {
@@ -80,27 +80,27 @@
 
 .game-results-action {
   padding: 0.625rem 1.25rem;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--color-secondary);
   border-radius: 4px;
-  background: #fff;
+  background: var(--color-surface);
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
-  color: #333;
+  color: var(--color-primary);
   transition: background-color 0.2s, border-color 0.2s;
 }
 
 .game-results-action:hover {
-  border-color: #1976d2;
-  background-color: #f5f5f5;
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-light);
 }
 
 .game-results-action--primary {
-  background-color: #1976d2;
+  background-color: var(--color-primary);
   color: #fff;
-  border-color: #1976d2;
+  border-color: var(--color-primary);
 }
 
 .game-results-action--primary:hover {
-  background-color: #1565c0;
+  background-color: var(--color-primary-dark);
 }

@@ -1,5 +1,5 @@
-from ConnectionStatus import ConnectionStatus
-from PlayerRole import PlayerRole
+from app.models.ConnectionStatus import ConnectionStatus
+from app.models.PlayerRole import PlayerRole
 
 #TODO: This class appears to be used by Game to track players
 class Player:

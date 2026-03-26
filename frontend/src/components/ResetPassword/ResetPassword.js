@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import validatePassword from '../../utils/validatePassword';
 import './ResetPassword.css';
 
 /**
@@ -36,8 +37,9 @@ function ResetPassword({ onResetPassword, onBackToLogin }) {
       return;
     }
 
-    if (newPassword.length < 6) {
-      setError('Password must be at least 6 characters.');
+    const pwdErrors = validatePassword(newPassword);
+    if (pwdErrors.length > 0) {
+      setError('Password must contain ' + pwdErrors.join(', ') + '.');
       return;
     }
 

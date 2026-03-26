@@ -12,8 +12,8 @@ from pymongo.errors import DuplicateKeyError
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 
-from src.app.db.validUser_mongo import users_collection, revoked_tokens_collection
-from src.app.schemas.auth import TokenData, UserCreate, UserInDB, UserPublic
+from app.db.validUser_mongo import users_collection, revoked_tokens_collection
+from app.schemas.auth import TokenData, UserCreate, UserInDB, UserPublic
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -153,6 +153,36 @@ async def get_user_by_username(username: str) -> UserInDB | None:
         disabled=doc.get("disabled", False),
         hashed_password=doc["hashed_password"],
         created_at=doc["created_at"],
+    )
+
+
+async def get_user_by_identifier(identifier: str) -> UserInDB | None:
+    """Look up a user by username or email."""
+    doc = await users_collection.find_one({
+        "$or": [{"username": identifier}, {"email": identifier}]
+    })
+    if not doc:
+        return None
+    return UserInDB(
+        username=doc["username"],
+        email=doc.get("email"),
+        full_name=doc.get("full_name"),
+        disabled=doc.get("disabled", False),
+        hashed_password=doc["hashed_password"],
+        created_at=doc["created_at"],
+    )
+
+
+async def reset_password(identifier: str, new_password: str) -> None:
+    """Reset a user's password given their username or email."""
+    user = await get_user_by_identifier(identifier)
+    if user is None:
+        raise ValueError("User not found")
+
+    hashed = get_password_hash(new_password)
+    await users_collection.update_one(
+        {"username": user.username},
+        {"$set": {"hashed_password": hashed}},
     )
 
 

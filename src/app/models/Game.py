@@ -1,7 +1,7 @@
-from Visibility import Visibility
-from GameStatus import GameStatus
-from GameSettings import GameSettings
-from GameState import GameState
+from app.models.Visibility import Visibility
+from app.models.GameStatus import GameStatus
+from app.models.GameSettings import GameSettings
+from app.models.GameState import GameState
 
 # TODO: This is more of a Lobby class; create a Game class for the games themselves, and move some fields there
 class Game:
@@ -17,7 +17,7 @@ class Game:
         pass
 
     def addPlayer(self, id):
-        self.players.insert(id) # TODO: make sure the ID is valid (the api is probably checking this so we assume a valid ID here)
+        self.players.append(id) # TODO: make sure the ID is valid (the api is probably checking this so we assume a valid ID here)
 
     def removePlayer(self, id):
         try:

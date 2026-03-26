@@ -76,12 +76,12 @@ function Profile({
           <table className="profile-table">
             <thead>
               <tr>
-                <th>Game</th>
-                <th>Played</th>
-                <th>W</th>
-                <th>L</th>
-                <th>Rank</th>
-                <th>MMR</th>
+                <th scope="col">Game</th>
+                <th scope="col">Played</th>
+                <th scope="col">W</th>
+                <th scope="col">L</th>
+                <th scope="col">Rank</th>
+                <th scope="col">MMR</th>
               </tr>
             </thead>
             <tbody>
