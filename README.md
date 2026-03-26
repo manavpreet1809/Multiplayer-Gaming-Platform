@@ -34,9 +34,13 @@ DB_NAME=myapp
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 REFRESH_TOKEN_EXPIRE_DAYS=7
 
+#### 4. Navigate to the frontend folder
+
+cd src
+
 #### 3. Start the backend server:
 
-uvicorn src.app.main:app --reload
+uvicorn app.main:app --reload
 
 FastAPI server runs at localhost:8000
 API docs available at localhost:8000/docs
