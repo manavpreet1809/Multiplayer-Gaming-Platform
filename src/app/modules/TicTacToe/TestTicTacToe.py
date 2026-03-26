@@ -33,7 +33,7 @@ if __name__ == "__main__":
     state = engine.createInitialState(["X", "O"])
 
     move = TicTacToeMove(TicTacToePosition(0,0))
-    engine.applyMove(state, move)
+    state = engine.applyMove(state, move)
 
     # try same move again
     print("Should be False:", engine.validateMove(state, move))
