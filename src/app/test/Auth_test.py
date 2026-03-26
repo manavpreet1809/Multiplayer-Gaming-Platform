@@ -9,7 +9,7 @@ def random_string(length=10):
     """Generate a random string for unique usernames/emails."""
     return ''.join(random.choices(string.ascii_letters, k=length))
 
-# --- Tests ---
+# --- Integration Tests ---
 
 def test_register_success():
     """Test that a user can register with valid credentials."""
@@ -138,3 +138,36 @@ def test_protected_route_me():
 
         assert response.status_code == 200
         assert response.json()["username"] == username
+
+def test_rate_limit():
+    """Test that rate limiting works on the login endpoint."""
+    with TestClient(app) as client:
+        username = f"user_{random_string()}"
+        password = "MyPassword1!"
+        
+        # Register the user
+        client.post("/auth/register", json={
+            "username": username, 
+            "password": password,
+            "email": f"{username}@example.com"
+        })
+        
+        # 1. Use up the allowed attempts (limit is 10/minute)
+        # we have called it 3 times so we have 7 more calls before we reach the limit.
+        # These should all fail with 401 (Wrong Password), NOT 429 yet.
+        for _ in range(7):
+            response = client.post("/auth/login", data={
+                "username": username,
+                "password": "WrongPassword1!"
+            })
+            assert response.status_code == 401
+
+        # 2. The 11th attempt should trigger the rate limit
+        response = client.post("/auth/login", data={
+            "username": username,
+            "password": "WrongPassword1!"
+        })
+        
+        assert response.status_code == 429
+        # precise error message depends on slowapi default or custom config
+        assert "Too Many Requests" in response.text or "Rate limit exceeded" in response.text
