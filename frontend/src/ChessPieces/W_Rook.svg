@@ -1,0 +1,10 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+	<defs>
+		<image  width="32" height="32" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAgMAAAAOFJJnAAAAAXNSR0IB2cksfwAAAAxQTFRFAAAALgVKudf/6P3/JLVclAAAAAR0Uk5TAP///7MtQIgAAACqSURBVHicY2SAAkYGBtcL9n/XAxmMM4GMWQeAjFlX+nZ2gRj7DAT2N4EYeRMY/jsBGQzRSxh+sYN0SVmzzeQBMyaGfIUwljosjQEx2H6sXr4BzPj5f1IBhMFw0YBYBtCcpzJQBtTkqQFf0eyCMyaEQhhZDqJW7BAGYxAzkMEa4HAgYPUGoONXAv05Deh4tiVAxrMCkFQow+rfIKkQoMhrkL+ArNcHQNohAAALHkQh4Z9YUQAAAABJRU5ErkJggg=="/>
+	</defs>
+	<style>
+	</style>
+	<g id="White">
+		<use id="-e- Rook (2)" href="#img1" x="0" y="0"/>
+	</g>
+</svg>

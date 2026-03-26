@@ -1,0 +1,10 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+	<defs>
+		<image  width="32" height="32" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAgMAAAAOFJJnAAAAAXNSR0IB2cksfwAAAAxQTFRFAAAALgVKudf/6P3/JLVclAAAAAR0Uk5TAP///7MtQIgAAADHSURBVHicY2SAAkYQwfobyohcDmEw7nGGMMReOh4AM6KXXNUBMRjXBfxjBjHYfjJAGNJP/iU9PABk5E9gSAAxgEoYGC4aABn7HBgYvvIwgtQyAFWDGdmhDo5gRpjYFBBjp0PgsefMYMZFs74cIGNlwFde+wNgxjdukDPYloQygJ0BYlw0ADNEHb7yIDMYVzKGgN3DuJIhFOKwqABWN26QSAjQ9tVABmsAY8j/5RsgioEmAkVCAxh+r94AkgKq+b0B5NNQoFoGAL6xQKHJQFYAAAAAAElFTkSuQmCC"/>
+	</defs>
+	<style>
+	</style>
+	<g id="White">
+		<use id="Knight (2)" href="#img1" x="0" y="0"/>
+	</g>
+</svg>
