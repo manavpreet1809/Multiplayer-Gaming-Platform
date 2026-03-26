@@ -12,11 +12,14 @@ Rules and Validation are in charge of the validation pipeline that ensures the p
 
 TicTacToeEngine inherits from the abstract base class (similar to a Java interface) GameEngine in gameEngine.py (found under modules) used for both our project's games, chess and tic-tac-toe.
 
-GameEngine has four abstract methods that TicTacToeEngine implements:
+GameEngine has seven abstract methods that TicTacToeEngine implements:
 1. createInitialState() - sets up the initial tic-tac-toe board and starting game state
 2. validateMove() - ensures that the requested player move is valid
 3. applyMove() - updates the game state once a move has been validated
 4. evaluateEnd() - checks if the game has ended and returns the result
+5. serializeState() - converts internal state to a JSON-serializable dict for the frontend (2D grid → flat array, player names → "X"/"O" symbols)
+6. serializeEndResult() - converts evaluateEnd() output to a JSON-serializable dict (maps winner player name to "X"/"O" symbol)
+7. deserializeMove() - converts a frontend move dict (cell index 0-8) back to an internal TicTacToeMove
 
 ## 3. Validation Pipeline
 

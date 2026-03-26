@@ -4,7 +4,7 @@
 
 Chess is a two-player strategy game utilizing an 8x8 game board. Each player is assigned a colour (white or black), and each colour has 16 available pieces with varying types (king, queen, rook, bishop, knight, and pawn).
 
-The goal of the game for either player is to reach a checkmate using valid moves of each piece, which only occurs when a king is in check and can't escape from the threat. Otherwise, a stalemate or draw occurs either when a checkmate is impossible or once the 50-move draw rule has passed.
+The goal of the game for either player is to reach a checkmate using valid moves of each piece, which only occurs when a king is in check and can't escape from the threat. Otherwise, a stalemate occurs when the active player has no legal moves but is not in check, and a draw is declared once the 50-move rule has passed (100 halfmoves without a pawn move or capture). Note: insufficient-material detection is not currently implemented.
 
 Rules and Validation are in charge of the validation pipeline that ensures the pass-through of valid moves, rejection of invalid moves, and updates to the game state.
 
@@ -12,11 +12,16 @@ Rules and Validation are in charge of the validation pipeline that ensures the p
 
 ChessEngine inherits from the abstract base class (similar to a Java interface) GameEngine in gameEngine.py (found under modules) used for both our project's games, chess and tic-tac-toe.
 
-GameEngine has four abstract methods that ChessEngine implements:
+GameEngine has seven abstract methods that ChessEngine implements:
 1. createInitialState() - sets up the initial chess board and starting game state
 2. validateMove() - ensures that the requested player move is valid
 3. applyMove() - updates the game state once a move has been validated
 4. evaluateEnd() - checks if the game has ended and returns the result
+5. serializeState() - converts internal state to a JSON-serializable dict for the frontend (row-flip, piece codes, castling rights, etc.)
+6. serializeEndResult() - converts evaluateEnd() output to a JSON-serializable dict (maps Color enum winner to "white"/"black" string)
+7. deserializeMove() - converts a frontend move dict back to an internal ChessMove (handles row-flip and optional promotion)
+
+ChessEngine also implements several helper methods: cloneState(), findKing(), isSquareAttacked(), isPathClear(), isValidCastle(), wouldLeaveKingInCheck(), and hasAnyLegalMove().
 
 ## 3. Validation Pipeline
 
