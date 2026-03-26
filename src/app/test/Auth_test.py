@@ -41,9 +41,6 @@ def register_and_login(client):
     data = login_res.json()
     return username, data["access_token"], data["refresh_token"]
 
-# --- Unit Tests for authServices.py ---
-
-
 # --- Unit Tests for schemas/auth.py ---
 
 @pytest.mark.parametrize(
@@ -388,6 +385,73 @@ def test_logout():
             "Authorization": f"Bearer {access_token}"
         })
         assert me_res.status_code == 401
+
+
+def test_logout_without_access_token():
+    """Test that logout without Authorization header returns 401."""
+    with TestClient(app) as client:
+        _, _, refresh_token = register_and_login(client)
+
+        response = client.post("/auth/logout",
+            json={"refresh_token": refresh_token},
+        )
+        assert response.status_code == 401
+        assert response.json()["detail"] == "Not authenticated"
+
+
+def test_logout_missing_refresh_token_body():
+    """Test that logout with missing refresh_token in body returns 422."""
+    with TestClient(app) as client:
+        _, access_token, _ = register_and_login(client)
+
+        response = client.post("/auth/logout",
+            headers={"Authorization": f"Bearer {access_token}"},
+            json={},
+        )
+        assert response.status_code == 422
+
+
+def test_logout_with_malformed_refresh_token():
+    """Test that logout with malformed refresh token still succeeds (token is ignored gracefully)."""
+    with TestClient(app) as client:
+        _, access_token, _ = register_and_login(client)
+
+        response = client.post("/auth/logout",
+            headers={"Authorization": f"Bearer {access_token}"},
+            json={"refresh_token": "garbage_no_dots_token"},
+        )
+        # Revoke handles invalid tokens gracefully, so logout succeeds
+        assert response.status_code == 204
+
+
+def test_logout_invalidates_refresh_token():
+    """Test that after logout, the refresh token cannot be used."""
+    with TestClient(app) as client:
+        _, access_token, refresh_token = register_and_login(client)
+
+        # Logout revokes both tokens
+        client.post("/auth/logout",
+            headers={"Authorization": f"Bearer {access_token}"},
+            json={"refresh_token": refresh_token},
+        )
+
+        # Try to use the old refresh token to get new tokens
+        response = client.post("/auth/refresh", json={"refresh_token": refresh_token})
+        assert response.status_code == 401
+        assert response.json()["detail"] == "Invalid or expired refresh token"
+
+
+def test_logout_with_wrong_token_type():
+    """Test that logout with a refresh token used as access token returns 401."""
+    with TestClient(app) as client:
+        _, _, refresh_token = register_and_login(client)
+
+        # Try to use refresh token as access (Authorization header)
+        response = client.post("/auth/logout",
+            headers={"Authorization": f"Bearer {refresh_token}"},
+            json={"refresh_token": refresh_token},
+        )
+        assert response.status_code == 401
 
 
 @pytest.mark.xfail(reason="/auth/reset-password endpoint is not implemented yet")
