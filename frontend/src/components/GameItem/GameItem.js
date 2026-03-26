@@ -9,6 +9,6 @@ export default function GameItem({
     itemIcon
 }) {
     <div className="game-item">
-        <a href="{itemEndpoint}"><img src="{itemIcon}"></img></a>
+        <a href={itemEndpoint}><img src={itemIcon}></img></a>
     </div>
 }

@@ -72,7 +72,7 @@ export default function Dashboard({
           }
         </div>
         <div className="dashboard-game-list">
-          <GameItem itemEndpoint={NULL} itemIcon/>
+          <GameItem itemEndpoint={null} itemIcon/>
         </div>
         <div className="dashboard-action-grid">
           
