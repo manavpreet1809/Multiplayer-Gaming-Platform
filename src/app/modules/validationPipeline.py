@@ -1,5 +1,5 @@
 from typing import Optional, Any  # mainly for
-from gameEngine import GameEngine # type hints
+from app.modules.gameEngine import GameEngine # type hints
 
 class ValidationPipeline:
     def __init__(self, engine: GameEngine): # pass ChessEngine or TicTacToeEngine
