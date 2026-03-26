@@ -68,6 +68,50 @@ def test_register_weak_password():
         assert response.status_code == 422
 
 
+def test_register_duplicate_email():
+    """Test that registering the same email twice fails."""
+    with TestClient(app) as client:
+        email = f"{random_string()}@example.com"
+        password = "MyPassword1!"
+
+        client.post("/auth/register", json={
+            "username": f"user_{random_string()}",
+            "password": password,
+            "email": email,
+        })
+
+        response = client.post("/auth/register", json={
+            "username": f"user_{random_string()}",
+            "password": password,
+            "email": email,
+        })
+
+        assert response.status_code == 400
+        assert response.json()["detail"] == "Email already in use"
+
+
+def test_register_invalid_email_format():
+    """Test that invalid email format is rejected by schema validation."""
+    with TestClient(app) as client:
+        response = client.post("/auth/register", json={
+            "username": f"user_{random_string()}",
+            "password": "MyPassword1!",
+            "email": "not-an-email",
+        })
+
+        assert response.status_code == 422
+
+
+def test_register_missing_required_fields():
+    """Test that missing required register fields returns 422."""
+    with TestClient(app) as client:
+        response = client.post("/auth/register", json={
+            "email": f"{random_string()}@example.com"
+        })
+
+        assert response.status_code == 422
+
+
 def test_login_success():
     """Test that a registered user can log in and get tokens."""
     with TestClient(app) as client:
@@ -115,6 +159,26 @@ def test_login_invalid_credentials():
         assert response.json()["detail"] == "Incorrect username or password"
 
 
+def test_login_nonexistent_user():
+    """Test that logging in with an unknown username returns 401."""
+    with TestClient(app) as client:
+        response = client.post("/auth/login", data={
+            "username": f"missing_{random_string()}",
+            "password": "WrongPassword1!"
+        })
+
+        assert response.status_code == 401
+        assert response.json()["detail"] == "Incorrect username or password"
+
+
+def test_login_missing_form_fields():
+    """Test that missing OAuth form fields returns 422."""
+    with TestClient(app) as client:
+        response = client.post("/auth/login", data={"username": "only_username"})
+
+        assert response.status_code == 422
+
+
 def test_protected_route_me():
     """Test accessing a protected route with a valid token."""
     with TestClient(app) as client:
@@ -152,22 +216,21 @@ def test_rate_limit():
             "email": f"{username}@example.com"
         })
         
-        # 1. Use up the allowed attempts (limit is 10/minute)
-        # we have called it 3 times so we have 7 more calls before we reach the limit.
-        # These should all fail with 401 (Wrong Password), NOT 429 yet.
-        for _ in range(7):
+        # Keep trying until the limiter trips. This avoids coupling with prior tests
+        # that may have already used part of the shared 10/minute budget.
+        hit_limit = False
+        for _ in range(20):
             response = client.post("/auth/login", data={
                 "username": username,
                 "password": "WrongPassword1!"
             })
+
+            if response.status_code == 429:
+                hit_limit = True
+                break
+
             assert response.status_code == 401
 
-        # 2. The 11th attempt should trigger the rate limit
-        response = client.post("/auth/login", data={
-            "username": username,
-            "password": "WrongPassword1!"
-        })
-        
-        assert response.status_code == 429
+        assert hit_limit is True
         # precise error message depends on slowapi default or custom config
         assert "Too Many Requests" in response.text or "Rate limit exceeded" in response.text
