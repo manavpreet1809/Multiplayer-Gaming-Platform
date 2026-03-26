@@ -303,7 +303,76 @@ def test_refresh_revokes_old_token():
         assert response.status_code == 401
 
 
+def test_refresh_with_access_token():
+    """Test that using an access token for refresh returns 401."""
+    with TestClient(app) as client:
+        _, access_token, _ = register_and_login(client)
+
+        # Try to refresh with access token instead of refresh token
+        response = client.post("/auth/refresh", json={"refresh_token": access_token})
+        assert response.status_code == 401
+        assert response.json()["detail"] == "Invalid or expired refresh token"
+
+
+def test_refresh_with_malformed_token():
+    """Test that a malformed token string returns 401."""
+    with TestClient(app) as client:
+        response = client.post("/auth/refresh", json={"refresh_token": "not.a.valid.jwt"})
+        assert response.status_code == 401
+        assert response.json()["detail"] == "Invalid or expired refresh token"
+
+
+def test_refresh_with_garbage_token():
+    """Test that a garbage token string returns 401."""
+    with TestClient(app) as client:
+        response = client.post("/auth/refresh", json={"refresh_token": "garbage_string_no_dots"})
+        assert response.status_code == 401
+        assert response.json()["detail"] == "Invalid or expired refresh token"
+
+
+def test_refresh_missing_refresh_token_field():
+    """Test that missing refresh_token in body returns 422."""
+    with TestClient(app) as client:
+        response = client.post("/auth/refresh", json={})
+        assert response.status_code == 422
+
+
+def test_refresh_success_returns_new_tokens():
+    """Test that a successful refresh returns new access and refresh tokens."""
+    with TestClient(app) as client:
+        _, _, refresh_token = register_and_login(client)
+
+        response = client.post("/auth/refresh", json={"refresh_token": refresh_token})
+
+        assert response.status_code == 200
+        data = response.json()
+        assert "access_token" in data
+        assert "refresh_token" in data
+        assert data["token_type"] == "bearer"
+        # New tokens should be different from old ones
+        assert data["refresh_token"] != refresh_token
+
+
+def test_refresh_new_access_is_valid():
+    """Test that the new access token from refresh can be used immediately."""
+    with TestClient(app) as client:
+        username, _, refresh_token = register_and_login(client)
+
+        # Refresh to get new access token
+        refresh_res = client.post("/auth/refresh", json={"refresh_token": refresh_token})
+        new_access_token = refresh_res.json()["access_token"]
+
+        # Use new access token on /auth/me
+        me_res = client.get("/auth/me", headers={
+            "Authorization": f"Bearer {new_access_token}"
+        })
+
+        assert me_res.status_code == 200
+        assert me_res.json()["username"] == username
+
+
 def test_logout():
+
     """Test that logout revokes tokens and blocks subsequent /me calls."""
     with TestClient(app) as client:
         _, access_token, refresh_token = register_and_login(client)
