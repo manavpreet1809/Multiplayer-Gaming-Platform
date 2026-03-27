@@ -1,3 +1,5 @@
+#  run tictactoe test case: py -m pytest tests/test_tictactoe.py -v -s
+
 import pytest
 import sys
 import os
