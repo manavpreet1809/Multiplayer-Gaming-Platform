@@ -23,7 +23,7 @@ def test_position_upper_bound():
     assert pos.col == 7
 
 def test_position_middle():
-    # # Checks if a chessPosition correctly stores row and column values
+    # Checks if a chessPosition correctly stores row and column values
     pos = chessPosition(3, 4)
     assert pos.row == 3
     assert pos.col == 4
@@ -44,4 +44,46 @@ def test_position_different_col():
 def test_position_out_of_bounds():
     with pytest.raises(ValueError):
         chessPosition(8, 8)
+
+
+# Move checks
+def test_move_from_position():
+    # checking fromPos is stored correctly
+    move = chessMove(chessPosition(1, 0), chessPosition(3, 0))
+    assert move.fromPos.row == 1
+    assert move.fromPos.col == 0
+
+def test_move_to_position():
+    # checking toPos is stored correctly
+    move = chessMove(chessPosition(1, 0), chessPosition(3, 0))
+    assert move.toPos.row == 3
+    assert move.toPos.col == 0
+
+def test_move_diff_square():
+    #  from and to positions should not be the same square for a valid move
+    pawn_move = chessMove(chessPosition(1, 0), chessPosition(3, 0))
+    assert pawn_move.fromPos != pawn_move.toPos
+
+def test_no_promo_default():
+    # checks that a regular move has no promotion
+    move = chessMove(chessPosition(4, 4), chessPosition(5, 4))
+    assert move.promotion is None
+
+def test_promo_queen():
+    # checks that pawn promoting to queen is stored correctly and not with other types
+    queen_promo = chessMove(chessPosition(6, 0), chessPosition(7, 0), promotion=PieceType.QUEEN)
+    assert queen_promo.promotion == PieceType.QUEEN
+    assert queen_promo.promotion != PieceType.ROOK
+
+def test_promo_knight():
+    # checks that pawn promoting to knight is stored correctly
+    knight_promo = chessMove(chessPosition(6, 3), chessPosition(7, 3), promotion=PieceType.KNIGHT)
+    assert knight_promo.promotion == PieceType.KNIGHT
+    assert knight_promo.promotion != PieceType.QUEEN
+
+def test_diff_promos_not_equal():
+    # checks that bishop and rook are two different promotions and are not equal
+    bishop_promo = chessMove(chessPosition(6, 0), chessPosition(7, 0), promotion=PieceType.BISHOP)
+    rook_promo = chessMove(chessPosition(6, 0), chessPosition(7, 0), promotion=PieceType.ROOK)
+    assert bishop_promo.promotion != rook_promo.promotion
 
