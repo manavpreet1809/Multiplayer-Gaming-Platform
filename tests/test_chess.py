@@ -40,6 +40,12 @@ def test_position_different_col():
     pos2 = chessPosition(1, 2)
     assert pos1 != pos2
 
+def test_position_hash_equal():
+    # checks if two positions with same values have equal hash
+    pos1 = chessPosition(3, 3)
+    pos2 = chessPosition(3, 3)
+    assert hash(pos1) == hash(pos2)
+
 @pytest.mark.skip(reason="bounds validation not yet implemented")
 def test_position_out_of_bounds():
     with pytest.raises(ValueError):
@@ -86,6 +92,15 @@ def test_diff_promos_not_equal():
     bishop_promo = chessMove(chessPosition(6, 0), chessPosition(7, 0), promotion=PieceType.BISHOP)
     rook_promo = chessMove(chessPosition(6, 0), chessPosition(7, 0), promotion=PieceType.ROOK)
     assert bishop_promo.promotion != rook_promo.promotion
+
+@pytest.mark.skip(reason="move validation not yet implemented")
+def test_pawn_blocked_by_piece():
+    # checks if pawn is blocked when enemy piece is directly in front of it
+    board = chessBoard()
+    board.setupInitialPosition()
+    board.setPiece(chessPosition(2, 0), ChessPiece(PieceType.PAWN, Color.BLACK))
+    move = chessMove(chessPosition(1, 0), chessPosition(2, 0))
+    assert board.isValidMove(move) == False
 
 
 
@@ -145,6 +160,20 @@ def test_white_rooks_knights_bishops_initial_pos():
     assert white_knight.pieceType == PieceType.KNIGHT
     assert white_bishop.pieceType == PieceType.BISHOP
 
+def test_black_rooks_knights_bishops_initial_pos():
+    # checks if black rook,  knight and bishop are placed correctly and of right color
+    board = chessBoard()
+    board.setupInitialPosition()
+    black_rook = board.getPiece(chessPosition(7, 7))
+    black_knight = board.getPiece(chessPosition(7, 6))
+    black_bishop = board.getPiece(chessPosition(7, 5))
+    assert black_rook.pieceType == PieceType.ROOK
+    assert black_knight.pieceType == PieceType.KNIGHT
+    assert black_bishop.pieceType == PieceType.BISHOP
+    assert black_rook.color == Color.BLACK
+    assert black_knight.color == Color.BLACK
+    assert black_bishop.color == Color.BLACK
+
 def test_middle_rows_empty():
     # checks if rows 2-5 are empty after initial setup
     board = chessBoard()
@@ -162,6 +191,32 @@ def test_white_piece_not_on_black_side():
     black_front_row = board.getPiece(chessPosition(6, 0))
     assert black_back_row.color != Color.WHITE
     assert black_front_row.color != Color.WHITE
+
+def test_black_piece_not_on_white_side():
+    # checks that no black piece is on rows 0 or 1 at the start of the game
+    board = chessBoard()
+    board.setupInitialPosition()
+    white_back_row = board.getPiece(chessPosition(0, 0))
+    white_front_row = board.getPiece(chessPosition(1, 0))
+    assert white_back_row.color != Color.BLACK
+    assert white_front_row.color != Color.BLACK
+
+def test_no_empty_cell_back_rows():
+    # checks if rows 0 and 7 have no empty squares after setup- if one of them is empty , then the board is invalid
+    board = chessBoard()
+    board.setupInitialPosition()
+    for col in range(8):
+        assert board.getPiece(chessPosition(0, col)) is not None
+        assert board.getPiece(chessPosition(7, col)) is not None
+
+def test_no_empty_on_pawn_rows():
+    # checks if rows 1 and 6 have no empty squares after setup
+    board = chessBoard()
+    board.setupInitialPosition()
+    for col in range(8):
+        assert board.getPiece(chessPosition(1, col)) is not None
+        assert board.getPiece(chessPosition(6, col)) is not None
+
 
 
 # Board update and state checks

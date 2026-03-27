@@ -94,3 +94,8 @@ def test_player_o_val():
 def test_players_not_equal():
     # checks if X and O are different players
     assert Player.X != Player.O
+
+def test_tictactoe_two_players():
+    # checks if there are only two players in tictactoe and not more
+    all_players = list(Player)
+    assert len(all_players) == 2
