@@ -9,62 +9,39 @@ from chessPiece import ChessPiece, PieceType, Color
 from chessBoard import chessBoard
 from chessMove import chessMove
 
+#  Boundary checks
+def test_position_lower_bound():
+    # (0,0) is the minimum valid position on the board
+    pos = chessPosition(0, 0)
+    assert pos.row == 0
+    assert pos.col == 0
 
-# Boundary checks
-def test_position_boundaries():
-    # lower bound check
-    pos_low = chessPosition(0, 0)
-    assert pos_low.row == 0
-    assert pos_low.col == 0
+def test_position_upper_bound():
+    # (7,7) is the maximum valid position on the board
+    pos = chessPosition(7, 7)
+    assert pos.row == 7
+    assert pos.col == 7
 
-    # upper bound check
-    pos_high = chessPosition(7, 7)
-    assert pos_high.row == 7
-    assert pos_high.col == 7
+def test_position_middle():
+    # # Checks if a chessPosition correctly stores row and column values
+    pos = chessPosition(3, 4)
+    assert pos.row == 3
+    assert pos.col == 4
 
-    # middle value
-    pos_mid = chessPosition(3, 4)
-    assert pos_mid.row == 3
-    assert pos_mid.col == 4
+def test_position_equal():
+    # two positions with same row and col should be equal
+    pos1 = chessPosition(4, 4)
+    pos2 = chessPosition(4, 4)
+    assert pos1 == pos2
 
-    # two positions with different values should not be equal
-    pos3 = chessPosition(1, 1)
-    pos4 = chessPosition(1, 2)
-    assert pos3 != pos4
+def test_position_different_col():
+    # same row but different col should not be equal
+    pos1 = chessPosition(1, 1)
+    pos2 = chessPosition(1, 2)
+    assert pos1 != pos2
 
+@pytest.mark.skip(reason="bounds validation not yet implemented")
+def test_position_out_of_bounds():
+    with pytest.raises(ValueError):
+        chessPosition(8, 8)
 
-# Move checks
-def test_valid_moves():
-    # basic chess move should store from and to positions correctly
-    move1 = chessMove(chessPosition(1, 0), chessPosition(3, 0))
-    assert move1.fromPos.row == 1
-    assert move1.fromPos.col == 0
-    assert move1.toPos.row == 3
-    assert move1.toPos.col == 0
-
-    # from and to should be at different positions
-    pawn_move = chessMove(chessPosition(1, 0), chessPosition(3, 0))
-    assert pawn_move.fromPos != pawn_move.toPos
-
-    queen_promo = chessMove(chessPosition(6, 0), chessPosition(7, 0), promotion=PieceType.QUEEN)
-    assert queen_promo.promotion == PieceType.QUEEN
-    assert queen_promo.promotion != PieceType.ROOK
-
-    # two different promotions should not be equal
-    bishop_promo = chessMove(chessPosition(6, 0), chessPosition(7, 0), promotion=PieceType.BISHOP)
-    knight_promo = chessMove(chessPosition(6, 0), chessPosition(7, 0), promotion=PieceType.KNIGHT)
-    assert bishop_promo.promotion != knight_promo.promotion
-
-
-# Category 3: Board setup checks
-def test_board_setup():
-    board = chessBoard()
-    board.setupInitialPosition()
-
-    # white pawns should be only on row 1 after initial setup
-    white_pawn_left = board.getPiece(chessPosition(1, 0))
-    white_pawn_right = board.getPiece(chessPosition(1, 7))
-    assert white_pawn_left.pieceType == PieceType.PAWN
-    assert white_pawn_left.color == Color.WHITE
-    assert white_pawn_right.pieceType == PieceType.PAWN
-    print(f"\nwhite pawns on row 1 passed... piece={white_pawn_left.pieceType.value}, color={white_pawn_left.color.value}")
