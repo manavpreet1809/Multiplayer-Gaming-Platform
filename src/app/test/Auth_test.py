@@ -1,10 +1,15 @@
 import pytest
+import asyncio
+import jwt
 from datetime import datetime, timedelta, timezone
+from fastapi import HTTPException
+from pymongo.errors import DuplicateKeyError
 from pydantic import ValidationError
 from fastapi.testclient import TestClient
 from src.app.main import app
-from src.app.services.authServices import create_access_token
+from src.app.services.authServices import create_access_token, create_refresh_token
 from src.app.schemas.auth import UserCreate, UserInDB
+from src.app.services import authServices
 from src.app.services.authServices import limiter
 import random
 import string
@@ -77,6 +82,103 @@ def test_usercreate_invalid_email_format():
         )
 
     assert "valid email address" in str(exc_info.value).lower()
+
+
+# --- Unit Tests for services/authServices.py ---
+
+
+def test_create_access_token_claims():
+    """Access token should include expected claims and expiry."""
+    username = f"user_{random_string()}"
+    token = create_access_token(
+        data={"sub": username},
+        expires_delta=timedelta(minutes=5),
+    )
+
+    payload = jwt.decode(
+        token,
+        authServices.SECRET_KEY,
+        algorithms=[authServices.ALGORITHM],
+    )
+
+    assert payload["sub"] == username
+    assert payload["type"] == "access"
+    assert isinstance(payload.get("jti"), str)
+    assert payload.get("jti")
+    assert "exp" in payload
+
+
+def test_create_refresh_token_claims():
+    """Refresh token should include expected claims and expiry."""
+    username = f"user_{random_string()}"
+    token = create_refresh_token(data={"sub": username})
+
+    payload = jwt.decode(
+        token,
+        authServices.SECRET_KEY,
+        algorithms=[authServices.ALGORITHM],
+    )
+
+    assert payload["sub"] == username
+    assert payload["type"] == "refresh"
+    assert isinstance(payload.get("jti"), str)
+    assert payload.get("jti")
+    assert "exp" in payload
+
+
+def test_revoke_token_duplicate_jti_is_safe(monkeypatch):
+    """Re-revoking the same token (duplicate jti) should not raise."""
+
+    class FakeRevokedTokensCollection:
+        async def insert_one(self, _doc):
+            raise DuplicateKeyError("duplicate key error")
+
+    monkeypatch.setattr(
+        authServices,
+        "revoked_tokens_collection",
+        FakeRevokedTokensCollection(),
+    )
+
+    token = create_access_token(data={"sub": f"user_{random_string()}"})
+    # Should not raise DuplicateKeyError
+    asyncio.run(authServices.revoke_token(token))
+
+
+@pytest.mark.parametrize("payload", [{"jti": "abc123", "type": "refresh"}, {"sub": "alice", "type": "refresh"}])
+def test_decode_refresh_token_rejects_missing_sub_or_jti(monkeypatch, payload):
+    """decode_refresh_token should reject refresh tokens missing sub or jti."""
+
+    def fake_decode(_token, _secret, algorithms):
+        return payload
+
+    monkeypatch.setattr(authServices.jwt, "decode", fake_decode)
+
+    with pytest.raises(HTTPException) as exc_info:
+        asyncio.run(authServices.decode_refresh_token("any-token"))
+
+    assert exc_info.value.status_code == 401
+    assert exc_info.value.detail == "Invalid or expired refresh token"
+
+
+def test_authenticate_user_nonexistent_runs_dummy_hash(monkeypatch):
+    """Non-existent user path should verify against DUMMY_HASH (timing-safe)."""
+
+    async def fake_get_user_by_username(_username):
+        return None
+
+    called = {"args": None}
+
+    def fake_verify_password(plain_password, hashed_password_value):
+        called["args"] = (plain_password, hashed_password_value)
+        return False
+
+    monkeypatch.setattr(authServices, "get_user_by_username", fake_get_user_by_username)
+    monkeypatch.setattr(authServices, "verify_password", fake_verify_password)
+
+    result = asyncio.run(authServices.authenticate_user("missing_user", "SomePass1!"))
+
+    assert result is None
+    assert called["args"] == ("SomePass1!", authServices.DUMMY_HASH)
 
 
 # --- Integration Tests ---
