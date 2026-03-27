@@ -163,3 +163,42 @@ def test_white_piece_not_on_black_side():
     assert black_back_row.color != Color.WHITE
     assert black_front_row.color != Color.WHITE
 
+
+# Board update and state checks
+def test_board_remove_piece():
+    # checks if square is empty after removing a piece
+    board = chessBoard()
+    board.setupInitialPosition()
+    board.removePiece(chessPosition(1, 0))
+    removed = board.getPiece(chessPosition(1, 0))
+    assert removed is None
+
+def test_set_piece_on_empty():
+    # checks if placing a piece on an empty square stores that piece correctly
+    board = chessBoard()
+    board.setupInitialPosition()
+    new_piece = ChessPiece(PieceType.QUEEN, Color.WHITE)
+    board.setPiece(chessPosition(4, 4), new_piece)
+    placed_piece = board.getPiece(chessPosition(4, 4))
+    assert placed_piece.pieceType == PieceType.QUEEN
+    assert placed_piece.color == Color.WHITE
+    assert placed_piece.pieceType != PieceType.ROOK
+
+def test_piece_not_moved_on_setup():
+    # checks if pieces have hasMoved=False when first placed
+    board = chessBoard()
+    board.setupInitialPosition()
+    white_pawn = board.getPiece(chessPosition(1, 0))
+    assert white_pawn.hasMoved == False
+
+def test_remove_then_replace():
+    # checks if a square can be reused after a piece is removed and replacement points to new piece and not old
+    board = chessBoard()
+    board.setupInitialPosition()
+    board.removePiece(chessPosition(1, 3))
+    board.setPiece(chessPosition(1, 3), ChessPiece(PieceType.BISHOP, Color.BLACK))
+    replaced_piece = board.getPiece(chessPosition(1, 3))
+    assert replaced_piece.pieceType == PieceType.BISHOP
+    assert replaced_piece.color == Color.BLACK
+    assert replaced_piece.pieceType != PieceType.PAWN
+
