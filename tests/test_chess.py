@@ -1,3 +1,7 @@
+# install pytest: py -m pip install pytest
+# Run chess test cases:  py -m pytest tests/test_chess.py -v -s
+# run all test cases at once : py -m pytest tests/ -v
+
 import pytest
 import sys
 import os
