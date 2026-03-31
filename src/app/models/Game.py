@@ -16,6 +16,22 @@ class Game:
         self.state = GameState() # TODO have a function that creates an empty state here (e.g. self.state = createGameState(self.gameType))
         pass
 
+    def toDict(self):
+        return {
+            "_id": self.game_id,
+            "lobby_code": self.lobby_code,
+            "status": self.status,
+            "host_player": self.host_player,
+            "players": self.players,
+            "state": self.state.to_dict(),
+            "move_history": self.move_history
+        }
+    
+    @staticmethod
+    def fromDict(data):
+        if not data: return GameState()
+        return GameState(data.get("_id"), data.get("lobby_code"), data.get("status"), data.get("host_player"), data.get("players"), data.get("state"), data.get("move_history"))
+
     def addPlayer(self, id):
         self.players.append(id) # TODO: make sure the ID is valid (the api is probably checking this so we assume a valid ID here)
 
