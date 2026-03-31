@@ -71,7 +71,7 @@
 .chat-send {
   padding: 0.5rem 1rem;
   background-color: var(--color-primary);
-  color: #fff;
+  color: var(--color-text-on-primary);
   border: none;
   border-radius: 4px;
   font-size: 0.875rem;

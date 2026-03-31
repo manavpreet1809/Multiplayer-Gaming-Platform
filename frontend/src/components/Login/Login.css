@@ -53,7 +53,7 @@
 .login-input:focus {
   outline: none;
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px rgba(102, 38, 145, 0.2);
+  box-shadow: var(--shadow-primary-focus);
 }
 
 .login-input:disabled {
@@ -65,7 +65,7 @@
   width: 100%;
   padding: 0.75rem;
   background-color: var(--color-primary);
-  color: #fff;
+  color: var(--color-text-on-primary);
   border: none;
   border-radius: 4px;
   font-size: 1rem;
@@ -104,6 +104,6 @@
 }
 
 .login-link:disabled {
-  color: #999;
+  color: var(--color-text-light);
   cursor: not-allowed;
 }

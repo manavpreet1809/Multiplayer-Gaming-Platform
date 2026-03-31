@@ -13,7 +13,7 @@
 
 .game-results-banner--win {
   background-color: var(--color-accent);
-  color: #0a7a6f;
+  color: var(--color-success-text);
 }
 
 .game-results-banner--loss {
@@ -23,7 +23,7 @@
 
 .game-results-banner--draw {
   background-color: var(--color-warning);
-  color: #7a6f00;
+  color: var(--color-warning-text);
 }
 
 .game-results-label {
@@ -64,7 +64,7 @@
 }
 
 .game-results-stat-value--positive {
-  color: #0a7a6f;
+  color: var(--color-success-text);
 }
 
 .game-results-stat-value--negative {
@@ -97,7 +97,7 @@
 
 .game-results-action--primary {
   background-color: var(--color-primary);
-  color: #fff;
+  color: var(--color-text-on-primary);
   border-color: var(--color-primary);
 }
 

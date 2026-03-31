@@ -34,7 +34,7 @@
 
 .ttt-vs {
   font-size: 0.75rem;
-  color: #bbb;
+  color: var(--color-text-disabled);
   text-transform: uppercase;
 }
 

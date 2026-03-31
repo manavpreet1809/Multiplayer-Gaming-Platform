@@ -3,6 +3,10 @@ target/
 !**/src/test/**/target/
 .kotlin
 
+### Environment Files ###
+.env
+*.env.local
+
 ### IntelliJ IDEA ###
 .idea/
 out/
@@ -16,9 +20,15 @@ out/
 ### Mac OS ###
 .DS_Store
 
-# --- Logs ---
-*.log
+### Python ###
+__pycache__/
+venv/
+.venv/
+env/
+*.pyc
 
-# --- Environment variables ---
-.env
-*.env.local
+### Node ###
+node_modules/
+
+### Logs ###
+*.log

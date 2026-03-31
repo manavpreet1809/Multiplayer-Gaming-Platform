@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional
+from typing import Any, List, Optional
 
 class GameEngine(ABC):
 
@@ -8,11 +8,11 @@ class GameEngine(ABC):
         pass
 
     @abstractmethod
-    def validateMove(self, state: dict, move: dict) -> bool:
+    def validateMove(self, state: dict, move: Any) -> bool:
         pass
 
     @abstractmethod
-    def applyMove(self, state: dict, move: dict) -> dict:
+    def applyMove(self, state: dict, move: Any) -> dict:
         pass
 
     @abstractmethod

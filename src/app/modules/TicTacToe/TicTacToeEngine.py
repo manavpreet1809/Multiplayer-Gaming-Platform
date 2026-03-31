@@ -70,7 +70,7 @@ class TicTacToeEngine(GameEngine):
             "moves": state["moves"],
         }
 
-    def deserializeMove(self, move_dict: dict, state: dict):
+    def deserializeMove(self, move_dict: dict, state: dict = None):
         """Convert a frontend move (cell index 0-8) to an internal TicTacToeMove."""
         index = move_dict["index"]
         row = index // 3
@@ -103,7 +103,7 @@ class TicTacToeEngine(GameEngine):
 
         return None
 
-    def serializeEndResult(self, end_result: dict, state: dict) -> dict:
+    def serializeEndResult(self, end_result: dict, state: dict = None) -> dict:
         """Convert evaluateEnd() output to a JSON-serializable dict.
 
         Maps the raw player-name winner to the "X"/"O" symbol so the

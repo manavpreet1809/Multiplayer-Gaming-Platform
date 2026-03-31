@@ -16,7 +16,7 @@ from app.services.authServices import limiter
 async def lifespan(app: FastAPI):
     await create_indexes()
     yield
-    close_mongo_connection()
+    await close_mongo_connection()
 
 
 app = FastAPI(lifespan=lifespan)
