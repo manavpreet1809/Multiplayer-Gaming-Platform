@@ -8,6 +8,7 @@
   overflow-x: scroll;
   scroll-snap-type: x mandatory;
   display: inline-flex;
+  position:relative;
 }
 
 .carousel-chess,.carousel-tictac{
@@ -18,8 +19,18 @@
     overflow-y:hidden;
 }
 
-.carousel-next, .carousel-prev{
-    width:1em;
-    height:1em;
-    position: absolute;
+.carousel-next,
+.carousel-prev {
+    position: sticky;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1em;
+    height: 1em;
+}
+
+.carousel-next{
+    right:0em;
+}
+.carousel-prev{
+    left:0em;
 }
