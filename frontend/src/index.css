@@ -1,5 +1,43 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
 
+:root {
+  /* Project color palette */
+  --color-primary: #662691;
+  --color-primary-dark: #4e1d6e;
+  --color-primary-light: #ebe8f5;
+  --color-secondary: #BEB8EB;
+  --color-accent: #ADFCF9;
+  --color-accent-teal: #ADFCF9;
+  --color-warning: #F8F4A6;
+  --color-accent-yellow: #F8F4A6;
+  --color-accent-red: #F56476;
+
+  /* Semantic aliases */
+  --color-error: #F56476;
+  --color-error-bg: #fde2e5;
+  --color-success-text: #0a7a6f;
+  --color-success-bg: #e6f9e6;
+  --color-warning-text: #7a6f00;
+  --color-warning-border: #e8e09a;
+  --color-text: #333;
+  --color-text-muted: #555;
+  --color-text-light: #999;
+  --color-text-disabled: #bbb;
+  --color-text-on-primary: #fff;
+  --color-bg: #f5f5f5;
+  --color-surface: #fff;
+  --color-border: #ccc;
+
+  /* Translucent helpers */
+  --color-primary-indicator: rgba(102, 38, 145, 0.3);
+  --color-warning-translucent: rgba(248, 244, 166, 0.5);
+
+  /* Focus / shadow helpers (can't use var() inside rgba yet) */
+  --shadow-primary-focus: 0 0 0 2px rgba(102, 38, 145, 0.2);
+  --shadow-primary-sm: 0 2px 8px rgba(102, 38, 145, 0.15);
+  --shadow-primary-ring: 0 0 0 2px rgba(102, 38, 145, 0.3);
+}
+
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
@@ -10,4 +48,86 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+/* ─── Shared utility classes ─────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1.25rem;
+  border: 1px solid var(--color-secondary);
+  border-radius: 4px;
+  background: var(--color-surface);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.btn:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-light);
+}
+
+.btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.btn--primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary);
+  border-color: var(--color-primary);
+}
+
+.btn--primary:hover:not(:disabled) {
+  background-color: var(--color-primary-dark);
+}
+
+.btn--danger {
+  color: var(--color-error);
+  border-color: var(--color-error);
+}
+
+.btn--danger:hover:not(:disabled) {
+  background-color: var(--color-error-bg);
+}
+
+.btn--ghost {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  text-decoration: underline;
+  padding: 0;
+}
+
+.btn--ghost:hover:not(:disabled) {
+  color: var(--color-primary-dark);
+  background: none;
+}
+
+.input {
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-primary-focus);
+}
+
+.input:disabled {
+  background-color: var(--color-bg);
+  cursor: not-allowed;
 }

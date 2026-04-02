@@ -15,26 +15,26 @@
   margin: 0;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #662691;
+  color: var(--color-primary);
 }
 
 .game-list-back {
   background: none;
-  border: 1px solid #BEB8EB;
+  border: 1px solid var(--color-secondary);
   border-radius: 4px;
   padding: 0.4rem 0.75rem;
   font-size: 0.875rem;
   cursor: pointer;
-  color: #662691;
+  color: var(--color-primary);
 }
 
 .game-list-back:hover {
-  background-color: #ebe8f5;
+  background-color: var(--color-primary-light);
 }
 
 .game-list-empty {
   text-align: center;
-  color: #999;
+  color: var(--color-text-muted);
   padding: 3rem 0;
 }
 
@@ -47,44 +47,45 @@
 
 .game-card {
   padding: 1.25rem;
-  border: 1px solid #BEB8EB;
+  border: 1px solid var(--color-secondary);
   border-radius: 8px;
-  background: #fff;
+  background: var(--color-surface);
   cursor: pointer;
   transition: border-color 0.2s, box-shadow 0.2s;
+  text-align: left;
 }
 
 .game-card:hover {
-  border-color: #662691;
-  box-shadow: 0 2px 8px rgba(102, 38, 145, 0.15);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-primary-sm);
 }
 
 .game-card--selected {
-  border-color: #662691;
-  box-shadow: 0 0 0 2px rgba(102, 38, 145, 0.3);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-primary-ring);
 }
 
 .game-card-name {
   margin: 0 0 0.5rem;
   font-size: 1.125rem;
   font-weight: 600;
-  color: #662691;
+  color: var(--color-primary);
 }
 
 .game-card-description {
   margin: 0 0 0.75rem;
   font-size: 0.875rem;
-  color: #666;
+  color: var(--color-text-muted);
 }
 
 .game-card-players {
   font-size: 0.75rem;
-  color: #999;
+  color: var(--color-text-muted);
 }
 
 .game-detail-panel {
-  background: #ebe8f5;
-  border: 1px solid #BEB8EB;
+  background: var(--color-primary-light);
+  border: 1px solid var(--color-secondary);
   border-radius: 8px;
   padding: 1.5rem;
 }
@@ -92,24 +93,24 @@
 .game-detail-panel h3 {
   margin: 0 0 0.5rem;
   font-size: 1.25rem;
-  color: #662691;
+  color: var(--color-primary);
 }
 
 .game-detail-panel p {
   margin: 0 0 0.5rem;
-  color: #555;
+  color: var(--color-text-muted);
 }
 
 .game-detail-players {
   font-size: 0.875rem;
-  color: #999;
+  color: var(--color-text-muted);
 }
 
 .game-detail-join {
   margin-top: 1rem;
   padding: 0.625rem 1.5rem;
-  background-color: #662691;
-  color: #fff;
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary);
   border: none;
   border-radius: 4px;
   font-size: 1rem;
@@ -119,5 +120,5 @@
 }
 
 .game-detail-join:hover {
-  background-color: #4e1d6e;
+  background-color: var(--color-primary-dark);
 }

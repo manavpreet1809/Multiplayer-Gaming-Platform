@@ -15,21 +15,21 @@
   margin: 0;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #662691;
+  color: var(--color-primary);
 }
 
 .leaderboard-back {
   background: none;
-  border: 1px solid #BEB8EB;
+  border: 1px solid var(--color-secondary);
   border-radius: 4px;
   padding: 0.4rem 0.75rem;
   font-size: 0.875rem;
   cursor: pointer;
-  color: #662691;
+  color: var(--color-primary);
 }
 
 .leaderboard-back:hover {
-  background-color: #ebe8f5;
+  background-color: var(--color-primary-light);
 }
 
 .leaderboard-tabs {
@@ -41,28 +41,28 @@
 
 .leaderboard-tab {
   padding: 0.5rem 1rem;
-  border: 1px solid #BEB8EB;
+  border: 1px solid var(--color-secondary);
   border-radius: 4px;
-  background: #fff;
+  background: var(--color-surface);
   font-size: 0.875rem;
   cursor: pointer;
-  color: #662691;
+  color: var(--color-primary);
   transition: background-color 0.2s, border-color 0.2s;
 }
 
 .leaderboard-tab:hover {
-  border-color: #662691;
+  border-color: var(--color-primary);
 }
 
 .leaderboard-tab--active {
-  background-color: #662691;
-  color: #fff;
-  border-color: #662691;
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary);
+  border-color: var(--color-primary);
 }
 
 .leaderboard-empty {
   text-align: center;
-  color: #999;
+  color: var(--color-text-muted);
   padding: 3rem 0;
 }
 
@@ -75,24 +75,24 @@
 .leaderboard-table td {
   text-align: left;
   padding: 0.75rem;
-  border-bottom: 1px solid #BEB8EB;
+  border-bottom: 1px solid var(--color-secondary);
   font-size: 0.875rem;
 }
 
 .leaderboard-table th {
   font-weight: 600;
-  color: #662691;
-  background: #ebe8f5;
+  color: var(--color-primary);
+  background: var(--color-primary-light);
 }
 
 .leaderboard-row--current {
-  background-color: #ADFCF9;
+  background-color: var(--color-accent);
   font-weight: 600;
 }
 
 .leaderboard-note {
   text-align: center;
-  color: #999;
+  color: var(--color-text-muted);
   font-size: 0.875rem;
   font-style: italic;
   margin-top: 1rem;

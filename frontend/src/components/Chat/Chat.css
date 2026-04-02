@@ -8,22 +8,22 @@
   margin: 0 0 0.75rem;
   font-size: 1rem;
   font-weight: 600;
-  color: #662691;
+  color: var(--color-primary);
 }
 
 .chat-messages {
   flex: 1;
   overflow-y: auto;
-  border: 1px solid #BEB8EB;
+  border: 1px solid var(--color-secondary);
   border-radius: 4px;
   padding: 0.75rem;
-  background: #fafafa;
+  background: var(--color-bg);
   margin-bottom: 0.75rem;
 }
 
 .chat-empty {
   text-align: center;
-  color: #999;
+  color: var(--color-text-muted);
   font-size: 0.875rem;
 }
 
@@ -37,17 +37,17 @@
 
 .chat-sender {
   font-weight: 600;
-  color: #662691;
+  color: var(--color-primary);
 }
 
 .chat-text {
-  color: #333;
+  color: var(--color-text);
 }
 
 .chat-time {
   margin-left: auto;
   font-size: 0.7rem;
-  color: #bbb;
+  color: var(--color-text-muted);
 }
 
 .chat-input-form {
@@ -58,20 +58,20 @@
 .chat-input {
   flex: 1;
   padding: 0.5rem 0.75rem;
-  border: 1px solid #BEB8EB;
+  border: 1px solid var(--color-secondary);
   border-radius: 4px;
   font-size: 0.875rem;
 }
 
 .chat-input:focus {
   outline: none;
-  border-color: #662691;
+  border-color: var(--color-primary);
 }
 
 .chat-send {
   padding: 0.5rem 1rem;
-  background-color: #662691;
-  color: #fff;
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary);
   border: none;
   border-radius: 4px;
   font-size: 0.875rem;
@@ -80,5 +80,5 @@
 }
 
 .chat-send:hover {
-  background-color: #4e1d6e;
+  background-color: var(--color-primary-dark);
 }

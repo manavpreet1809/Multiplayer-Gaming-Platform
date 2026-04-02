@@ -1,9 +1,9 @@
-// import Login from './components/Login';
-import Dashboard from './components/Dashboard';
 import { useState } from 'react';
-// import Login from './components/Login';
+import ErrorBoundary from './components/ErrorBoundary';
+import Login from './components/Login';
 import GameBoardDemo from './components/GameBoardDemo';
 import ScreenshotPage from './ScreenshotPage';
+import { login as authLogin } from './services/authService';
 import './App.css';
 import './index.css';
 
@@ -23,6 +23,12 @@ function App() {
         // For demo purposes, any login goes to the board demo
         setView('demo');
     };
+    /**
+    const handleLogin = async (identifier, password) => {
+        await authLogin(identifier, password);
+        setView('demo');
+    };
+    */
 
     const handleForgotPassword = () => {
         // TODO: Navigate to reset-password view (AUTH-03)
@@ -38,14 +44,22 @@ function App() {
         return <GameBoardDemo />;
     }
 
+    if (view === 'demo') {
+        return (
+            <ErrorBoundary>
+                <GameBoardDemo />
+            </ErrorBoundary>
+        );
+    }
+
     return (
-        /* <Login
-           onLogin={handleLogin}
-           onForgotPassword={handleForgotPassword}
-           onRegister={handleRegister}
-         />
-         */
-        <Dashboard />
+        <ErrorBoundary>
+            <Login
+                onLogin={handleLogin}
+                onForgotPassword={handleForgotPassword}
+                onRegister={handleRegister}
+            />
+        </ErrorBoundary>
     );
 }
 

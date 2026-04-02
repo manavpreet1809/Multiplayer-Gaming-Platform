@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import validatePassword from '../../utils/validatePassword';
 import './Register.css';
 
 /**
@@ -30,8 +31,9 @@ function Register({ onRegister, onLogin }) {
       return;
     }
 
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters.');
+    const pwdErrors = validatePassword(password);
+    if (pwdErrors.length > 0) {
+      setError('Password must contain ' + pwdErrors.join(', ') + '.');
       return;
     }
 

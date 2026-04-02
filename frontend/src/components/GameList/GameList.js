@@ -30,18 +30,15 @@ function GameList({ games = [], selectedGameId, onSelectGame, onJoinLobby, onBac
       ) : (
         <div className="game-list-grid">
           {games.map((game) => (
-            <div
+            <button
               key={game.id}
               className={`game-card ${selectedGameId === game.id ? 'game-card--selected' : ''}`}
               onClick={() => onSelectGame && onSelectGame(game.id)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => e.key === 'Enter' && onSelectGame && onSelectGame(game.id)}
             >
               <h3 className="game-card-name">{game.name}</h3>
               <p className="game-card-description">{game.description}</p>
               <span className="game-card-players">{game.playerCount} players online</span>
-            </div>
+            </button>
           ))}
         </div>
       )}
