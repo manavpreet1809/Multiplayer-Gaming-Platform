@@ -1,4 +1,4 @@
-from mongo import db
+from app.db.mongo import db, close_mongo_connection
 from pymongo import IndexModel, ASCENDING
 
 users_collection = db["users"]

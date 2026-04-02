@@ -6,9 +6,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
-from src.app.api.auth import router as auth_router
+from app.api.auth import router as auth_router
 from app.db.usersRepo import create_indexes, close_mongo_connection
-from src.app.services.authServices import limiter
+from app.services.authServices import limiter
 
 
 # @app.on_event is deprecated in modern FastAPI — use lifespan instead

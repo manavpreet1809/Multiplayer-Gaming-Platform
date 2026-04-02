@@ -13,7 +13,7 @@ from slowapi import Limiter
 from slowapi.util import get_remote_address
 
 from app.db.usersRepo import users_collection, revoked_tokens_collection
-from src.app.schemas.auth import TokenData, UserCreate, UserInDB, UserPublic
+from app.schemas.auth import TokenData, UserCreate, UserInDB, UserPublic
 
 from dotenv import load_dotenv
 load_dotenv()
