@@ -53,8 +53,8 @@ def isSafeCode(code):
 # =====
 
 # Create lobby
-@app.post("/lobbies")
-def createLobby(user, visibility, maxPlayers):
+@app.post("/api/lobbies")
+def apiCreateLobby(user, visibility, maxPlayers):
     # TODO: Validation checks
     query = users.find_one({ "_id": user }, { "currentLobby": 1 })
 
@@ -78,21 +78,63 @@ def createLobby(user, visibility, maxPlayers):
         users.update_one({ "_id": user }, { "$set": { "currentLobby": lobbyId } }) # Update user's status
 
 # Join lobby
-@app.post("/lobby/join") # TODO: Don't worry about this, I'll fix it eventually
-def joinLobby(lobby, user): # TODO: Don't worry about this, I'll fix it eventually
-    query = lobbies.find_one({ "_id": lobby }, { "maxPlayers": 1, "players": 1 })
+@app.post("/api/lobbies/join")
+def apiJoinLobby(user, lobbyId, lobbyCode):
+    # The sheer insanity of writing code blindly without an IDE
+    # I got what I wanted but is it really worth it?
+    # ...
+    # ...anyways this line determines whether we select by id or the lobby code
+    if lobbyCode is not None:
+        lobby = lobbies.find_one({ "code": lobbyCode }, { "maxPlayers": 1, "players": 1 })
+        # Again how do we get the id TODO
+    else:
+        lobby = lobbies.find_one({ "code": lobbyId }, { "maxPlayers": 1, "players": 1 })
 
-    if (len(query.players) + 1) <= query.maxPlayers:
-        lobbies.update_one({ "_id": lobby }, { "$push": { "players": user } }) # Add user to lobby
-        users.update_one({ "_id": user }, { "$set": { "currentLobby": lobby } }) # Update user's status
+    # Isn't validation... validation team's job?
+    # Oh well too bad
+    # Client UI did our job last time so this time I'm doing validation's
+    # ...what even is a pipeline??? I just learnt this in class today
+    # finally fixed my sleep schedule enough to attend
+    # just ignore the fact that this is probably committed at like 3 am or something
+    if lobby is not None and (len(lobby.players) + 1) <= lobby.maxPlayers and lobby.status is 0:
+        lobbies.update_one({ "_id": lobbyId }, { "$push": { "players": user } }) # Add user to lobby
+        users.update_one({ "_id": user }, { "$set": { "currentLobby": lobbyId } }) # Update user's status
+
+    # meh it's okay
+    # I guess it meets the requirements
 
 # Leave lobby
-@app.post("/lobby/leave") # TODO: Don't worry about this, I'll fix it eventually
-def leaveLobby(user): # TODO: Don't worry about this, I'll fix it eventually
-    query = users.find_one({ "_id": user }, { "currentLobby": 1 })
+@app.post("/api/lobbies/leave")
+def apiLeaveLobby(user):
+    # WAIT WHAT A MAIN MENU STATE???????
+    # WHAT WHY I guess it's better BUT WHY
+    # why is this the first time I'm hearing of it
+    # is it bad that I just heard of it
+    # Yeah I guess it's better to have that variable instead of calculating from the currentGame column
+    # O(1) vs O(1), but 1 of the O(1) better
+    # Speaking of which what does the collections table for users even look like
+    # Have I just been writing pure gibberish this whole time, setting columns that don't even exist...
+    # .....
+    # ...ehhh I think I'll pass on the main menu state for now
 
-    if query.currentLobby is not None:
-        lobbies.update_one({ "_id": query.currentLobby }, { "$pull": { "players": user } }) # Remove user from lobby
+    user = users.find_one({ "_id": user }, { "currentLobby": 1 })
+
+    if user.currentLobby is not None:
+        lobbies.update_one({ "_id": user.currentLobby }, { "$pull": { "players": user } }) # Remove user from lobby
+        lobbies.delete_one({ "_id": user.currentLobby, "host": user }) # Remove lobby if host leaves TODO need to kick other players too 
         users.update_one({ "_id": user }, { "$set": { "currentLobby": None } }) # Update user's status
+    
+    # Oh crud I forgot the host leaving case
+    # Yeah
+    # Let's just pretend that's validation team's job and keep quiet
+    # ...
+    # ...nah it shouldn't be too hard to implement
+
+    # Microsoft would be reeling if they hired me and found all these comments in their codebase
+    # ...so would my team... crap
+
+    # Wait a minute what am I doing
+    # Shouldn't I make functions for
+    # Yes yes I should TODO
 
 # TODO: Leader-only remove user action
