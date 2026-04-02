@@ -1,5 +1,7 @@
-import React from 'react';
-import './Dashboard.css';
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
+import "./Dashboard.css";
 
 /**
  * Dashboard component (UC-04).
@@ -19,8 +21,7 @@ import './Dashboard.css';
  *   onLogout()        – log out (AUTH-04)
  */
 function Dashboard({
-  username,
-  status = 'idle',
+  status = "idle",
   notifications = [],
   onBrowseGames,
   onCreateGame,
@@ -30,16 +31,22 @@ function Dashboard({
   onJoinActiveGame,
   onViewProfile,
   onLeaderboard,
-  onLogout,
 }) {
+  const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    await logout();
+    navigate("/");
+  };
+
   return (
     <div className="dashboard">
       <header className="dashboard-header">
         <h1 className="dashboard-title">Dashboard</h1>
         <div className="dashboard-user-info">
-          <span className="dashboard-username">{username}</span>
+          <span className="dashboard-username">{user?.username}</span>
           <span className={`dashboard-status dashboard-status--${status}`}>
-            {status.replace('-', ' ')}
+            {status.replace("-", " ")}
           </span>
         </div>
         <nav className="dashboard-nav">
@@ -53,11 +60,13 @@ function Dashboard({
               Leaderboard
             </button>
           )}
-          {onLogout && (
-            <button className="dashboard-nav-link dashboard-nav-link--logout" onClick={onLogout}>
-              Log Out
-            </button>
-          )}
+
+          <button
+            className="dashboard-nav-link dashboard-nav-link--logout"
+            onClick={handleLogout}
+          >
+            Log Out
+          </button>
         </nav>
       </header>
 
@@ -66,28 +75,33 @@ function Dashboard({
           <h3>Notifications</h3>
           <ul>
             {notifications.map((n) => (
-              <li key={n.id} className="dashboard-notification">{n.message}</li>
+              <li key={n.id} className="dashboard-notification">
+                {n.message}
+              </li>
             ))}
           </ul>
         </section>
       )}
 
-      {status === 'game-ready' && onJoinActiveGame && (
+      {status === "game-ready" && onJoinActiveGame && (
         <div className="dashboard-banner dashboard-banner--game-ready">
           <span>A game is ready for you!</span>
-          <button className="dashboard-action dashboard-action--primary" onClick={onJoinActiveGame}>
+          <button
+            className="dashboard-action dashboard-action--primary"
+            onClick={onJoinActiveGame}
+          >
             Join Game
           </button>
         </div>
       )}
 
-      {status === 'in-queue' && (
+      {status === "in-queue" && (
         <div className="dashboard-banner dashboard-banner--in-queue">
           <span>You are currently in the matchmaking queue…</span>
         </div>
       )}
 
-      {status === 'in-lobby' && (
+      {status === "in-lobby" && (
         <div className="dashboard-banner dashboard-banner--in-lobby">
           <span>You are currently in a game lobby.</span>
         </div>

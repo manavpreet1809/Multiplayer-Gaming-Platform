@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./Login.css";
-import { register as authRegister } from "../../services/authService";
 
 /**
  * Reusable Login component (AUTH-02).

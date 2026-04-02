@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { AuthProvider, AuthContext } from "./context/AuthContext";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Login from "./components/Login";
 import Register from "./components/Register";
@@ -7,6 +8,7 @@ import Dashboard from "./components/Dashboard";
 import ScreenshotPage from "./ScreenshotPage";
 import { useNavigate, Routes, Route } from "react-router-dom";
 import { login as authLogin } from "./services/authService";
+import { getMe } from "./services/authService";
 import "./App.css";
 import ResetPassword from "./components/ResetPassword";
 
@@ -18,13 +20,18 @@ const isScreenshotMode = new URLSearchParams(window.location.search).has(
 function App() {
   const [view, setView] = useState("login");
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   if (isScreenshotMode) {
     return <ScreenshotPage />;
   }
 
   const handleLogin = async (identifier, password) => {
-    await authLogin(identifier, password);
+    const data = await authLogin(identifier, password);
+    const user = await getMe();
+
+    login(user);
+    console.log(user);
     navigate("/dashboard");
   };
 

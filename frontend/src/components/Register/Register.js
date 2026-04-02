@@ -1,6 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { register as authRegister } from "../../services/authService";
+import {
+  register as authRegister,
+  login as authLogin,
+  getMe,
+} from "../../services/authService";
+import { AuthContext } from "../../context/AuthContext";
 import validatePassword from "../../utils/validatePassword";
 import "./Register.css";
 
@@ -17,9 +22,9 @@ function Register({ onRegister, onLogin }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -45,12 +50,10 @@ function Register({ onRegister, onLogin }) {
     setLoading(true);
     try {
       await authRegister(username.trim(), email.trim(), password);
-      setSuccess(true);
-      setUsername("");
-      setEmail("");
-      setPassword("");
-      setConfirmPassword("");
-      setError("");
+      const tokenData = await authLogin(username.trim(), password);
+      const user = await getMe();
+      login(user);
+      navigate("/dashboard");
     } catch (err) {
       setError(err?.message || "Unable to create account, please try again.");
     } finally {
@@ -68,8 +71,6 @@ function Register({ onRegister, onLogin }) {
             {error}
           </div>
         )}
-
-        {success && <div className="register-success">Account created!</div>}
 
         <label className="register-label" htmlFor="register-username">
           Username
@@ -135,12 +136,10 @@ function Register({ onRegister, onLogin }) {
           <button
             type="button"
             className="register-link"
-            onClick={() => navigate("/login")}
+            onClick={() => navigate("/")}
             disabled={loading}
           >
-            {!success
-              ? "Already have an account? Log in"
-              : "Return to login page"}
+            ? "Already have an account? Log in"
           </button>
         </div>
       </form>
