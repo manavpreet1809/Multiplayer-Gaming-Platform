@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import './Login.css';
+import React, { useState } from "react";
+import "./Login.css";
+import { register as authRegister } from "../../services/authService";
 
 /**
  * Reusable Login component (AUTH-02).
@@ -12,17 +13,17 @@ import './Login.css';
  *   onRegister()                   – navigates to the registration view.
  */
 function Login({ onLogin, onForgotPassword, onRegister }) {
-  const [identifier, setIdentifier] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [identifier, setIdentifier] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (!identifier.trim() || !password) {
-      setError('Please enter your username/email and password.');
+      setError("Please enter your username/email and password.");
       return;
     }
 
@@ -30,7 +31,7 @@ function Login({ onLogin, onForgotPassword, onRegister }) {
     try {
       await onLogin(identifier.trim(), password);
     } catch (err) {
-      setError(err?.message || 'Invalid credentials.');
+      setError(err?.message || "Invalid credentials.");
     } finally {
       setLoading(false);
     }
@@ -75,12 +76,8 @@ function Login({ onLogin, onForgotPassword, onRegister }) {
           disabled={loading}
         />
 
-        <button
-          className="login-button"
-          type="submit"
-          disabled={loading}
-        >
-          {loading ? 'Logging in…' : 'Log In'}
+        <button className="login-button" type="submit" disabled={loading}>
+          {loading ? "Logging in…" : "Log In"}
         </button>
 
         <div className="login-links">

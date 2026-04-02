@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
-import validatePassword from '../../utils/validatePassword';
-import './Register.css';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { register as authRegister } from "../../services/authService";
+import validatePassword from "../../utils/validatePassword";
+import "./Register.css";
 
 /**
  * Register component (UC-02 / AUTH-01).
@@ -10,38 +12,47 @@ import './Register.css';
  *   onLogin()                             – navigate to login view
  */
 function Register({ onRegister, onLogin }) {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (!username.trim() || !email.trim() || !password) {
-      setError('All fields are required.');
+      setError("All fields are required.");
       return;
     }
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match.');
+      setError("Passwords do not match.");
       return;
     }
 
     const pwdErrors = validatePassword(password);
     if (pwdErrors.length > 0) {
-      setError('Password must contain ' + pwdErrors.join(', ') + '.');
+      setError("Password must contain " + pwdErrors.join(", ") + ".");
       return;
     }
 
     setLoading(true);
     try {
-      await onRegister(username.trim(), email.trim(), password);
+      await authRegister(username.trim(), email.trim(), password);
+      setSuccess(true);
+      setUsername("");
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+      setError("");
     } catch (err) {
-      setError(err?.message || 'Unable to create account, please try again.');
+      setError(err?.message || "Unable to create account, please try again.");
     } finally {
       setLoading(false);
     }
@@ -57,6 +68,8 @@ function Register({ onRegister, onLogin }) {
             {error}
           </div>
         )}
+
+        {success && <div className="register-success">Account created!</div>}
 
         <label className="register-label" htmlFor="register-username">
           Username
@@ -115,20 +128,20 @@ function Register({ onRegister, onLogin }) {
         />
 
         <button className="register-button" type="submit" disabled={loading}>
-          {loading ? 'Creating account…' : 'Create Account'}
+          {loading ? "Creating account…" : "Create Account"}
         </button>
 
         <div className="register-links">
-          {onLogin && (
-            <button
-              type="button"
-              className="register-link"
-              onClick={onLogin}
-              disabled={loading}
-            >
-              Already have an account? Log in
-            </button>
-          )}
+          <button
+            type="button"
+            className="register-link"
+            onClick={() => navigate("/login")}
+            disabled={loading}
+          >
+            {!success
+              ? "Already have an account? Log in"
+              : "Return to login page"}
+          </button>
         </div>
       </form>
     </div>
