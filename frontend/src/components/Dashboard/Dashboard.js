@@ -7,7 +7,6 @@ import "./Dashboard.css";
  * Dashboard component (UC-04).
  *
  * Props:
- *   username          – display name of the authenticated player
  *   status            – player status: "idle" | "in-lobby" | "in-queue" | "game-ready"
  *   notifications     – array of { id, message } notification objects
  *   onBrowseGames()   – navigate to game list (UC-01)
@@ -16,9 +15,7 @@ import "./Dashboard.css";
  *   onEnqueue()       – enqueue for matchmaking (UC-06)
  *   onOpenChat()      – open the chat panel (UC-07)
  *   onJoinActiveGame()– join a ready game session (UC-08)
- *   onViewProfile()   – navigate to profile (UC-09)
  *   onLeaderboard()   – navigate to leaderboard (UC-12)
- *   onLogout()        – log out (AUTH-04)
  */
 function Dashboard({
   status = "idle",
@@ -29,7 +26,6 @@ function Dashboard({
   onEnqueue,
   onOpenChat,
   onJoinActiveGame,
-  onViewProfile,
   onLeaderboard,
 }) {
   const { user, logout } = useContext(AuthContext);
@@ -50,16 +46,23 @@ function Dashboard({
           </span>
         </div>
         <nav className="dashboard-nav">
-          {onViewProfile && (
-            <button className="dashboard-nav-link" onClick={onViewProfile}>
-              Profile
-            </button>
-          )}
-          {onLeaderboard && (
-            <button className="dashboard-nav-link" onClick={onLeaderboard}>
-              Leaderboard
-            </button>
-          )}
+          <button
+            className="dashboard-nav-link"
+            onClick={() => {
+              navigate("/profile");
+            }}
+          >
+            Profile
+          </button>
+
+          <button
+            className="dashboard-nav-link"
+            onClick={() => {
+              navigate("/leaderboard");
+            }}
+          >
+            Leaderboard
+          </button>
 
           <button
             className="dashboard-nav-link dashboard-nav-link--logout"
@@ -69,7 +72,6 @@ function Dashboard({
           </button>
         </nav>
       </header>
-
       {notifications.length > 0 && (
         <section className="dashboard-notifications">
           <h3>Notifications</h3>
@@ -82,7 +84,6 @@ function Dashboard({
           </ul>
         </section>
       )}
-
       {status === "game-ready" && onJoinActiveGame && (
         <div className="dashboard-banner dashboard-banner--game-ready">
           <span>A game is ready for you!</span>
@@ -94,49 +95,40 @@ function Dashboard({
           </button>
         </div>
       )}
-
       {status === "in-queue" && (
         <div className="dashboard-banner dashboard-banner--in-queue">
           <span>You are currently in the matchmaking queue…</span>
         </div>
       )}
-
       {status === "in-lobby" && (
         <div className="dashboard-banner dashboard-banner--in-lobby">
           <span>You are currently in a game lobby.</span>
         </div>
       )}
-
       <section className="dashboard-actions">
         <h2>What would you like to do?</h2>
         <div className="dashboard-action-grid">
-          {onBrowseGames && (
-            <button className="dashboard-action" onClick={onBrowseGames}>
-              Browse Games
-            </button>
-          )}
-          {onCreateGame && (
-            <button className="dashboard-action" onClick={onCreateGame}>
-              Create Game
-            </button>
-          )}
-          {onJoinGame && (
-            <button className="dashboard-action" onClick={onJoinGame}>
-              Join Game
-            </button>
-          )}
-          {onEnqueue && (
-            <button className="dashboard-action" onClick={onEnqueue}>
-              Find Match
-            </button>
-          )}
-          {onOpenChat && (
-            <button className="dashboard-action" onClick={onOpenChat}>
-              Open Chat
-            </button>
-          )}
+          <button className="dashboard-action" onClick={onBrowseGames}>
+            Browse Games
+          </button>
+
+          <button className="dashboard-action" onClick={onCreateGame}>
+            Create Game
+          </button>
+
+          <button className="dashboard-action" onClick={onJoinGame}>
+            Join Game
+          </button>
+
+          <button className="dashboard-action" onClick={onEnqueue}>
+            Find Match
+          </button>
+
+          <button className="dashboard-action" onClick={onOpenChat}>
+            Open Chat
+          </button>
         </div>
-      </section>
+      </section>{" "}
     </div>
   );
 }

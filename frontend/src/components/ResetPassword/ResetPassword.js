@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
-import validatePassword from '../../utils/validatePassword';
-import './ResetPassword.css';
+import React, { useState } from "react";
+import validatePassword from "../../utils/validatePassword";
+import "./ResetPassword.css";
+import { resetPassword } from "../../services/authService";
+import { useNavigate } from "react-router-dom";
 
 /**
  * ResetPassword component (AUTH-03).
@@ -10,50 +12,52 @@ import './ResetPassword.css';
  *   onBackToLogin()                          – navigate back to login
  */
 function ResetPassword({ onResetPassword, onBackToLogin }) {
-  const [step, setStep] = useState('identify'); // "identify" | "reset"
-  const [identifier, setIdentifier] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [step, setStep] = useState("identify"); // "identify" | "reset"
+  const [identifier, setIdentifier] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleIdentify = (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     if (!identifier.trim()) {
-      setError('Please enter your username or email.');
+      setError("Please enter your username or email.");
       return;
     }
-    setStep('reset');
+    setStep("reset");
   };
 
   const handleReset = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (!newPassword) {
-      setError('Please enter a new password.');
+      setError("Please enter a new password.");
       return;
     }
 
     const pwdErrors = validatePassword(newPassword);
     if (pwdErrors.length > 0) {
-      setError('Password must contain ' + pwdErrors.join(', ') + '.');
+      setError("Password must contain " + pwdErrors.join(", ") + ".");
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setError('Passwords do not match.');
+      setError("Passwords do not match.");
       return;
     }
 
     setLoading(true);
     try {
-      await onResetPassword(identifier.trim(), newPassword);
-      setSuccess('Password has been reset. You can now log in.');
+      await resetPassword(identifier.trim(), newPassword);
+      setSuccess("Password has been reset. You can now log in.");
     } catch (err) {
-      setError(err?.message || 'Unable to reset password, please try again.');
+      setError(err?.message || "Unable to reset password, please try again.");
     } finally {
       setLoading(false);
     }
@@ -79,7 +83,7 @@ function ResetPassword({ onResetPassword, onBackToLogin }) {
               </button>
             )}
           </div>
-        ) : step === 'identify' ? (
+        ) : step === "identify" ? (
           <form onSubmit={handleIdentify} noValidate>
             <label className="reset-label" htmlFor="reset-identifier">
               Username or Email
@@ -132,17 +136,17 @@ function ResetPassword({ onResetPassword, onBackToLogin }) {
             />
 
             <button className="reset-button" type="submit" disabled={loading}>
-              {loading ? 'Resetting…' : 'Reset Password'}
+              {loading ? "Resetting…" : "Reset Password"}
             </button>
           </form>
         )}
 
         <div className="reset-links">
-          {onBackToLogin && !success && (
+          {success && (
             <button
               type="button"
               className="reset-link"
-              onClick={onBackToLogin}
+              onClick={() => navigate("/")}
               disabled={loading}
             >
               Back to Log In
