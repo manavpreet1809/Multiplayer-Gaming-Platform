@@ -5,13 +5,15 @@ import string
 game_collection = db["games"]
 
 class LobbyCode:
+    # Parameters
     allowedChars = string.ascii_letters
+    length = 4
 
     # Generates a lobby code given a length
     @staticmethod
-    async def generate_code(length):
+    async def generate_code():
         while True:
-            code = "".join(random.choice(LobbyCode.allowedChars) for i in range(length))
+            code = "".join(random.choice(LobbyCode.allowedChars) for i in range(LobbyCode.length))
             is_safe = await LobbyCode.is_safe_code(code)
             if is_safe return code
 
