@@ -29,7 +29,7 @@ async def game_create(
     game_id = await GameRepository.createGame(game)
 
     # Return the game_id to the client; they will send a request to create a WebSocket
-    return { "success": true, "game_id": game_id }
+    return { "success": True, "game_id": game_id }
 
 
 @router.post("/join/${game_id}")
