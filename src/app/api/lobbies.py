@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, Request, Form
 from src.app.services.authServices import get_current_user
 from models.Game import Game
 from db.GameRepository import GameRepository
-from mongo import db
+from db.mongo import db
+from db.ConnectionManager import manager
 
 lobbies = db["games"]
 
@@ -68,9 +69,10 @@ def game_leave(
         kill_the_entire_lobby(current_game)
         # TODO: Need to notify websockets of all players to end
     else:
-        # Just remove the user from the lobby
-        # TODO: Need to notify websocket
+        # Otherwise, just remove the user from the lobby
         lobbies.update_one({ "_id": current_game }, { "$pull": { "players": current_user.user_id } })
+        # TODO: Need to notify websocket
+        manager[current_user.user_id].send("close down please")
 
     return { "success": True }
 
@@ -107,7 +109,8 @@ def game_kick(
 
     # Remove user from lobby
     lobbies.update_one({ "_id": current_game }, { "$pull": { "players": target_id } })
-    # TODO: Need to notify kicked user
+    # TODO: Need to notify websocket
+    manager[target_id].send("close down please")
 
     return { "success": True }
     
