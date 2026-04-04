@@ -2,6 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, Request, Form
 from src.app.services.authServices import get_current_user
 from models.Game import Game
 from db.GameRepository import GameRepository
+from mongo import db
+
+lobbies = db["games"]
 
 # All endpoints here are prefixed with /game
 router = APIRouter(prefix="/game", tags=["game"])
@@ -64,7 +67,10 @@ def game_leave(
     if is_host(current_user):
         kill_the_entire_lobby(current_game)
     else:
-        kick_player(current_game, current_user.user_id)
+        # Just remove the user from the lobby
+        lobbies.update_one({ "_id": current_game }, { "$pull": { "players": current_user.user_id } })
+
+    return "success"
 
 @router.post("/kick")
 def game_kick(
@@ -97,7 +103,9 @@ def game_kick(
             headers={}
         )
 
-    kick_player(current_game, target_id)
+    # Remove user from lobby
+    lobbies.update_one({ "_id": current_game }, { "$pull": { "players": target_id } })
+    return "success"
     
 
     
