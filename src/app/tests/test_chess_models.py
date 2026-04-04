@@ -1,140 +1,140 @@
 # install pytest: py -m pip install pytest
-# Run chess test cases:  py -m pytest tests/test_chess.py -v -s
-# run all test cases at once : py -m pytest tests/ -v
+# Run chess model test cases:  py -m pytest src/app/tests/test_chess_models.py -v -s
+# Run all test cases at once:  py -m pytest src/app/tests/ -v
 
 import pytest
 import sys
 import os
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src', 'app', 'models', 'chess'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
-from chessPosition import chessPosition
-from chessPiece import ChessPiece, PieceType, Color
-from chessBoard import chessBoard
-from chessMove import chessMove
+from app.models.chess.chessPosition import ChessPosition
+from app.models.chess.chessPiece import ChessPiece, PieceType, Color
+from app.models.chess.chessBoard import ChessBoard
+from app.models.chess.chessMove import ChessMove
+
 
 #  Boundary checks
 def test_position_lower_bound():
     # (0,0) is the minimum valid position on the board
-    pos = chessPosition(0, 0)
+    pos = ChessPosition(0, 0)
     assert pos.row == 0
     assert pos.col == 0
 
 def test_position_upper_bound():
     # (7,7) is the maximum valid position on the board
-    pos = chessPosition(7, 7)
+    pos = ChessPosition(7, 7)
     assert pos.row == 7
     assert pos.col == 7
 
 def test_position_middle():
-    # Checks if a chessPosition correctly stores row and column values
-    pos = chessPosition(3, 4)
+    # Checks if a ChessPosition correctly stores row and column values
+    pos = ChessPosition(3, 4)
     assert pos.row == 3
     assert pos.col == 4
 
 def test_position_equal():
     # two positions with same row and col should be equal
-    pos1 = chessPosition(4, 4)
-    pos2 = chessPosition(4, 4)
+    pos1 = ChessPosition(4, 4)
+    pos2 = ChessPosition(4, 4)
     assert pos1 == pos2
 
 def test_position_different_col():
     # same row but different col should not be equal
-    pos1 = chessPosition(1, 1)
-    pos2 = chessPosition(1, 2)
+    pos1 = ChessPosition(1, 1)
+    pos2 = ChessPosition(1, 2)
     assert pos1 != pos2
 
 def test_position_hash_equal():
     # checks if two positions with same values have equal hash
-    pos1 = chessPosition(3, 3)
-    pos2 = chessPosition(3, 3)
+    pos1 = ChessPosition(3, 3)
+    pos2 = ChessPosition(3, 3)
     assert hash(pos1) == hash(pos2)
 
-@pytest.mark.skip(reason="bounds validation not yet implemented")
+
 def test_position_out_of_bounds():
     with pytest.raises(ValueError):
-        chessPosition(8, 8)
+        ChessPosition(8, 8)
 
 
 # Move checks
 def test_move_from_position():
     # checking fromPos is stored correctly
-    move = chessMove(chessPosition(1, 0), chessPosition(3, 0))
+    move = ChessMove(ChessPosition(1, 0), ChessPosition(3, 0))
     assert move.fromPos.row == 1
     assert move.fromPos.col == 0
 
 def test_move_to_position():
     # checking toPos is stored correctly
-    move = chessMove(chessPosition(1, 0), chessPosition(3, 0))
+    move = ChessMove(ChessPosition(1, 0), ChessPosition(3, 0))
     assert move.toPos.row == 3
     assert move.toPos.col == 0
 
 def test_move_diff_square():
     #  from and to positions should not be the same square for a valid move
-    pawn_move = chessMove(chessPosition(1, 0), chessPosition(3, 0))
+    pawn_move = ChessMove(ChessPosition(1, 0), ChessPosition(3, 0))
     assert pawn_move.fromPos != pawn_move.toPos
 
 def test_no_promo_default():
     # checks that a regular move has no promotion
-    move = chessMove(chessPosition(4, 4), chessPosition(5, 4))
+    move = ChessMove(ChessPosition(4, 4), ChessPosition(5, 4))
     assert move.promotion is None
 
 def test_promo_queen():
     # checks that pawn promoting to queen is stored correctly and not with other types
-    queen_promo = chessMove(chessPosition(6, 0), chessPosition(7, 0), promotion=PieceType.QUEEN)
+    queen_promo = ChessMove(ChessPosition(6, 0), ChessPosition(7, 0), promotion=PieceType.QUEEN)
     assert queen_promo.promotion == PieceType.QUEEN
     assert queen_promo.promotion != PieceType.ROOK
 
 def test_promo_knight():
     # checks that pawn promoting to knight is stored correctly
-    knight_promo = chessMove(chessPosition(6, 3), chessPosition(7, 3), promotion=PieceType.KNIGHT)
+    knight_promo = ChessMove(ChessPosition(6, 3), ChessPosition(7, 3), promotion=PieceType.KNIGHT)
     assert knight_promo.promotion == PieceType.KNIGHT
     assert knight_promo.promotion != PieceType.QUEEN
 
 def test_diff_promos_not_equal():
     # checks that bishop and rook are two different promotions and are not equal
-    bishop_promo = chessMove(chessPosition(6, 0), chessPosition(7, 0), promotion=PieceType.BISHOP)
-    rook_promo = chessMove(chessPosition(6, 0), chessPosition(7, 0), promotion=PieceType.ROOK)
+    bishop_promo = ChessMove(ChessPosition(6, 0), ChessPosition(7, 0), promotion=PieceType.BISHOP)
+    rook_promo = ChessMove(ChessPosition(6, 0), ChessPosition(7, 0), promotion=PieceType.ROOK)
     assert bishop_promo.promotion != rook_promo.promotion
 
-@pytest.mark.skip(reason="move validation not yet implemented")
+@pytest.mark.skip(reason="move validation not yet implemented in models - tested in engine tests")
 def test_pawn_blocked_by_piece():
     # checks if pawn is blocked when enemy piece is directly in front of it
-    board = chessBoard()
+    board = ChessBoard()
     board.setupInitialPosition()
-    board.setPiece(chessPosition(2, 0), ChessPiece(PieceType.PAWN, Color.BLACK))
-    move = chessMove(chessPosition(1, 0), chessPosition(2, 0))
+    board.setPiece(ChessPosition(2, 0), ChessPiece(PieceType.PAWN, Color.BLACK))
+    move = ChessMove(ChessPosition(1, 0), ChessPosition(2, 0))
     assert board.isValidMove(move) == False
-
 
 
 #  Board setup test cases - initial position checks before game starts
 def test_white_pawns_position():
     # checks if white pawns are placed in row 1 after initial setup
-    board = chessBoard()
+    board = ChessBoard()
     board.setupInitialPosition()
-    left_pawn = board.getPiece(chessPosition(1, 0))
-    right_pawn = board.getPiece(chessPosition(1, 7))
-    assert left_pawn.pieceType == PieceType.PAWN
-    assert left_pawn.color == Color.WHITE
-    assert right_pawn.pieceType == PieceType.PAWN
+    for col in range(8):
+        piece = board.getPiece(ChessPosition(1, col))
+        assert piece is not None
+        assert piece.pieceType == PieceType.PAWN
+        assert piece.color == Color.WHITE
 
 def test_black_pawns_position():
     # checks if black pawns are placed in row 6 before game starts
-    board = chessBoard()
+    board = ChessBoard()
     board.setupInitialPosition()
-    middle_pawn = board.getPiece(chessPosition(6, 4))
-    right_pawn = board.getPiece(chessPosition(6, 7))
-    assert middle_pawn.pieceType == PieceType.PAWN
-    assert middle_pawn.color == Color.BLACK
-    assert right_pawn.pieceType == PieceType.PAWN
+    for col in range(8):
+        piece = board.getPiece(ChessPosition(6, col))
+        assert piece is not None
+        assert piece.pieceType == PieceType.PAWN
+        assert piece.color == Color.BLACK
 
 def test_kings_correct_position():
     # checks if kings are placed at correct positions
-    board = chessBoard()
+    board = ChessBoard()
     board.setupInitialPosition()
-    white_king = board.getPiece(chessPosition(0, 4))
-    black_king = board.getPiece(chessPosition(7, 4))
+    white_king = board.getPiece(ChessPosition(0, 4))
+    black_king = board.getPiece(ChessPosition(7, 4))
     assert white_king.pieceType == PieceType.KING
     assert white_king.color == Color.WHITE
     assert black_king.pieceType == PieceType.KING
@@ -143,10 +143,10 @@ def test_kings_correct_position():
 
 def test_queens_correct_position():
     # checks if white queen is at (0,3) and  black queen is at (7,3)
-    board = chessBoard()
+    board = ChessBoard()
     board.setupInitialPosition()
-    white_queen = board.getPiece(chessPosition(0, 3))
-    black_queen = board.getPiece(chessPosition(7, 3))
+    white_queen = board.getPiece(ChessPosition(0, 3))
+    black_queen = board.getPiece(ChessPosition(7, 3))
     assert white_queen.pieceType == PieceType.QUEEN
     assert white_queen.color == Color.WHITE
     assert black_queen.pieceType == PieceType.QUEEN
@@ -155,22 +155,22 @@ def test_queens_correct_position():
 
 def test_white_rooks_knights_bishops_initial_pos():
     # checks if white rook, bishop and knights are at correct position
-    board = chessBoard()
+    board = ChessBoard()
     board.setupInitialPosition()
-    white_rook = board.getPiece(chessPosition(0, 0))
-    white_knight = board.getPiece(chessPosition(0, 1))
-    white_bishop = board.getPiece(chessPosition(0, 2))
+    white_rook = board.getPiece(ChessPosition(0, 0))
+    white_knight = board.getPiece(ChessPosition(0, 1))
+    white_bishop = board.getPiece(ChessPosition(0, 2))
     assert white_rook.pieceType == PieceType.ROOK
     assert white_knight.pieceType == PieceType.KNIGHT
     assert white_bishop.pieceType == PieceType.BISHOP
 
 def test_black_rooks_knights_bishops_initial_pos():
     # checks if black rook,  knight and bishop are placed correctly and of right color
-    board = chessBoard()
+    board = ChessBoard()
     board.setupInitialPosition()
-    black_rook = board.getPiece(chessPosition(7, 7))
-    black_knight = board.getPiece(chessPosition(7, 6))
-    black_bishop = board.getPiece(chessPosition(7, 5))
+    black_rook = board.getPiece(ChessPosition(7, 7))
+    black_knight = board.getPiece(ChessPosition(7, 6))
+    black_bishop = board.getPiece(ChessPosition(7, 5))
     assert black_rook.pieceType == PieceType.ROOK
     assert black_knight.pieceType == PieceType.KNIGHT
     assert black_bishop.pieceType == PieceType.BISHOP
@@ -178,86 +178,131 @@ def test_black_rooks_knights_bishops_initial_pos():
     assert black_knight.color == Color.BLACK
     assert black_bishop.color == Color.BLACK
 
-def test_middle_rows_empty():
-    # checks if rows 2-5 are empty after initial setup
-    board = chessBoard()
+def test_all_middle_rows_empty():
+    # checks if all squares in rows 2-5 are empty after initial setup
+    board = ChessBoard()
     board.setupInitialPosition()
-    assert board.getPiece(chessPosition(2, 0)) is None
-    assert board.getPiece(chessPosition(3, 3)) is None
-    assert board.getPiece(chessPosition(4, 7)) is None
-    assert board.getPiece(chessPosition(5, 5)) is None
+    for row in range(2, 6):
+        for col in range(8):
+            assert board.getPiece(ChessPosition(row, col)) is None
+
+def test_invalid_position():
+    # checks that invalid positions raise ValueError
+    with pytest.raises(ValueError):
+        ChessPosition(8, 0)
+    with pytest.raises(ValueError):
+        ChessPosition(0, 8)
+    with pytest.raises(ValueError):
+        ChessPosition(-1, 0)
 
 def test_white_piece_not_on_black_side():
     # checks that no white piece is on rows 6 or 7 at the start of the game
-    board = chessBoard()
+    board = ChessBoard()
     board.setupInitialPosition()
-    black_back_row = board.getPiece(chessPosition(7, 0))
-    black_front_row = board.getPiece(chessPosition(6, 0))
+    black_back_row = board.getPiece(ChessPosition(7, 0))
+    black_front_row = board.getPiece(ChessPosition(6, 0))
     assert black_back_row.color != Color.WHITE
     assert black_front_row.color != Color.WHITE
 
 def test_black_piece_not_on_white_side():
     # checks that no black piece is on rows 0 or 1 at the start of the game
-    board = chessBoard()
+    board = ChessBoard()
     board.setupInitialPosition()
-    white_back_row = board.getPiece(chessPosition(0, 0))
-    white_front_row = board.getPiece(chessPosition(1, 0))
+    white_back_row = board.getPiece(ChessPosition(0, 0))
+    white_front_row = board.getPiece(ChessPosition(1, 0))
     assert white_back_row.color != Color.BLACK
     assert white_front_row.color != Color.BLACK
 
 def test_no_empty_cell_back_rows():
     # checks if rows 0 and 7 have no empty squares after setup- if one of them is empty , then the board is invalid
-    board = chessBoard()
+    board = ChessBoard()
     board.setupInitialPosition()
     for col in range(8):
-        assert board.getPiece(chessPosition(0, col)) is not None
-        assert board.getPiece(chessPosition(7, col)) is not None
+        assert board.getPiece(ChessPosition(0, col)) is not None
+        assert board.getPiece(ChessPosition(7, col)) is not None
 
 def test_no_empty_on_pawn_rows():
     # checks if rows 1 and 6 have no empty squares after setup
-    board = chessBoard()
+    board = ChessBoard()
     board.setupInitialPosition()
     for col in range(8):
-        assert board.getPiece(chessPosition(1, col)) is not None
-        assert board.getPiece(chessPosition(6, col)) is not None
-
+        assert board.getPiece(ChessPosition(1, col)) is not None
+        assert board.getPiece(ChessPosition(6, col)) is not None
 
 
 # Board update and state checks
 def test_board_remove_piece():
     # checks if square is empty after removing a piece
-    board = chessBoard()
+    board = ChessBoard()
     board.setupInitialPosition()
-    board.removePiece(chessPosition(1, 0))
-    removed = board.getPiece(chessPosition(1, 0))
+    board.removePiece(ChessPosition(1, 0))
+    removed = board.getPiece(ChessPosition(1, 0))
     assert removed is None
 
 def test_set_piece_on_empty():
     # checks if placing a piece on an empty square stores that piece correctly
-    board = chessBoard()
+    board = ChessBoard()
     board.setupInitialPosition()
     new_piece = ChessPiece(PieceType.QUEEN, Color.WHITE)
-    board.setPiece(chessPosition(4, 4), new_piece)
-    placed_piece = board.getPiece(chessPosition(4, 4))
+    board.setPiece(ChessPosition(4, 4), new_piece)
+    placed_piece = board.getPiece(ChessPosition(4, 4))
     assert placed_piece.pieceType == PieceType.QUEEN
     assert placed_piece.color == Color.WHITE
     assert placed_piece.pieceType != PieceType.ROOK
 
 def test_piece_not_moved_on_setup():
     # checks if pieces have hasMoved=False when first placed
-    board = chessBoard()
+    board = ChessBoard()
     board.setupInitialPosition()
-    white_pawn = board.getPiece(chessPosition(1, 0))
+    white_pawn = board.getPiece(ChessPosition(1, 0))
     assert white_pawn.hasMoved == False
 
 def test_remove_then_replace():
     # checks if a square can be reused after a piece is removed and replacement points to new piece and not old
-    board = chessBoard()
+    board = ChessBoard()
     board.setupInitialPosition()
-    board.removePiece(chessPosition(1, 3))
-    board.setPiece(chessPosition(1, 3), ChessPiece(PieceType.BISHOP, Color.BLACK))
-    replaced_piece = board.getPiece(chessPosition(1, 3))
+    board.removePiece(ChessPosition(1, 3))
+    board.setPiece(ChessPosition(1, 3), ChessPiece(PieceType.BISHOP, Color.BLACK))
+    replaced_piece = board.getPiece(ChessPosition(1, 3))
     assert replaced_piece.pieceType == PieceType.BISHOP
     assert replaced_piece.color == Color.BLACK
     assert replaced_piece.pieceType != PieceType.PAWN
 
+def test_piece_code():
+    # white pieces should return uppercase letter codes
+    # black pieces should return lowercase letter codes
+
+    # king codes
+    white_king = ChessPiece(PieceType.KING, Color.WHITE)
+    black_king = ChessPiece(PieceType.KING, Color.BLACK)
+    assert white_king.toCode() == "K"   # white king → "K"
+    assert black_king.toCode() == "k"   # black king → "k"
+
+    # pawn codes
+    white_pawn = ChessPiece(PieceType.PAWN, Color.WHITE)
+    black_pawn = ChessPiece(PieceType.PAWN, Color.BLACK)
+    assert white_pawn.toCode() == "P"   # white pawn → "P"
+    assert black_pawn.toCode() == "p"   # black pawn → "p"
+
+def test_board_clone():
+    # checks that modifying clone does not affect original board
+    board = ChessBoard()
+    board.setupInitialPosition()
+    clone = board.clone()
+    clone.removePiece(ChessPosition(1, 0))  # removing the pawn from clone
+    assert board.getPiece(ChessPosition(1, 0)) is not None # original board should still have the pawn
+    assert clone.getPiece(ChessPosition(1, 0)) is None  # pawn removed from cloned board
+
+def test_position_equality():
+    pos1 = ChessPosition(3, 4)
+    pos2 = ChessPosition(3, 4)
+    pos3 = ChessPosition(4, 3)
+
+    assert pos1 == pos2   # two positions with same row and col should be equal
+    assert pos1 != pos3   # two positions with different row and col should not be equal
+
+    # positions should work as dictionary keys -
+    # storing with pos1 and retrieving with pos2 should return same value
+    # since pos1 and pos2 have same row and col
+    pos_dict = {pos1: "test"}
+    assert pos_dict[pos2] == "test"
