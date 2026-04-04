@@ -29,7 +29,7 @@ async def game_create(
     game_id = await GameRepository.createGame(game)
 
     # Return the game_id to the client; they will send a request to create a WebSocket
-    return game_id
+    return { "success": true, "game_id": game_id }
 
 
 @router.post("/join/${game_id}")
@@ -46,7 +46,7 @@ def game_join(
         )
 
     # Return the game_id to the client; they will send a request to create a WebSocket
-    return game_id
+    return { "success": True, "game_id": game_id }
 
 
 @router.post("/leave")
@@ -66,11 +66,13 @@ def game_leave(
     # If the host leaves, disband the lobby
     if is_host(current_user):
         kill_the_entire_lobby(current_game)
+        # TODO: Need to notify websockets of all players to end
     else:
         # Just remove the user from the lobby
+        # TODO: Need to notify websocket
         lobbies.update_one({ "_id": current_game }, { "$pull": { "players": current_user.user_id } })
 
-    return "success"
+    return { "success": True }
 
 @router.post("/kick")
 def game_kick(
@@ -105,7 +107,9 @@ def game_kick(
 
     # Remove user from lobby
     lobbies.update_one({ "_id": current_game }, { "$pull": { "players": target_id } })
-    return "success"
+    # TODO: Need to notify kicked user
+
+    return { "success": True }
     
 
     
