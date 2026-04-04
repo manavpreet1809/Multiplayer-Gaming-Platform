@@ -1,16 +1,15 @@
-#  run tictactoe test case: py -m pytest tests/test_tictactoe.py -v -s
+# Run tictactoe model test cases:  py -m pytest src/app/tests/test_tictactoe_models.py -v -s
 
 import pytest
 import sys
 import os
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src', 'app', 'models', 'tictactoe'))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
-from TicTacToePosition import TicTacToePosition
-from Player import Player
-from TicTacToeBoard import TicTacToeBoard
-from TicTacToeMove import TicTacToeMove
+from app.models.tictactoe.TicTacToePosition import TicTacToePosition
+from app.models.tictactoe.TicTacToeBoard import TicTacToeBoard
+from app.models.tictactoe.TicTacToeMove import TicTacToeMove
+from app.models.tictactoe.Player import Player
 
 # Boundary checks
 def test_pos_different_row():
@@ -61,7 +60,7 @@ def test_board_set_o():
     assert cell == "O"
     assert cell != "X"
 
-
+@pytest.mark.skip(reason="written before validation was implemented - test_board_fully_filled covers the real game scenario after validation was added")
 def test_board_full_when_filled():
     # checks if board is full when all 9 cells are filled, only checks if isFull returns true when board is full, logic not considered because validation is not implemented
     board = TicTacToeBoard()
@@ -70,8 +69,32 @@ def test_board_full_when_filled():
             board.setCell(TicTacToePosition(row, col), "X")
     assert board.isFull() == True
 
+def test_board_fully_filled():
+    # checks if board is full when all 9 cells are filled with alternating X and O
+    board = TicTacToeBoard()
+    # fill board alternating X and O like a real game
+    values = ["X", "O", "X",
+              "O", "X", "O",
+              "X", "O", "X"]
+    index = 0
+    for row in range(3):
+        for col in range(3):
+            board.setCell(TicTacToePosition(row, col), values[index])
+            index += 1
+    assert board.isFull() == True
 
-@pytest.mark.skip(reason="turn validation not yet implemented")
+def test_board_cells_independent():
+    # checks that setting one cell does not affect other cells
+    board = TicTacToeBoard()
+    board.setCell(TicTacToePosition(0, 0), "X")
+    board.setCell(TicTacToePosition(1, 1), "O")
+    board.setCell(TicTacToePosition(2, 2), "X")
+    assert board.getCell(TicTacToePosition(0, 0)) == "X"
+    assert board.getCell(TicTacToePosition(1, 1)) == "O"
+    assert board.getCell(TicTacToePosition(2, 2)) == "X"
+
+
+
 def test_board_one_empty_cell():
     # checks if board is not full when one cell is still empty
     board = TicTacToeBoard()
