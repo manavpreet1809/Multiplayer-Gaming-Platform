@@ -50,3 +50,8 @@ class GameRepository:
     @staticmethod
     async def changeHost(game_id: str, player_id: str):
         await games_collection.update_one({ "_id": game_id }, { "$set": { "host_id": player_id } })
+
+    # Deletes a given lobby; used to clean up lobbies if the last player leaves during the WAITING state
+    @staticmethod
+    async def killLobby(game_id: str):
+        await games_collection.delete_one({ "_id": game_id })
