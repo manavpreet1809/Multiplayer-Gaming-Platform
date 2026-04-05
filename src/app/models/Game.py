@@ -5,16 +5,15 @@ from GameState import GameState
 from LobbyCode import LobbyCode
 
 class Game:
-    def __init__(self, current_player):
+    def __init__(self, current_player, visibility, max_players):
         self.lobby_code = LobbyCode.generate()
         self.status = GameStatus.WAITING
-        self.host_player = current_player.user_id # TODO: This field does not exist yet
+        self.host_player = current_player.user_id # TODO: user_id does not exist yet
         self.players = [current_player.user_id]
-        self.visibility = Visibility.PUBLIC # TODO: Should be provided as input
-        self.maxPlayers = 4 # TODO: Should be provided as input
-        self.settings = GameSettings(4, { "test": 123 }) # TODO: No clue what this is, might have maxPlayers on it
+        self.visibility = visibility
+        self.maxPlayers = max_players
         self.state = GameState() # TODO: Empty game state
-        self.move_history = {} # TODO
+        self.move_history = {} # TODO: Move history
 
     def toDict(self):
         return {
