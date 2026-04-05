@@ -37,7 +37,17 @@ async def createGame(
     # Return the game_id to the front-end; they will send a request to create a WebSocket
     # The lobby code is also returned for the user (regardless of the private/public setting)
     # TODO: The WebSocket should only accept if the player is inside the game in the DB
-    return { "success": True, "game_id": game_id, "lobby_code": game.lobby_code }
+    return
+    {
+        "success": True,
+        "data":
+        {
+                "game_id": game_id,
+             "lobby_code": game.lobby_code,
+            "max_players": game.max_players,
+             "visibility": game.visibility
+        }
+    }
 
 # Joining games 
 @router.post("/join/{lobby_code}", status_code = status.HTTP_200_OK)
