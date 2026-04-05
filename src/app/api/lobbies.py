@@ -2,38 +2,38 @@ from fastapi import Depends, HTTPException, Request, Form, status
 from services.authServices import get_current_user
 from models.Game import Game
 from models.GameStatus import GameStatus
-from models.Visibility import Visibility
 from db.GameRepository import GameRepository
 from db.mongo import db
-import re
+from typing import Annotated
 
 lobbies = db["games"]
 
 # Create game endpoint
 @router.post("/create")
-async def gameCreate(
+async def createGame(
     current_user: Annotated[UserPublic, Depends(get_current_user)],
     visibility: Annotated[int, Form()],
     player_count: Annotated[int, Form()]
 ):
-    # Make sure player is not in a game
-    if get_current_game(current_user) is not None:
+    # Make sure the player is not already in a game
+    if current_user.current_game is not None: # TODO: current_game is not implemented
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="User is already in a game.",
-            headers={}
+            status_code = status.HTTP_403_FORBIDDEN,
+            detail = "User is already in a game"
         )
 
-    # Instantiate game and send it to DB
-    game = Game(current_user, visibility, player_count)
+    # Instantiate game and send it to the DB
+    game = Game(current_user, visibility, player_count, GameStatus.WAITING)
     game_id = await GameRepository.createGame(game)
 
     # Return the game_id to the front-end; they will send a request to create a WebSocket
-    return { "success": True, "game_id": game_id }
+    # The lobby code is also returned for the user (regardless of the private/public setting)
+    # TODO: The WebSocket should only accept if the player is inside the game in the DB
+    return { "success": True, "game_id": game_id, "lobby_code": game.lobby_code }
 
 # Joining games 
 @router.post("/join/{lobby_code}", status_code = status.HTTP_200_OK)
-async def gameJoin(
+async def joinGame(
     lobby_code: str,
     current_user: Annotated[UserPublic, Depends(get_current_user)]
 ):
@@ -76,5 +76,5 @@ async def gameJoin(
     await GameRepository.updatePlayerMembership(game.game_id, game.player_ids)
 
     # Return the game_id to the front-end; they will use it to request a WebSocket
-    # TODO: The WebSocket should only accept if the player is inside player_ids
+    # TODO: The WebSocket should only accept if the player is inside the game in the DB
     return { "success": True, "game_id": game.game_id }
