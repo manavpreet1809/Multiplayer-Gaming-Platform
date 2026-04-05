@@ -13,9 +13,14 @@ class GameRepository:
     # Creates a new game
     @staticmethod
     async def createGame(game: Game):
+        # Set the game in the DB
         doc = game.to_dict()
         doc["createdAt"] = datetime.utcnow()
         await games_collection.insert_one(doc)
+
+        # Set the current game for the host
+        await users.update_one({ "_id": game.host_id }, { "$set": { "current_game": game.game_id } })
+
         return game.game_id
 
     # Creates a game from the DB
