@@ -92,9 +92,7 @@ async def joinGame(
         )
 
     # If all checks passed, add the player 
-    game.player_ids.append(current_user.user_id)
-    await users.update_one({ "_id": current_user.user_id }, { "$set": { "current_game": game.game_id } }) # TODO: Put under GameRepository.createGame
-    await GameRepository.updatePlayerMembership(game.game_id, game.player_ids)
+    await GameRepository.addPlayer(game.game_id, current_user.user_id)
 
     # Return the game_id to the front-end; they will use it to request a WebSocket
     # TODO: The WebSocket should only accept if the player is inside the game in the DB
