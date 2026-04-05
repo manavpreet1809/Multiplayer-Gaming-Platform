@@ -1,5 +1,5 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from GamesRepository import GameRepository
+from GameRepository import GameRepository
 from db.ConnectionManager import manager
 from datetime import datetime
 from models.GameStatus import GameStatus
