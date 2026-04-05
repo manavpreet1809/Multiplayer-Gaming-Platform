@@ -9,7 +9,7 @@ from typing import Annotated
 lobbies = db["games"]
 
 # Create game endpoint
-@router.post("/create")
+@router.post("/games")
 async def createGame(
     current_user: Annotated[UserPublic, Depends(get_current_user)],
     visibility: Annotated[int, Form()],
