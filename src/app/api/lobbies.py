@@ -34,7 +34,6 @@ async def createGame(
     # Instantiate game and send it to the DB
     game = Game(current_user, visibility, player_count, GameStatus.WAITING)
     game_id = await GameRepository.createGame(game)
-    await users.update_one({ "_id": current_user.user_id }, { "$set": { "current_game": game.game_id } }) # TODO: Put under GameRepository.createGame
 
     # Return the game_id to the front-end; they will send a request to create a WebSocket
     # The lobby code is also returned for the user (regardless of the private/public setting)
