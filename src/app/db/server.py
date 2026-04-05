@@ -77,7 +77,7 @@ async def game_websocket(websocket: WebSocket, game_id: str, player_id: str):
                 # Terminate the WebSocket
                 await websocket.close(code = 1000, reason = "Player initiated leave request")
                 
-            if event == "kick":
+            if event == "kick_player":
                 target = payload.target_id
 
                 # If the player is not the host, reject
