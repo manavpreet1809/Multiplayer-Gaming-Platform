@@ -38,12 +38,13 @@ async def game_join_public(
     current_user: Annotated[UserPublic, Depends(get_current_user)]
 ):
     # Make sure the player is not already in a game
-    if get_current_game(current_user) is not None:
+    if current_user.current_game is not None: # TODO: current_game is not implemented
         raise HTTPException(
             status_code = status.HTTP_403_FORBIDDEN,
             detail = "User is already in a game"
         )
 
+    # Get game by ID
     game = await GameRepository.getGame(game_id)
 
     # Make sure the game actually exists
