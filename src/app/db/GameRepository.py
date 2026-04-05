@@ -6,6 +6,7 @@ from models.Game import Game
 from models.GameState import GameState
 
 games_collection = db["games"]
+users_collection = db["users"]
 
 class GameRepository:
 
@@ -62,10 +63,17 @@ class GameRepository:
     async def updateGameState(game_id: str, new_state: dict, move_entry: dict):
         await games_collection.update_one({"_id": game_id}, {"$set": {"current_state": new_state, "updated_at": datetime.utcnow()}, "$push": {"move_history": move_entry}})
 
+    # Adds player to game; used for join functionality
+    @staticmethod
+    async def addPlayer(game_id: str, player_id: str):
+        await games_collection.update_one({ "_id": game_id }, { "$push": { "player_ids": player_id } })
+        await users_collection.update_one({ "_id": player_id }, { "$set": { "current_game": game_id } })
+
     # Removes player from game; used for leave and kick functionality
     @staticmethod
     async def removePlayer(game_id: str, player_id: str):
         await games_collection.update_one({ "_id": game_id }, { "$pull": { "player_ids": player_id } })
+        await users_collection.update_one({ "_id": player_id }, { "$set": { "current_game": None } })
 
     # Swaps host to given player
     @staticmethod
