@@ -48,7 +48,7 @@ async def gameJoin(
     # Public lobbies will store it in their "Join" button
 
     # Attempt to get a game by the given code
-    game = await GameRepository.getGameByCode(lobby_code) # TODO: getGameByCode is not implemented
+    game = await GameRepository.getGameByCode(lobby_code)
 
     # Make sure the game actually exists
     if game is None:
