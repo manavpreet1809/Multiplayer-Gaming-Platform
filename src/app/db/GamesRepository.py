@@ -40,3 +40,13 @@ class GameRepository:
     @staticmethod
     async def updateGameState(game_id: str, new_state: dict, move_entry: dict):
         await games_collection.update_one({"_id": game_id}, {"$set": {"current_state": new_state, "updated_at": datetime.utcnow()}, "$push": {"move_history": move_entry}})
+
+    # Removes player from game; used for leave and kick functionality
+    @staticmethod
+    async def removePlayer(game_id: str, player_id: str):
+        await games_collection.update_one({ "_id": game_id }, { "$pull": { "player_ids": player_id } })
+
+    # Swaps host to given player
+    @staticmethod
+    async def changeHost(game_id: str, player_id: str):
+        await games_collection.update_one({ "_id": game_id }, { "$set": { "host_id": player_id } })
