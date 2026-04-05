@@ -1,4 +1,4 @@
-# Handles all db operations for the games collection
+# Handles all DB operations for the games collection
 
 from mongo import db
 from datetime import datetime
@@ -17,18 +17,39 @@ class GameRepository:
         await games_collection.insert_one(doc)
         return game.game_id
 
-    # Creates a game from the db
+    # Creates a game from the DB
     @staticmethod
     async def getGame(game_id: str):
-        doc = await games_collection.find_one({"_id": game_id})
+        doc = await games_collection.find_one({ "_id": game_id })
+        return GameRepository.docToGame(doc)
+    
+    # Creates a game from the DB using a code
+    @staticmethod
+    async def getGameByCode(lobby_code: str):
+        doc = await games_collection.find_one({ "lobby_code": lobby_code })
+        return GameRepository.docToGame(doc)
+
+    # Converts a doc to an instantiated member of the Game class
+    @staticmethod
+    def docToGame(doc):
+        # If nothing was found, return
         if not doc:
             return None
         
-        game = Game(game_id=doc["_id"], lobby_code=doc["lobby_code"], visibility=doc["visibility"], status=doc["status"], host_id=doc["host_id"])
+        # Instantiate the Game class
+        game = Game(
+            game_id = doc["_id"],
+            lobby_code = doc["lobby_code"],
+            visibility = doc["visibility"],
+            status = doc["status"],
+            host_id = doc["host_id"]
+        )
+
         game.player_ids = doc.get("player_ids", [])
         game.active_player_id = doc.get("active_player_id")
         game.state = GameState.from_dict(doc.get("current_state"))
         game.move_history = doc.get("move_history", [])
+
         return game
 
     # Updates the list of players in the current session
