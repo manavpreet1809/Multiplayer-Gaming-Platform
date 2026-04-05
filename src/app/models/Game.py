@@ -5,14 +5,14 @@ from GameState import GameState
 from LobbyCode import LobbyCode
 
 class Game:
-    def __init__(self, current_player, visibility, max_players):
+    def __init__(self, current_player, visibility, max_players, status):
         self.lobby_code = LobbyCode.generate()
-        self.status = GameStatus.WAITING
         self.host_player = current_player.user_id # TODO: user_id does not exist yet
         self.players = [current_player.user_id]
         self.visibility = visibility
         self.maxPlayers = max_players
-        self.state = GameState() # TODO: Empty game state
+        self.status = status
+        self.state = GameState() # TODO: Game state
         self.move_history = {} # TODO: Move history
 
     def toDict(self):
