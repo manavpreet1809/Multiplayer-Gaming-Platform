@@ -44,6 +44,7 @@ class UserPublic(BaseModel):
     email: str | None = None
     full_name: str | None = None
     disabled: bool = False
+    current_game: int | None = None
 
 
 class UserInDB(UserPublic):
