@@ -152,6 +152,7 @@ async def get_user_by_username(username: str) -> UserInDB | None:
         email=doc.get("email"),
         full_name=doc.get("full_name"),
         disabled=doc.get("disabled", False),
+        current_game=doc["current_game"],
         hashed_password=doc["hashed_password"],
         created_at=doc["created_at"],
     )
@@ -167,6 +168,7 @@ async def create_user(user: UserCreate) -> UserPublic:
         "hashed_password": get_password_hash(user.password),
         "disabled": False,
         "created_at": datetime.now(timezone.utc),
+        "current_game": None,
     }
 
     try:
@@ -183,6 +185,7 @@ async def create_user(user: UserCreate) -> UserPublic:
         email=user_doc["email"],
         full_name=user_doc["full_name"],
         disabled=user_doc["disabled"],
+        current_game=user_doc["current_game"]
     )
 
 
@@ -239,4 +242,5 @@ async def get_current_user(
         email=user.email,
         full_name=user.full_name,
         disabled=user.disabled,
+        current_game=user.current_game
     )
