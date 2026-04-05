@@ -2,6 +2,7 @@ from fastapi import Depends, HTTPException, Request, Form, status
 from services.authServices import get_current_user
 from models.Game import Game
 from models.GameStatus import GameStatus
+from models.Visibility import Visibility
 from db.GameRepository import GameRepository
 from db.mongo import db
 from typing import Annotated
@@ -20,6 +21,13 @@ async def createGame(
         raise HTTPException(
             status_code = status.HTTP_403_FORBIDDEN,
             detail = "User is already in a game"
+        )
+    
+    # Validate inputs
+    if visibility not in Visibility or player_count < 2 or player_count > 10: # TODO: Need MIN_PLAYERS, MAX_PLAYERS
+        raise HTTPException(
+            status_code = status.HTTP_400_BAD_REQUEST,
+            detail = "Invalid parameters"
         )
 
     # Instantiate game and send it to the DB
