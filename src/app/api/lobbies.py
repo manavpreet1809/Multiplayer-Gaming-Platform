@@ -8,6 +8,7 @@ from db.mongo import db
 from typing import Annotated
 
 lobbies = db["games"]
+users = db["users"]
 
 # Create game endpoint
 @router.post("/games")
@@ -17,7 +18,7 @@ async def createGame(
     player_count: Annotated[int, Form()]
 ):
     # Make sure the player is not already in a game
-    if current_user.current_game is not None: # TODO: current_game is not implemented
+    if current_user.current_game is not None:
         raise HTTPException(
             status_code = status.HTTP_403_FORBIDDEN,
             detail = "User is already in a game"
@@ -33,6 +34,7 @@ async def createGame(
     # Instantiate game and send it to the DB
     game = Game(current_user, visibility, player_count, GameStatus.WAITING)
     game_id = await GameRepository.createGame(game)
+    await users.update_one({ "_id": current_user.user_id }, { "$set": { "current_game": game.game_id } }) # TODO: Put under GameRepository.createGame
 
     # Return the game_id to the front-end; they will send a request to create a WebSocket
     # The lobby code is also returned for the user (regardless of the private/public setting)
@@ -56,7 +58,7 @@ async def joinGame(
     current_user: Annotated[UserPublic, Depends(get_current_user)]
 ):
     # Make sure the player is not already in a game
-    if current_user.current_game is not None: # TODO: current_game is not implemented
+    if current_user.current_game is not None:
         raise HTTPException(
             status_code = status.HTTP_403_FORBIDDEN,
             detail = "User is already in a game"
@@ -90,9 +92,20 @@ async def joinGame(
         )
 
     # If all checks passed, add the player 
-    game.player_ids.append(current_user.user_id) # TODO: user_id is not implemented
+    game.player_ids.append(current_user.user_id)
+    await users.update_one({ "_id": current_user.user_id }, { "$set": { "current_game": game.game_id } }) # TODO: Put under GameRepository.createGame
     await GameRepository.updatePlayerMembership(game.game_id, game.player_ids)
 
     # Return the game_id to the front-end; they will use it to request a WebSocket
     # TODO: The WebSocket should only accept if the player is inside the game in the DB
-    return { "success": True, "game_id": game.game_id }
+    return
+    {
+        "success": True,
+        "data":
+        {
+                "game_id": game_id,
+             "lobby_code": game.lobby_code,
+            "max_players": game.max_players,
+             "visibility": game.visibility
+        }
+    }
