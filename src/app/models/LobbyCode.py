@@ -1,4 +1,4 @@
-from mongo import db
+from src.app.db.GamesRepository import GamesRepository
 import random
 import string
 
@@ -13,12 +13,10 @@ class LobbyCode:
     @staticmethod
     async def generate():
         while True:
+            # Generate code
             code = "".join(random.choice(LobbyCode.allowedChars) for i in range(LobbyCode.length))
-            is_safe = await LobbyCode.is_safe(code)
-            if is_safe return code
 
-    # Checks if the code is safe
-    @staticmethod
-    async def is_safe(code):
-        conflict = await games_collection.find_one({ "code": code }, { "code": 1 })
-        return conflict is None;
+            # Check if it is in use
+            is_safe = await GameRepository.isSafeCode(code)
+            if is_safe:
+                return code
