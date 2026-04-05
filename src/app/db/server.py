@@ -2,6 +2,7 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from GamesRepository import GameRepository
 from db.ConnectionManager import manager
 from datetime import datetime
+from models.GameStatus import GameStatus
 
 app = FastAPI()
 
@@ -66,14 +67,15 @@ async def game_websocket(websocket: WebSocket, game_id: str, player_id: str):
                 for ws in players:
                     await ws.send_json({ "event": "player_left", "payload": { "id": player_id } })
 
-                # Terminate the WebSocket
-                await websocket.close(code = 1000, reason = "Player initiated leave request")
+                # If that was the last player, and the game has not begun, shut down the entire lobby
+                # Note that we do not want to delete a game in progress; we will end it with a forfeit, and keep it 
+                if len(game.player_ids) == 1 and game.status == GameStatus.WAITING:
+                    await killLobby(game_id)
 
                 # TODO: Forfeit the game if it is running
 
-                # If that was the last player, shut down the entire lobby
-                if len(game.player_ids) == 1:
-                    pass # TODO: Shut down lobby
+                # Terminate the WebSocket
+                await websocket.close(code = 1000, reason = "Player initiated leave request")
                 
             if event == "kick":
                 target = payload.target_id
