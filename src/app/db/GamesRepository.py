@@ -76,3 +76,9 @@ class GameRepository:
     @staticmethod
     async def killLobby(game_id: str):
         await games_collection.delete_one({ "_id": game_id })
+
+    # Checks code availability
+    @staticmethod
+    async def isSafeCode(code: str):
+        conflict = await games_collection.find_one({ "code": code })
+        return conflict is None;
