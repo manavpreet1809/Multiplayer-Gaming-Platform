@@ -14,6 +14,29 @@ from app.models.chess.chessBoard import ChessBoard
 from app.models.chess.chessMove import ChessMove
 
 
+# verifies that toList() correctly represents a mid-game board state
+def test_chess_to_list_mid_game():
+    board = ChessBoard()
+    board.setupInitialPosition()
+
+    pawn = board.getPiece(ChessPosition(1, 4))
+    board.removePiece(ChessPosition(1, 4))
+    board.setPiece(ChessPosition(3, 4), pawn)
+    board.removePiece(ChessPosition(7, 6))
+    board.setPiece(ChessPosition(4, 4), ChessPiece(PieceType.QUEEN, Color.WHITE))
+
+    board_list = board.toList()
+    assert board_list == [
+        ["r", "n", "b", "q", "k", "b", None, "r"],
+        ["p", "p", "p", "p", "p", "p", "p", "p"],
+        [None, None, None, None, None, None, None, None],
+        [None, None, None, None, "Q", None, None, None],
+        [None, None, None, None, "P", None, None, None],
+        [None, None, None, None, None, None, None, None],
+        ["P", "P", "P", "P", None, "P", "P", "P"],
+        ["R", "N", "B", "Q", "K", "B", "N", "R"]
+    ]
+
 #  Boundary checks
 def test_position_lower_bound():
     # (0,0) is the minimum valid position on the board
@@ -52,9 +75,16 @@ def test_position_hash_equal():
     assert hash(pos1) == hash(pos2)
 
 
-def test_position_out_of_bounds():
+def test_invalid_position():
+    # checks that invalid positions raise ValueError
     with pytest.raises(ValueError):
-        ChessPosition(8, 8)
+        ChessPosition(8, 0)
+    with pytest.raises(ValueError):
+        ChessPosition(0, 8)
+    with pytest.raises(ValueError):
+        ChessPosition(-1, 0)
+    with pytest.raises(ValueError):
+            ChessPosition(8, 8)
 
 
 # Move checks
@@ -186,14 +216,7 @@ def test_all_middle_rows_empty():
         for col in range(8):
             assert board.getPiece(ChessPosition(row, col)) is None
 
-def test_invalid_position():
-    # checks that invalid positions raise ValueError
-    with pytest.raises(ValueError):
-        ChessPosition(8, 0)
-    with pytest.raises(ValueError):
-        ChessPosition(0, 8)
-    with pytest.raises(ValueError):
-        ChessPosition(-1, 0)
+
 
 def test_white_piece_not_on_black_side():
     # checks that no white piece is on rows 6 or 7 at the start of the game
@@ -293,6 +316,15 @@ def test_board_clone():
     assert board.getPiece(ChessPosition(1, 0)) is not None # original board should still have the pawn
     assert clone.getPiece(ChessPosition(1, 0)) is None  # pawn removed from cloned board
 
+def test_clone_modifying_piece_does_not_affect_original():
+    #  ensures modifying a piece in the cloned board does not affect the original
+    board = ChessBoard()
+    board.setupInitialPosition()
+    clone = board.clone()
+    pawn_clone = clone.getPiece(ChessPosition(1,0))
+    pawn_clone.hasMoved = True
+    assert board.getPiece(ChessPosition(1,0)).hasMoved == False
+
 def test_position_equality():
     pos1 = ChessPosition(3, 4)
     pos2 = ChessPosition(3, 4)
@@ -301,8 +333,10 @@ def test_position_equality():
     assert pos1 == pos2   # two positions with same row and col should be equal
     assert pos1 != pos3   # two positions with different row and col should not be equal
 
-    # positions should work as dictionary keys -
+    # positions should work as dictionary keys
     # storing with pos1 and retrieving with pos2 should return same value
     # since pos1 and pos2 have same row and col
     pos_dict = {pos1: "test"}
     assert pos_dict[pos2] == "test"
+
+

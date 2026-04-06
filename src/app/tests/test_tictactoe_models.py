@@ -124,3 +124,26 @@ def test_tictactoe_two_players():
     # checks if there are only two players in tictactoe and not more
     all_players = list(Player)
     assert len(all_players) == 2
+
+def test_board_to_list():
+    # verifies that toList() returns a correct list representation of the board
+    board = TicTacToeBoard()
+    board.setCell(TicTacToePosition(0, 0), "X")
+    board.setCell(TicTacToePosition(0, 1), "O")
+    board.setCell(TicTacToePosition(1, 1), "X")
+    board.setCell(TicTacToePosition(2, 2), "O")
+
+    board_list = board.toList()
+
+    assert board_list == [
+        "X", "O", None,
+        None, "X", None,
+        None, None, "O"
+    ]
+
+def test_pos_can_be_used_as_dict_key():
+    # verifies that positions with same row and column can be used interchangeably as dictionary keys
+    pos1 = TicTacToePosition(2, 2)
+    pos2 = TicTacToePosition(2, 2)
+    pos_dict = {pos1: "corner"}
+    assert pos_dict[pos2] == "corner"
