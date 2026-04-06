@@ -57,15 +57,21 @@ async def game_websocket(websocket: WebSocket, game_id: str, player_id: str):
                     await GameRepository.changeHost(game_id, new_host)
 
                     # Broadcast a message to update to the new host
-                    for ws in players:
-                        await ws.send_json({ "event": "host_change", "payload": { "id": new_host } })
+                    await manager.broadcast(game_id,
+                    {
+                        "event": "host_change",
+                        "payload": { "id": new_host }
+                    })
                 
                 # Kick the player
                 await GameRepository.removePlayer(game_id, player_id)
                 
                 # Broadcast a message to update players in front-end
-                for ws in players:
-                    await ws.send_json({ "event": "player_left", "payload": { "id": player_id } })
+                await manager.broadcast(game_id,
+                {
+                    "event": "player_left",
+                    "payload": { "id": player_id }
+                })
 
                 # If that was the last player, and the game has not begun, shut down the entire lobby
                 # Note that we do not want to delete a game in progress; we will end it with a forfeit, and keep it 
@@ -97,8 +103,11 @@ async def game_websocket(websocket: WebSocket, game_id: str, player_id: str):
                 await websocket.send_json({ "event": "kick_success", "message": "Kicked player successfully" })
 
                 # Message to update the player list in the front-end
-                for ws in players:
-                    await ws.send_json({ "event": "player_kicked", "payload": { "id": target_id } })
+                await manager.broadcast(
+                {
+                    "event": "player_kicked",
+                    "payload": { "id": target_id }
+                })
 
                 # Terminate the WebSocket for the kicked player
                 await players[target_id].send_json({ "event": "kicked", "message": "Player kicked" })
