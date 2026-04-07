@@ -52,4 +52,51 @@ def test_connect_stores_multiple_players_in_same_game(connection_manager):
 
     assert set(connection_manager.active_connections[game_id].keys()) == {"player1", "player2"}
 
+def test_disconnect_removes_only_target_player(connection_manager):
+    '''
+    Tests that when a player disconnects, only their websocket is removed from the connection manager, 
+    and other players in the same game are unaffected.
+    '''
+    game_id = "game1"
+    ws1 = _mock_websocket()
+    ws2 = _mock_websocket()
 
+    asyncio.run(connection_manager.connect(game_id, "player1", ws1))
+    asyncio.run(connection_manager.connect(game_id, "player2", ws2))
+
+    connection_manager.disconnect(game_id, "player1")
+
+    assert "player1" not in connection_manager.active_connections[game_id]
+    assert connection_manager.active_connections[game_id]["player2"] is ws2
+
+
+def test_disconnect_removes_game_bucket_when_last_player_leaves(connection_manager):
+    '''
+    Tests that when the last player in a game disconnects, 
+    the entire game bucket is removed from the connection manager.
+    '''
+
+    game_id = "game1"
+    ws = _mock_websocket()
+
+    asyncio.run(connection_manager.connect(game_id, "player1", ws))
+    connection_manager.disconnect(game_id, "player1")
+
+    assert game_id not in connection_manager.active_connections
+
+
+def test_disconnect_missing_game_or_player_is_noop(connection_manager):
+    '''
+    Tests that if disconnect is called with a game ID or player ID that doesn't exist,
+    it does not raise an error and does not affect existing connections.
+    '''
+    game_id = "game1"
+    ws = _mock_websocket()
+
+    asyncio.run(connection_manager.connect(game_id, "player1", ws))
+
+    connection_manager.disconnect("missing-game", "player1")
+    connection_manager.disconnect(game_id, "missing-player")
+
+    assert game_id in connection_manager.active_connections
+    assert "player1" in connection_manager.active_connections[game_id]
