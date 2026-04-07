@@ -51,11 +51,11 @@ function Leaderboard({
         <table className="leaderboard-table">
           <thead>
             <tr>
-              <th>#</th>
-              <th>Player</th>
-              <th>Rank</th>
-              <th>MMR</th>
-              <th>W/L</th>
+              <th scope="col">#</th>
+              <th scope="col">Player</th>
+              <th scope="col">Rank</th>
+              <th scope="col">MMR</th>
+              <th scope="col">W/L</th>
             </tr>
           </thead>
           <tbody>

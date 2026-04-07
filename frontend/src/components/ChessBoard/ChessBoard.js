@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import './ChessBoard.css';
 
 /**
@@ -59,11 +59,18 @@ function ChessBoard({
 
   const isWhitePiece = (piece) => piece && piece === piece.toUpperCase();
 
-  // Flip board if playing black
-  const displayRows = playerColor === 'black' ? [...RANKS].reverse() : RANKS;
-  const displayCols = playerColor === 'black' ? [...FILES].reverse() : FILES;
-  const rowIndices = playerColor === 'black' ? [7, 6, 5, 4, 3, 2, 1, 0] : [0, 1, 2, 3, 4, 5, 6, 7];
-  const colIndices = playerColor === 'black' ? [7, 6, 5, 4, 3, 2, 1, 0] : [0, 1, 2, 3, 4, 5, 6, 7];
+  // Flip board if playing black (memoized — only recomputes when playerColor changes)
+  const { displayRows, displayCols, rowIndices, colIndices } = useMemo(() => {
+    const flipped = playerColor === 'black';
+    const seq = [0, 1, 2, 3, 4, 5, 6, 7];
+    const rev = [7, 6, 5, 4, 3, 2, 1, 0];
+    return {
+      displayRows: flipped ? [...RANKS].reverse() : RANKS,
+      displayCols: flipped ? [...FILES].reverse() : FILES,
+      rowIndices: flipped ? rev : seq,
+      colIndices: flipped ? rev : seq,
+    };
+  }, [playerColor]);
 
   // Default starting position if no board prop provided
   const defaultBoard = [

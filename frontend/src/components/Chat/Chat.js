@@ -48,6 +48,7 @@ function Chat({ messages = [], onSendMessage, context = 'global' }) {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Type a message…"
+          aria-label="Chat message"
         />
         <button className="chat-send" type="submit">
           Send

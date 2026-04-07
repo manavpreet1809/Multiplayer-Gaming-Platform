@@ -20,28 +20,28 @@
 .ttt-player {
   font-size: 1rem;
   font-weight: 500;
-  color: #999;
+  color: var(--color-text-light);
   padding: 0.3rem 0.75rem;
   border-radius: 4px;
   transition: color 0.2s, background-color 0.2s;
 }
 
 .ttt-player--active {
-  color: #1976d2;
-  background-color: #e3f2fd;
+  color: var(--color-primary);
+  background-color: var(--color-primary-light);
   font-weight: 700;
 }
 
 .ttt-vs {
   font-size: 0.75rem;
-  color: #bbb;
+  color: var(--color-text-disabled);
   text-transform: uppercase;
 }
 
 .ttt-turn {
   margin: 0;
   font-size: 0.875rem;
-  color: #666;
+  color: var(--color-text-muted);
 }
 
 /* Board */
@@ -49,7 +49,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 4px;
-  background-color: #333;
+  background-color: var(--color-primary);
   border-radius: 8px;
   overflow: hidden;
   width: 300px;
@@ -60,7 +60,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #fff;
+  background-color: var(--color-surface);
   border: none;
   cursor: pointer;
   padding: 0;
@@ -68,7 +68,7 @@
 }
 
 .ttt-cell:hover:not(:disabled) {
-  background-color: #f0f7ff;
+  background-color: var(--color-primary-light);
 }
 
 .ttt-cell:disabled {
@@ -76,7 +76,7 @@
 }
 
 .ttt-cell--winning {
-  background-color: #c8e6c9;
+  background-color: var(--color-accent);
 }
 
 /* Marks */
@@ -88,9 +88,9 @@
 }
 
 .ttt-cell--x .ttt-mark {
-  color: #1976d2;
+  color: var(--color-primary);
 }
 
 .ttt-cell--o .ttt-mark {
-  color: #d32f2f;
+  color: var(--color-error);
 }
