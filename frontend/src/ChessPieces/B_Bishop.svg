@@ -1,0 +1,10 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+	<defs>
+		<image  width="32" height="32" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAgMAAAAOFJJnAAAAAXNSR0IB2cksfwAAAAxQTFRFAAAANAFSZwKJTwRqc3lMxAAAAAR0Uk5TAP///7MtQIgAAACmSURBVHicY2SAAkYQtj8AYbB1FUAYrN4bIAyprhgII8sKxnALADMYX16vPwBhqBhBGK+CmaAMfzYI4+eHMAjj75ppYIZIdpb2GxCDVepqzAYw49HnMjCDob6OGWKFeG0OhCHXFoPGqNMOR2Uw/lsNMRnOYP/xelkBiCH/4PeqGBCjvuH/fmcQI34BwzduIIPxSwLXbLcDYJHVv6PBzghg+A1xBhgAAGGqOyGUiiDuAAAAAElFTkSuQmCC"/>
+	</defs>
+	<style>
+	</style>
+	<g id="Black">
+		<use id="Bishop" href="#img1" x="0" y="0"/>
+	</g>
+</svg>
