@@ -1,4 +1,4 @@
-import GameItem from '../GameItem/GameItem.js';
+import GameItem from '../GameItem/GameItem';
 import '../../index.css';
 import './Carousel.css';
 import Logo from '../../logo.svg';
@@ -9,13 +9,13 @@ export default function Carousel() {
     <div className='carousel'>
         <button className='carousel-next' 
             onClick={() => {         
-                document.getElementById('carousel').scrollBy({left:1,top:0,behavior:'smooth'});
+                document.getElementById('carousel').scrollBy({left:1000,top:0,behavior:'smooth'});
             }}>
             &gt;
         </button>
         <button className='carousel-prev' 
             onClick={() => {         
-                document.getElementById('carousel').scrollBy({left:-1,top:0,behavior:'smooth'});
+                document.getElementById('carousel').scrollBy({left:-1000,top:0,behavior:'smooth'});
             }}>
             &lt;
         </button>
@@ -24,6 +24,9 @@ export default function Carousel() {
                 <img src={Logo}></img>
             </div>
             <div className="carousel-tictac">
+                <img src={Logo}></img>
+            </div>
+            <div >
                 <img src={Logo}></img>
             </div>
         </div>
