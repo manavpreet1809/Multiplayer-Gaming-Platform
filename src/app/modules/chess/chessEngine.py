@@ -33,9 +33,12 @@ class ChessEngine(GameEngine):
 
         board = state["board"]
 
-        if not hasattr(move, "fromPos") or move.fromPos is None:
-            return False
         if not hasattr(move, "toPos") or move.toPos is None:
+            return False
+
+        if not (0 <= move.fromPos.row < 8 and 0 <= move.fromPos.col < 8):
+            return False
+        if not (0 <= move.toPos.row < 8 and 0 <= move.toPos.col < 8):
             return False
 
         piece = board.getPiece(move.fromPos)
