@@ -25,6 +25,9 @@ class ChessEngine(GameEngine):
         }
 
     def validateMove(self, state: dict, move: ChessMove) -> bool:
+        if state is None or move is None:
+            return False
+
         board = state["board"]
         piece = board.getPiece(move.fromPos)
         target = board.getPiece(move.toPos)
