@@ -1,3 +1,7 @@
+# Note: To use this demo pipeline, navigate to the src directory first (cd src)
+# Then run the following command in a terminal:
+# python -m app.modules.demoPipeline
+
 # Import the validation pipeline
 from app.modules.validationPipeline import ValidationPipeline
 
@@ -26,7 +30,7 @@ def run_chess_pipeline():
     playerId = "player1"
 
     # An example game move (note that the piece type here doesn't need to be specified, just the from and to positions themselves)
-    move = ChessMove(fromPos=ChessPosition(1, 4), toPos=ChessPosition(3, 4)) # Pawn e4 move (assuming piece is a pawn)
+    move = ChessMove(fromPos=ChessPosition(1, 4), toPos=ChessPosition(3, 4)) # Player 1 plays a pawn e4 move (assuming piece is a pawn)
 
     result = pipeline.processMove(state, playerId, move)  # 3. Use the validation pipeline's processMove method to run the entire pipeline (no need to do anything else).
                                                           # Simply pass the state, playerId and move from the API request
@@ -36,12 +40,33 @@ def run_chess_pipeline():
         "--- Finished chess validation pipeline ---\n"
         f'Success: {result["success"]}\n' # See success value
         f'Error: {result["error"]}\n'     # See error value
+        f'State: {result["state"]}\n'     # See new state value (unserialized)
         f'Result: {result["result"]}\n'   # See result value
     )
 
 # How to use the tic-tac-toe validation pipeline
 def run_tictactoe_pipeline():
-    pass
+    # The steps for tic-tac-toe are exactly the same as chess (see all run_chess_pipeline() comments)
+    print("\n--- Running tic-tac-toe validation pipeline ---")
+
+    engine = TicTacToeEngine()
+    pipeline = ValidationPipeline(engine)
+
+    state = engine.createInitialState(["player1", "player2"])
+
+    playerId = "player2"
+
+    move = TicTacToeMove(position=TicTacToePosition(1, 1)) # Player 2 places their mark in the center square 
+
+    result = pipeline.processMove(state, playerId, move)
+
+    print(
+        "--- Finished tic-tac-toe validation pipeline ---\n"
+        f'Success: {result["success"]}\n'
+        f'Error: {result["error"]}\n'
+        f'State: {result["state"]}\n'
+        f'Result: {result["result"]}\n'
+    )
 
 # This simulates how FastAPI would use the validation pipeline altogether
 def main():
