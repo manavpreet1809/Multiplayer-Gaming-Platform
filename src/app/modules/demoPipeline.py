@@ -16,3 +16,10 @@ def run_chess_pipeline():
 
 def run_tictactoe_pipeline():
     pass
+
+def main():
+    run_chess_pipeline()
+    run_tictactoe_pipeline()
+
+if __name__ == "__main__":
+    main()
