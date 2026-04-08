@@ -45,19 +45,27 @@ class TicTacToeEngine(GameEngine):
 
         return True
 
-
-        
-
     def applyMove(self, state: dict, move: TicTacToeMove) -> dict:
+        if state is None or move is None:
+            return state
+
         board = state["board"]
         pos = move.position
         player = state["currentPlayer"]
 
-        board.setCell(pos, player)
+
+        if board.getCell(pos) is None:
+            board.setCell(pos, player)
+
         state["moves"] += 1
 
         players = state["players"]
-        state["currentPlayer"] = players[1] if player == players[0] else players[0]
+
+
+        if player == players[0]:
+            state["currentPlayer"] = players[1]
+        else:
+            state["currentPlayer"] = players[0]
 
         return state
 
