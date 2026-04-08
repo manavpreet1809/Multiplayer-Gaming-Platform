@@ -141,6 +141,9 @@ class ChessEngine(GameEngine):
         }
 
     def isLegalMove(self, state: dict, move: ChessMove, piece: ChessPiece, target: Optional[ChessPiece]) -> bool:
+        if state is None or move is None or piece is None:
+            return False
+
         board = state["board"]
         # change in row/ col (delta row, delta column)
         dr = move.toPos.row - move.fromPos.row
