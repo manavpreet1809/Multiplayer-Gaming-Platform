@@ -28,6 +28,9 @@ class ChessEngine(GameEngine):
         if state is None or move is None:
             return False
 
+        if "board" not in state or "activeColor" not in state:
+            return False
+
         board = state["board"]
         piece = board.getPiece(move.fromPos)
         target = board.getPiece(move.toPos)
