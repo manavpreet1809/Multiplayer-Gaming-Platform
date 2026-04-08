@@ -20,6 +20,9 @@ class ValidationPipeline:
                 "result": None
             }
 
+        if isinstance(move, dict):
+            move = self.engine.deserializeMove(move, state)
+
         if not self.engine.validateMove(state, move):
             return {
                 "success": False,
