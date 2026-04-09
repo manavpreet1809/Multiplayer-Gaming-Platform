@@ -1,63 +1,64 @@
+import os
+
+# Must run before app.services.authServices (imported via app.main) reads SECRET_KEY.
+if not os.environ.get("SECRET_KEY") or os.environ.get("SECRET_KEY") == "CHANGE_ME_TO_A_LONG_RANDOM_SECRET":
+    os.environ["SECRET_KEY"] = "pytest-only-secret-key-do-not-use-in-production-0123456789ab"
+
 import pytest
 from typing import AsyncGenerator
 from contextlib import asynccontextmanager
 from pymongo import AsyncMongoClient
 
-# Import the app and modules to patch
+import app.services.authServices as auth_services
+
+# Before app.main loads route modules, neutralize SlowAPI (many logins → 429 otherwise).
+auth_services.limiter.limit = lambda *args, **kwargs: (lambda f: f)
+
 from app.main import app
-from app.db import validUser_mongo
+from app.db import mongo as mongo_mod
+from app.db import usersRepo
 from app.services import authServices
+
 
 @pytest.fixture(scope="session", autouse=True)
 def patch_lifespan():
     """
     Patch the FastAPI lifespan to re-initialize the MongoDB client
     inside the event loop that TestClient/FastAPI runs in.
-    This is to fix 'RuntimeError: Cannot use AsyncMongoClient in different event loop'
-    This error comes up if tests ran without re-initializing the MongoDB client.
+    This fixes 'RuntimeError: Cannot use AsyncMongoClient in different event loop'.
     """
-    
-    # Store the original lifespan context manager
     original_lifespan = app.router.lifespan_context
 
     @asynccontextmanager
     async def new_lifespan_wrapper(app_instance) -> AsyncGenerator[None, None]:
-        # We are now inside the correct running loop.
-        
-        # 1. Initialize a new AsyncMongoClient in this loop
-        #    Use the same URL and DB name from the module
-        new_client = AsyncMongoClient(validUser_mongo.MONGODB_URL)
-        new_db = new_client[validUser_mongo.DB_NAME]
-        
-        # 2. Patch the module-level variables in validUser_mongo
-        #    so that create_indexes and other functions use the new client.
-        old_client = validUser_mongo.client
-        validUser_mongo.client = new_client
-        validUser_mongo.db = new_db
-        validUser_mongo.users_collection = new_db["users"]
-        validUser_mongo.revoked_tokens_collection = new_db["revoked_tokens"]
+        new_client = AsyncMongoClient(mongo_mod.MONGODB_URL)
+        new_db = new_client[mongo_mod.DB_NAME]
 
-        # Patch close_mongo_connection to an async no-op since we close manually below.
-        # Must overwrite in both validUser_mongo (source) and main (where it's imported).
-        async def _noop(): pass
-        validUser_mongo.close_mongo_connection = _noop
-        import app.main
-        app.main.close_mongo_connection = _noop
-        
-        # 3. Patch authServices because it imports these collections directly
-        authServices.users_collection = validUser_mongo.users_collection
-        authServices.revoked_tokens_collection = validUser_mongo.revoked_tokens_collection
-        
+        old_client = mongo_mod.client
+        mongo_mod.client = new_client
+        mongo_mod.db = new_db
+
+        usersRepo.users_collection = new_db["users"]
+        usersRepo.revoked_tokens_collection = new_db["revoked_tokens"]
+
+        async def _noop():
+            pass
+
+        mongo_mod.close_mongo_connection = _noop
+        usersRepo.close_mongo_connection = _noop
+        import app.main as main_mod
+
+        main_mod.close_mongo_connection = _noop
+
+        authServices.users_collection = usersRepo.users_collection
+        authServices.revoked_tokens_collection = usersRepo.revoked_tokens_collection
+
         try:
-            # 4. Delegate to the original lifespan (which calls create_indexes)
             async with original_lifespan(app_instance) as state:
                 yield state
         finally:
-            # 5. Cleanup
-            # Note: validUser_mongo.close_mongo_connection() in main.py tries to close the client too,
-            # but usually fails to await it. We ensure proper closure here.
+            mongo_mod.client = old_client
             await new_client.close()
 
-    # Apply the patch
     app.router.lifespan_context = new_lifespan_wrapper
     yield
