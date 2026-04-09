@@ -26,7 +26,8 @@ Install mongo db server, add mongod.exe to system path or navigate to this direc
 Then run the following in a new cmd
 ```
 cd C:\Program Files\MongoDB\Server\8.2\bin
-mongod.exe
+mkdir C:\data\db
+mongod --dbpath C:\data\db
 ```
 
 #### 2. Create .env in project root directory with following contents:
