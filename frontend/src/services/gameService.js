@@ -75,8 +75,11 @@ export async function createGameWebSocket(gameId, onMessage, onOpen, onClose, on
   if (!token) {
     throw new Error('Not authenticated. Please log in again.');
   }
-  const ws = new WebSocket(`${WS_BASE}/games/ws/${gameId}?token=${encodeURIComponent(token)}`);
-  ws.onopen = () => onOpen && onOpen();
+  const ws = new WebSocket(`${WS_BASE}/games/ws/${gameId}`);
+  ws.onopen = () => {
+    ws.send(JSON.stringify({ type: 'auth', token }));
+    if (onOpen) onOpen();
+  };
   ws.onmessage = (e) => {
     try {
       onMessage(JSON.parse(e.data));
@@ -115,8 +118,11 @@ export async function createGlobalChatWebSocket(onMessage, onOpen, onClose, onEr
   if (!token) {
     throw new Error('Not authenticated. Please log in again.');
   }
-  const ws = new WebSocket(`${WS_BASE}/games/chat/global?token=${encodeURIComponent(token)}`);
-  ws.onopen = () => onOpen && onOpen();
+  const ws = new WebSocket(`${WS_BASE}/games/chat/global`);
+  ws.onopen = () => {
+    ws.send(JSON.stringify({ type: 'auth', token }));
+    if (onOpen) onOpen();
+  };
   ws.onmessage = (e) => {
     try {
       onMessage(JSON.parse(e.data));
