@@ -78,7 +78,7 @@ REFRESH_TOKEN_EXPIRE_DAYS=7
 ### Run the server
 
 ```bash
-uvicorn src.app.main:app --reload
+PYTHONPATH=src uvicorn app.main:app --reload
 ```
 
 API will be available at `http://localhost:8000`.  
