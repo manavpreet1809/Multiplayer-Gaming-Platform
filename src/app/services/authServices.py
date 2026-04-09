@@ -227,6 +227,43 @@ async def authenticate_user(username: str, password: str) -> UserInDB | None:
     return user
 
 
+async def get_current_user_from_token(token: str) -> UserPublic:
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+    )
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        if payload.get("type") != "access":
+            raise credentials_exception
+
+        username: str | None = payload.get("sub")
+        jti: str | None = payload.get("jti")
+        if username is None or jti is None:
+            raise credentials_exception
+
+        if await is_token_revoked(jti):
+            raise credentials_exception
+
+        token_data = TokenData(username=username, jti=jti)
+    except InvalidTokenError:
+        raise credentials_exception
+
+    user = await get_user_by_username(token_data.username)
+    if user is None:
+        raise credentials_exception
+
+    if user.disabled:
+        raise HTTPException(status_code=400, detail="Inactive user")
+
+    return UserPublic(
+        username=user.username,
+        email=user.email,
+        full_name=user.full_name,
+        disabled=user.disabled,
+    )
+
+
 async def get_current_user(
     token: Annotated[str, Depends(oauth2_scheme)],
 ) -> UserPublic:

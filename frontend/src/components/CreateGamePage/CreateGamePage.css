@@ -1,0 +1,93 @@
+.create-game-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: var(--color-bg, #f5f5f5);
+  padding: 2rem;
+}
+
+.create-game-card {
+  background: white;
+  border-radius: 8px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.create-game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.create-game-header h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  color: var(--color-primary, #2c3e50);
+}
+
+.create-game-back {
+  background: none;
+  border: 1px solid var(--color-secondary, #ccc);
+  border-radius: 4px;
+  padding: 0.35rem 0.75rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: var(--color-primary, #2c3e50);
+}
+
+.create-game-error {
+  color: var(--color-error, #c0392b);
+  background: var(--color-error-bg, #fdf0ef);
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+}
+
+.create-game-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.create-game-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.create-game-field label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-muted, #666);
+}
+
+.create-game-field select {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-secondary, #ccc);
+  border-radius: 4px;
+  font-size: 1rem;
+  background: white;
+  cursor: pointer;
+}
+
+.create-game-submit {
+  padding: 0.65rem;
+  background: var(--color-primary, #2c3e50);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+
+.create-game-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

@@ -36,3 +36,4 @@ app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 app.include_router(auth_router)
+app.include_router(games_router)
