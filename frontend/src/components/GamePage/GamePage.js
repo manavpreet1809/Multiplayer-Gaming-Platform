@@ -11,6 +11,7 @@ import {
   createGameWebSocket,
   sendMove,
   sendGameChat,
+  sendSelectPiece,
 } from '../../services/gameService';
 import { buildChessMove, buildTttMove, chessStateToProps, tttStateToProps, endResultToProps } from '../../adapters/gameAdapters';
 import './GamePage.css';
@@ -30,6 +31,7 @@ function GamePage() {
 
   // Chess interaction state
   const [selectedSquare, setSelectedSquare] = useState(null);
+  const [highlightedSquares, setHighlightedSquares] = useState([]);
   const [lastMove, setLastMove] = useState(null);
 
   // In-game chat
@@ -91,6 +93,8 @@ function GamePage() {
             if (msg.type === 'state') {
               const state = msg.state;
               setEngineState(state);
+              setSelectedSquare(null);
+              setHighlightedSquares([]);
               const inferredType = state?.activeColor ? 'chess' : state?.currentPlayer ? 'tictactoe' : null;
               if (inferredType && !gameType) setGameType(inferredType);
 
@@ -105,6 +109,8 @@ function GamePage() {
                 setError('');
               }
               if (msg.result) setEndResult(msg.result);
+            } else if (msg.type === 'legal_moves') {
+              setHighlightedSquares(msg.moves || []);
             } else if (msg.type === 'game_over') {
               setEndResult(msg.result);
             } else if (msg.type === 'chat') {
@@ -121,6 +127,7 @@ function GamePage() {
                 setError(msg.error);
               }
               setSelectedSquare(null);
+              setHighlightedSquares([]);
             }
           },
           undefined,
@@ -157,18 +164,21 @@ function GamePage() {
     if (!selectedSquare) {
       if (!isOwnPiece) return;
       setSelectedSquare({ row, col });
+      sendSelectPiece(wsRef.current, row, col);
       return;
     }
 
     // If clicked the same square, deselect
     if (selectedSquare.row === row && selectedSquare.col === col) {
       setSelectedSquare(null);
+      setHighlightedSquares([]);
       return;
     }
 
     // Clicking another of your own pieces changes selection instead of attempting a move.
     if (isOwnPiece) {
       setSelectedSquare({ row, col });
+      sendSelectPiece(wsRef.current, row, col);
       return;
     }
 
@@ -179,6 +189,7 @@ function GamePage() {
     );
     sendMove(wsRef.current, move);
     setSelectedSquare(null);
+    setHighlightedSquares([]);
   };
 
   // ---- TicTacToe cell click handler ----
@@ -228,6 +239,7 @@ function GamePage() {
         <ChessBoard
           {...chessStateToProps(engineState, playerColor, {
             selectedSquare,
+            highlightedSquares,
             lastMove,
           })}
           onSquareClick={handleChessSquareClick}

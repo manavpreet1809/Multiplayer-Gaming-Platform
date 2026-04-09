@@ -102,6 +102,16 @@ export function sendMove(ws, movePayload) {
 }
 
 /**
+ * Request legal moves for the piece at (row, col) over the game WebSocket.
+ * Server responds with a "legal_moves" message.
+ */
+export function sendSelectPiece(ws, row, col) {
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    ws.send(JSON.stringify({ type: 'select_piece', position: { row, col } }));
+  }
+}
+
+/**
  * Send a lobby/game chat message over the game WebSocket.
  */
 export function sendGameChat(ws, text) {
