@@ -1,6 +1,6 @@
 import os
 import sys
-from unittest.mock import AsyncMock, Mock
+from unittest.mock import AsyncMock
 
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
@@ -8,7 +8,7 @@ from fastapi.testclient import TestClient
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..")))
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-import src.app.main as main_module
+import app.main as main_module
 
 
 def test_main_import_exposes_fastapi_app():
@@ -17,7 +17,7 @@ def test_main_import_exposes_fastapi_app():
 
 def test_lifespan_hooks_run_without_crashing(monkeypatch):
     fake_create_indexes = AsyncMock()
-    fake_close_connection = Mock()
+    fake_close_connection = AsyncMock()
 
     monkeypatch.setattr(main_module, "create_indexes", fake_create_indexes)
     monkeypatch.setattr(main_module, "close_mongo_connection", fake_close_connection)
@@ -32,7 +32,7 @@ def test_lifespan_hooks_run_without_crashing(monkeypatch):
 
 def test_openapi_status_endpoint_returns_ok(monkeypatch):
     monkeypatch.setattr(main_module, "create_indexes", AsyncMock())
-    monkeypatch.setattr(main_module, "close_mongo_connection", Mock())
+    monkeypatch.setattr(main_module, "close_mongo_connection", AsyncMock())
 
     with TestClient(main_module.app) as client:
         response = client.get("/openapi.json")

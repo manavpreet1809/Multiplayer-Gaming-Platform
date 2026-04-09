@@ -7,10 +7,10 @@ from datetime import datetime as real_datetime, timezone
 from fastapi.testclient import TestClient
 
 # Add the parent directory to the path to import ConnectionManager
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../app")))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../app/db")))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../app/models")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../app/models")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../app/db")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../app")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 from app.db.ConnectionManager import ConnectionManager
 import server as websocket_server
 

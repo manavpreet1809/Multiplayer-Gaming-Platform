@@ -11,10 +11,10 @@ pytestmark = pytest.mark.filterwarnings(
 	"ignore:datetime\\.datetime\\.utcnow\\(\\) is deprecated.*:DeprecationWarning"
 )
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../app")))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../app/db")))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../app/models")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../app/models")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../app/db")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../app")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 import GamesRepository as games_repo_module
 import usersRepo as users_repo_module

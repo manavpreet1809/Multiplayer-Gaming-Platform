@@ -6,11 +6,11 @@ from fastapi import HTTPException
 from pymongo.errors import DuplicateKeyError
 from pydantic import ValidationError
 from fastapi.testclient import TestClient
-from src.app.main import app
-from src.app.services.authServices import create_access_token, create_refresh_token
-from src.app.schemas.auth import UserCreate, UserInDB
-from src.app.services import authServices
-from src.app.services.authServices import limiter
+from app.main import app
+from app.services.authServices import create_access_token, create_refresh_token
+from app.schemas.auth import UserCreate, UserInDB
+from app.services import authServices
+from app.services.authServices import limiter
 import random
 import string
 
@@ -431,7 +431,7 @@ def test_me_with_disabled_user_returns_400(monkeypatch):
         )
 
     monkeypatch.setattr(
-        "src.app.services.authServices.get_user_by_username",
+        "app.services.authServices.get_user_by_username",
         fake_get_user_by_username,
     )
 
@@ -454,7 +454,7 @@ def test_me_with_deleted_user_returns_401(monkeypatch):
         return None
 
     monkeypatch.setattr(
-        "src.app.services.authServices.get_user_by_username",
+        "app.services.authServices.get_user_by_username",
         fake_get_user_by_username,
     )
 
