@@ -15,6 +15,24 @@ let refreshToken = null;
 export const getAccessToken = () => accessToken;
 export const getRefreshToken = () => refreshToken;
 
+function parseJwtPayload(token) {
+  if (!token || token.split('.').length < 2) return null;
+  try {
+    const payload = token.split('.')[1];
+    const normalized = payload.replace(/-/g, '+').replace(/_/g, '/');
+    const padded = normalized + '='.repeat((4 - (normalized.length % 4)) % 4);
+    return JSON.parse(atob(padded));
+  } catch {
+    return null;
+  }
+}
+
+function isTokenExpired(token, leewaySeconds = 20) {
+  const payload = parseJwtPayload(token);
+  if (!payload || typeof payload.exp !== 'number') return true;
+  return Date.now() >= ((payload.exp - leewaySeconds) * 1000);
+}
+
 export function setTokens(access, refresh) {
   accessToken = access;
   refreshToken = refresh;
@@ -127,6 +145,25 @@ export async function refresh() {
 
   setTokens(data.access_token, data.refresh_token);
   return data;
+}
+
+/**
+ * Return an access token guaranteed to be present and not near expiry.
+ * Refreshes once if a refresh token is available.
+ */
+export async function getValidAccessToken() {
+  if (!accessToken) {
+    if (!refreshToken) return null;
+    await refresh();
+    return accessToken;
+  }
+
+  if (isTokenExpired(accessToken)) {
+    if (!refreshToken) return null;
+    await refresh();
+  }
+
+  return accessToken;
 }
 
 /**
