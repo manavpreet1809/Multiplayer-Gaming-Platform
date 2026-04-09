@@ -20,6 +20,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, WebSocket, WebSock
 from pydantic import BaseModel
 
 from app.db.ConnectionManager import manager
+from app.db.gamesRepo import save_game_result, get_leaderboard, get_user_stats
 from app.models.Game import Game
 from app.models.GameSettings import GameSettings
 from app.models.GameStatus import GameStatus
@@ -215,12 +216,21 @@ async def leave_game(game_id: str, current_user=Depends(get_current_user)):
     if not game:
         raise HTTPException(status_code=404, detail="Game not found")
     was_in_progress = game.status == GameStatus.IN_PROGRESS
+    remaining = [p for p in game.player_ids if p != current_user.username]
     game.removePlayer(current_user.username)
     if was_in_progress:
         game.status = GameStatus.FINISHED
+        forfeit_winner = remaining[0] if remaining else None
+        await save_game_result(
+            game_id=game.game_id,
+            game_type=game.game_type,
+            players=game.player_ids + [current_user.username],
+            winner=forfeit_winner,
+            result_type="forfeit",
+        )
         await manager.broadcast(game_id, {
             "type": "game_over",
-            "result": {"isOver": True, "result": "forfeit", "winner": None},
+            "result": {"isOver": True, "result": "forfeit", "winner": forfeit_winner},
             "reason": f"{current_user.username} left the game",
         })
     elif game.player_ids:
@@ -236,6 +246,18 @@ async def leave_game(game_id: str, current_user=Depends(get_current_user)):
         _games.pop(game_id, None)
         _lobby_codes.pop(game.lobby_code, None)
     return {"success": True}
+
+
+@router.get("/leaderboard/{game_type}")
+async def leaderboard(game_type: str, current_user=Depends(get_current_user)):
+    if game_type not in ("chess", "tictactoe"):
+        raise HTTPException(status_code=400, detail="game_type must be 'chess' or 'tictactoe'")
+    return await get_leaderboard(game_type)
+
+
+@router.get("/stats/{username}")
+async def user_stats(username: str, current_user=Depends(get_current_user)):
+    return await get_user_stats(username)
 
 
 # ─── WebSocket: per-game room ─────────────────────────────────────────
@@ -297,6 +319,19 @@ async def game_websocket(game_id: str, ws: WebSocket, token: str = Query(...)):
                 if outcome.get("status"):
                     msg["status"] = outcome["status"]
                 await manager.broadcast(game_id, msg)
+
+                # Persist result when game ends
+                if outcome["result"] and outcome["result"].get("isOver"):
+                    r = outcome["result"]
+                    result_type = r.get("result", "win") or "win"
+                    winner = r.get("winner")
+                    await save_game_result(
+                        game_id=game.game_id,
+                        game_type=game.game_type,
+                        players=list(game.player_ids),
+                        winner=winner,
+                        result_type=result_type,
+                    )
 
             elif msg_type == "chat":
                 text = str(data.get("text", "")).strip()[:500]

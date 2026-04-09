@@ -1,4 +1,5 @@
 from app.db.mongo import db, close_mongo_connection
+from app.db.gamesRepo import create_game_indexes
 from pymongo import IndexModel, ASCENDING
 
 users_collection = db["users"]
@@ -17,3 +18,5 @@ async def create_indexes():
         # Mongo auto-deletes the document once `expires_at` is reached
         IndexModel([("expires_at", ASCENDING)], expireAfterSeconds=0),
     ])
+
+    await create_game_indexes()

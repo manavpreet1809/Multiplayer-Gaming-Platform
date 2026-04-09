@@ -54,6 +54,14 @@ export function leaveGame(gameId) {
   return authFetch(`/games/${gameId}/leave`, { method: 'POST' });
 }
 
+export function getLeaderboard(gameType) {
+  return authFetch(`/games/leaderboard/${encodeURIComponent(gameType)}`);
+}
+
+export function getUserStats(username) {
+  return authFetch(`/games/stats/${encodeURIComponent(username)}`);
+}
+
 // ─── WebSocket helpers ────────────────────────────────────────────────
 
 /**

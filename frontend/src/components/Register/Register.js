@@ -139,7 +139,7 @@ function Register({ onRegister, onLogin }) {
             onClick={() => navigate("/")}
             disabled={loading}
           >
-            ? "Already have an account? Log in"
+            Already have an account? Log in
           </button>
         </div>
       </form>
