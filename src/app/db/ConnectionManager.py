@@ -5,8 +5,16 @@ class ConnectionManager:
     def __init__(self):
         self.active_connections: Dict[str, Dict[str, WebSocket]] = {}
 
-    async def connect(self, id: str, player_id: str, websocket: WebSocket):
-        await websocket.accept()
+    async def connect(
+        self,
+        id: str,
+        player_id: str,
+        websocket: WebSocket,
+        *,
+        already_accepted: bool = False,
+    ):
+        if not already_accepted:
+            await websocket.accept()
         if id not in self.active_connections:
             self.active_connections[id] = {}
         self.active_connections[id][player_id] = websocket
