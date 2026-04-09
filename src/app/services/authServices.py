@@ -393,4 +393,5 @@ async def get_current_user(
         email=user.email,
         full_name=user.full_name,
         disabled=user.disabled,
+        stats=normalize_stats(user.stats),
     )
