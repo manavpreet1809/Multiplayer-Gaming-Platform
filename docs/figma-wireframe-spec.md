@@ -331,12 +331,12 @@ Use this document as a reference when building wireframes in the [Design Guide](
 │   purple text, lavender border cards         │
 │                                              │
 │  Per-Game Stats (h3)                         │
-│  ┌────────┬──────┬───┬───┬──────┬─────┐     │
-│  │ Game   │Played│ W │ L │ Rank │ MMR │     │
-│  ├────────┼──────┼───┼───┼──────┼─────┤     │
-│  │ Chess  │  7   │ 4 │ 3 │Silver│1200 │     │
-│  │ T-T-T  │  3   │ 2 │ 0 │ Gold │1400 │     │
-│  └────────┴──────┴───┴───┴──────┴─────┘     │
+│  ┌────────┬──────┬───┬───┬───┬──────┬─────┐   │
+│  │ Game   │Played│ W │ L │ T │ Rank │ MMR │   │
+│  ├────────┼──────┼───┼───┼───┼──────┼─────┤   │
+│  │ Chess  │  7   │ 4 │ 3 │ 0 │Silver│1200 │   │
+│  │ T-T-T  │  3   │ 2 │ 0 │ 1 │ Gold │1400 │   │
+│  └────────┴──────┴───┴───┴───┴──────┴─────┘   │
 │   header: light purple bg, purple text       │
 │                                              │
 │  [Edit Account Settings btn]                 │
@@ -357,13 +357,14 @@ Use this document as a reference when building wireframes in the [Design Guide](
 │   active tab: purple bg + white text         │
 │   inactive: white bg, lavender border        │
 │                                              │
-│  ┌───┬──────────┬──────┬─────┬─────┐        │
-│  │ # │ Player   │ Rank │ MMR │ W/L │        │
-│  ├───┼──────────┼──────┼─────┼─────┤        │
-│  │ 1 │ master   │ Gold │1800 │50/10│        │
-│  │ 2 │ player1  │Silver│1200 │30/20│  ← mint bg (current user)
-│  │ 3 │ newbie   │Bronze│ 900 │10/15│        │
-│  └───┴──────────┴──────┴─────┴─────┘        │
+│  ┌───┬──────────┬──────┬─────┬──────┐       │
+│  │ # │ Player   │ Rank │ MMR │ W/L/T│       │
+│  ├───┼──────────┼──────┼─────┼──────┤        │
+│  │ 1 │ master   │ Gold │1800 │50/8/2│       │
+│  │ 2 │ player1  │Silver│1200 │30/18/2│ ← mint (current user)
+│  │ 3 │ newbie   │Bronze│ 900 │10/12/3│      │
+│  └───┴──────────┴──────┴─────┴──────┘        │
+│   (# = standings place; Rank column = tier)  │
 │                                              │
 │  "Play more games to appear..."  (if unranked)
 └──────────────────────────────────────────────┘
