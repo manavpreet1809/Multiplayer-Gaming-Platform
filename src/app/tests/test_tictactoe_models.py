@@ -60,14 +60,6 @@ def test_board_set_o():
     assert cell == "O"
     assert cell != "X"
 
-@pytest.mark.skip(reason="written before validation was implemented - test_board_fully_filled covers the real game scenario after validation was added")
-def test_board_full_when_filled():
-    # checks if board is full when all 9 cells are filled, only checks if isFull returns true when board is full, logic not considered because validation is not implemented
-    board = TicTacToeBoard()
-    for row in range(3):
-        for col in range(3):
-            board.setCell(TicTacToePosition(row, col), "X")
-    assert board.isFull() == True
 
 def test_board_fully_filled():
     # checks if board is full when all 9 cells are filled with alternating X and O
