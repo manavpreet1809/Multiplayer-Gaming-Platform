@@ -112,3 +112,79 @@ def test_no_mutation():
     move = TicTacToeMove(TicTacToePosition(0, 0))
     engine.applyMove(state, move)
     assert state["board"].getCell(TicTacToePosition(0, 0)) is None
+
+
+# evaluate all winning conditions
+def test_win_top_row():
+    # checks if win is detected when top row is filled by same player
+    # Alice wins with top row: (0,0)(0,1)(0,2)
+    engine, state = make_engine_and_state()
+    state = apply_moves(engine, state, [(0,0),(1,0),(0,1),(1,1),(0,2)])
+    result = engine.evaluateEnd(state)
+    assert result is not None
+    assert result["isOver"] == True
+    assert result["result"] == "win"
+    assert result["winner"] == "Alice"
+
+def test_win_middle_row():
+    # Bob wins with middle row
+    engine, state = make_engine_and_state()
+    state = apply_moves(engine, state, [(0,0),(1,0),(2,0),(1,1),(0,1),(1,2)])
+    result = engine.evaluateEnd(state)
+    assert result is not None
+    assert result["isOver"] == True
+    assert result["result"] == "win"
+    assert result["winner"] == "Bob"
+
+def test_win_left_column():
+    engine, state = make_engine_and_state()
+    # Alice wins with left column
+    state = apply_moves(engine, state, [(0,0),(0,1),(1,0),(1,1),(2,0)])
+    result = engine.evaluateEnd(state)
+    assert result is not None
+    assert result["result"] == "win"
+    assert result["winner"] == "Alice"
+
+def test_win_right_column():
+    engine, state = make_engine_and_state()
+    # Alice wins with right column
+    state = apply_moves(engine, state, [(0,2),(0,0),(1,2),(1,0),(2,2)])
+    result = engine.evaluateEnd(state)
+    assert result is not None
+    assert result["result"] == "win"
+    assert result["winner"] == "Alice"
+
+def test_win_main_diagonal():
+    # checks if win is detected on main diagonal (top-left to bottom-right)
+    engine, state = make_engine_and_state()
+    # Alice wins with main diagonal
+    state = apply_moves(engine, state, [(0,0),(0,1),(1,1),(0,2),(2,2)])
+    result = engine.evaluateEnd(state)
+    assert result is not None
+    assert result["isOver"] == True
+    assert result["result"] == "win"
+    assert result["winner"] == "Alice"
+
+def test_win_anti_diagonal():
+    engine, state = make_engine_and_state()
+    # Alice wins with anti diagonal starting from top-right to bottom-left
+    state = apply_moves(engine, state, [(0,2),(0,0),(1,1),(1,0),(2,0)])
+    result = engine.evaluateEnd(state)
+    assert result is not None
+    assert result["result"] == "win"
+    assert result["winner"] == "Alice"
+
+
+# evaluate draw match
+def test_draw_when_board_full():
+    # checks if draw is detected when board is full with no winner
+    engine, state = make_engine_and_state()
+    state = apply_moves(engine, state, [
+        (0,0),(0,1),(0,2),
+        (1,1),(1,0),(1,2),
+        (2,1),(2,0),(2,2)
+    ])
+    result = engine.evaluateEnd(state)
+    assert result is not None
+    assert result["isOver"] == True
+    assert result["result"] == "draw"
