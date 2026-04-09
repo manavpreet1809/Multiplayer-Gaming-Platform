@@ -1,6 +1,5 @@
 **DO NOT USE SAFARI**
 
-
 ## Tech Stack
 
 - Database: MongoDB
@@ -29,17 +28,179 @@
 
 ---
 
-## 2. Run the Project
+## 2. Run the Project Locally
 
-Use the section for your OS. All paths assume the **repository root** (the folder that contains `frontend/`, `src/`, and `requirements.txt`).
+These instructions assume you are in the **repository root** (the folder that contains `frontend/`, `src/`, and `requirements.txt`).
 
-**Quick start (optional):** from the repo root, **macOS** can run `./scripts/dev-macos.sh` (starts MongoDB if port 27017 is free, then uvicorn, then `npm start` in the foreground). **Windows (PowerShell):** `.\scripts\dev-windows.ps1`. Requires existing `.venv` and dependencies; set `SKIP_MONGO=1` if MongoDB is already running. Override the data directory with `MONGO_DATA` if needed.
+### 2.1 Create `.env`
 
-### macOS
+Create a file named `.env` in the repository root with the values shown in [Shared `.env` contents](#shared-env-contents).
+
+> `SECRET_KEY` must be set before the backend can start successfully.
+
+### 2.2 Install dependencies
+
+From the repository root:
+
+#### macOS / Linux
 
 ```bash
-cd "/path/to/seng300-202601-pg-3"
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+cd frontend
+npm install
 ```
+
+#### Windows PowerShell
+
+```powershell
+py -3.11 -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+cd frontend
+npm install
+```
+
+If `py` is unavailable, use `python -m venv .venv` instead.
+
+### 2.3 Start the backend
+
+Open a new terminal, go to the repository root, activate the Python virtual environment, then start Uvicorn.
+
+#### macOS / Linux
+
+```bash
+cd /path/to/seng300-202601-pg-3
+source .venv/bin/activate
+export PYTHONPATH=src
+uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+#### Windows PowerShell
+
+```powershell
+cd C:\path\to\seng300-202601-pg-3
+.venv\Scripts\Activate.ps1
+$env:PYTHONPATH = 'src'
+uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+If `uvicorn` is not found, run it explicitly with Python:
+
+```powershell
+.\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+Backend URLs:
+
+- API: `http://localhost:8000`
+- Docs: `http://localhost:8000/docs`
+
+### 2.4 Start the frontend
+
+Open a second terminal and run:
+
+```bash
+cd frontend
+npm start
+```
+
+The frontend will usually open at `http://localhost:3000`. If port `3000` is already in use, React will offer to run on an alternate port such as `3001`.
+
+### 2.5 Quick start script
+
+You can also use the repository helper script to start MongoDB (if needed), the backend, and the frontend together.
+
+These scripts are located in `scripts/` and will:
+
+- start MongoDB if port `27017` is free,
+- launch the FastAPI backend with `uvicorn`, and
+- start the React frontend with `npm start`.
+
+The scripts assume a working `.venv` and `.env` file. If `frontend/node_modules` is missing, the macOS script will install frontend dependencies automatically.
+
+#### macOS / Linux
+
+```bash
+cd /path/to/seng300-202601-pg-3
+./scripts/dev-macos.sh
+```
+
+#### Windows PowerShell
+
+```powershell
+cd C:\path\to\seng300-202601-pg-3
+.\scripts\dev-windows.ps1
+```
+
+The helper scripts expect a working `.venv` and `.env` file.
+
+If MongoDB is already running, add `SKIP_MONGO=1` before the command:
+
+```bash
+SKIP_MONGO=1 ./scripts/dev-macos.sh
+```
+
+```powershell
+$env:SKIP_MONGO = '1'; .\scripts\dev-windows.ps1
+```
+
+To use a custom MongoDB data directory, set `MONGO_DATA`.
+
+### 2.6 Start MongoDB manually (if needed)
+
+If you are not using the helper script, start MongoDB in a separate terminal:
+
+#### macOS / Linux
+
+```bash
+mkdir -p ~/mongodb-data
+mongod --dbpath ~/mongodb-data
+```
+
+#### Windows PowerShell
+
+```powershell
+cd "C:\Program Files\MongoDB\Server\<version>\bin"
+.\mongod.exe
+```
+
+Then run the backend as shown above.
+
+### 2.7 Quick troubleshooting
+
+- `.env` must exist in the repository root.
+- The Python virtual environment must be activated before starting the backend.
+- `PYTHONPATH=src` is required because the backend imports `app` from `src`.
+- If port `3000` is busy, use the alternate React port that is offered.
+
+---
+
+### Shared `.env` contents
+
+Create a file named `.env` in the **project root** with:
+
+```bash
+# Generate SECRET_KEY with:
+# python3 -c "import secrets; print(secrets.token_hex(32))"
+#   (Windows: py -c "import secrets; print(secrets.token_hex(32))")
+SECRET_KEY=
+
+# MongoDB
+MONGODB_URL=mongodb://localhost:27017
+DB_NAME=myapp
+
+# Token expiry
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+REFRESH_TOKEN_EXPIRE_DAYS=7
+```
+
+> **Important:** Set a real `SECRET_KEY` before starting the app. Do not commit `.env`.
+
+---
+
+## 3. Build the App
 
 #### Backend (FastAPI)
 
@@ -97,7 +258,7 @@ cd "/path/to/seng300-202601-pg-3"
    PYTHONPATH=src uvicorn app.main:app --reload
    ```
 
-   - API: [http://localhost:8000](http://localhost:8000)  
+   - API: [http://localhost:8000](http://localhost:8000)
    - Docs: [http://localhost:8000/docs](http://localhost:8000/docs)
 
 #### Frontend (React)
@@ -138,7 +299,6 @@ cd C:\path\to\seng300-202601-pg-3
    ```
 
 3. **MongoDB**
-
    - Install MongoDB Community and add the **bin** folder to your **PATH**, **or** run `mongod.exe` from the install directory (version varies), for example:
 
    ```powershell
@@ -157,7 +317,7 @@ cd C:\path\to\seng300-202601-pg-3
    uvicorn app.main:app --reload
    ```
 
-   - API: [http://localhost:8000](http://localhost:8000)  
+   - API: [http://localhost:8000](http://localhost:8000)
    - Docs: [http://localhost:8000/docs](http://localhost:8000/docs)
 
 #### Frontend (React)
