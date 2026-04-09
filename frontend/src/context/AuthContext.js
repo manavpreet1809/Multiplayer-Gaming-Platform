@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useCallback } from "react";
 import { getMe, getAccessToken, clearTokens } from "../services/authService";
 
 export const AuthContext = createContext();
@@ -30,13 +30,13 @@ export function AuthProvider({ children }) {
     };
   }, []);
 
-  const login = (userData) => {
+  const login = useCallback((userData) => {
     setUser(userData);
-  };
+  }, []);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     setUser(null);
-  };
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, login, logout, restoring }}>

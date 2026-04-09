@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
  *   gameTypes              – array of game type strings (e.g. ["Connect 4", "Tic-Tac-Toe", "Checkers", "Overall"])
  *   selectedGameType       – currently selected game type
  *   onSelectGameType(type) – switch the displayed leaderboard
- *   rankings               – array of { rank, username, tier, mmr, wins, losses }
+ *   rankings               – array of { place, username, tier, mmr, wins, losses, ties?, rank? }
  *   currentUsername         – logged-in player's username (to highlight their row)
  */
 function Leaderboard({
@@ -19,7 +19,6 @@ function Leaderboard({
   currentUsername,
 }) {
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
 
   return (
     <div className="leaderboard">
@@ -58,25 +57,25 @@ function Leaderboard({
               <th scope="col">Player</th>
               <th scope="col">Rank</th>
               <th scope="col">MMR</th>
-              <th scope="col">W/L</th>
+              <th scope="col">W/L/T</th>
             </tr>
           </thead>
           <tbody>
-            {rankings.map((entry) => (
+            {rankings.map((entry, index) => (
               <tr
-                key={entry.rank}
+                key={`${entry.username}-${entry.place ?? index}`}
                 className={
                   entry.username === currentUsername
                     ? "leaderboard-row--current"
                     : ""
                 }
               >
-                <td>{entry.rank}</td>
+                <td>{entry.place ?? index + 1}</td>
                 <td>{entry.username}</td>
-                <td>{entry.tier}</td>
+                <td>{entry.tier ?? entry.rank}</td>
                 <td>{entry.mmr}</td>
                 <td>
-                  {entry.wins}/{entry.losses}
+                  {entry.wins}/{entry.losses}/{entry.ties ?? 0}
                 </td>
               </tr>
             ))}

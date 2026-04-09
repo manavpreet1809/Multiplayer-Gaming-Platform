@@ -7,6 +7,7 @@ import { AuthContext } from "../../context/AuthContext";
  * Profile component (UC-09).
  *
  * Props:
+ *   username, email  – optional display fallbacks when AuthContext.user is absent (e.g. screenshot page)
  *   generalStats    – { gamesPlayed, wins, losses, ties }
  *   gameStats       – array of { gameType, gamesPlayed, wins, losses, rank, mmr }
  *   onEditSettings()– navigate to account settings (UC-10)
@@ -15,9 +16,14 @@ function Profile({
   generalStats,
   gameStats,
   onEditSettings,
+  username: usernameProp,
+  email: emailProp,
 }) {
-  const { user } = useContext(AuthContext);
+  const ctx = useContext(AuthContext);
+  const user = ctx?.user;
   const navigate = useNavigate();
+  const displayUsername = user?.username ?? usernameProp ?? "";
+  const displayEmail = user?.email ?? emailProp ?? "";
 
   const inheritedGeneral = user?.stats?.overall || {};
   const general = {
@@ -29,14 +35,20 @@ function Profile({
   };
 
   const gameStatsFromUser = user?.stats?.games
-    ? Object.entries(user.stats.games).map(([gameType, stats]) => ({
-        gameType: gameType === "tictactoe" ? "Tic-Tac-Toe" : gameType.charAt(0).toUpperCase() + gameType.slice(1),
-        gamesPlayed: stats.games_played ?? stats.gamesPlayed ?? 0,
-        wins: stats.wins ?? 0,
-        losses: stats.losses ?? 0,
-        rank: stats.rank || "Bronze",
-        mmr: stats.mmr ?? 0,
-      }))
+    ? Object.entries(user.stats.games)
+        .map(([gameType, stats]) => ({
+          gameType:
+            gameType === "tictactoe"
+              ? "Tic-Tac-Toe"
+              : gameType.charAt(0).toUpperCase() + gameType.slice(1),
+          gamesPlayed: stats.games_played ?? stats.gamesPlayed ?? 0,
+          wins: stats.wins ?? 0,
+          losses: stats.losses ?? 0,
+          ties: stats.ties ?? 0,
+          rank: stats.rank || "Bronze",
+          mmr: stats.mmr ?? 0,
+        }))
+        .filter((row) => row.gamesPlayed > 0)
     : [];
 
   const displayGameStats = gameStats?.length > 0 ? gameStats : gameStatsFromUser;
@@ -55,11 +67,11 @@ function Profile({
       <section className="profile-info">
         <div className="profile-field">
           <span className="profile-field-label">Username</span>
-          <span className="profile-field-value">{user.username}</span>
+          <span className="profile-field-value">{displayUsername}</span>
         </div>
         <div className="profile-field">
           <span className="profile-field-label">Email</span>
-          <span className="profile-field-value">{user.email}</span>
+          <span className="profile-field-value">{displayEmail}</span>
         </div>
       </section>
 
@@ -101,6 +113,7 @@ function Profile({
                 <th scope="col">Played</th>
                 <th scope="col">W</th>
                 <th scope="col">L</th>
+                <th scope="col">T</th>
                 <th scope="col">Rank</th>
                 <th scope="col">MMR</th>
               </tr>
@@ -112,6 +125,7 @@ function Profile({
                   <td>{gs.gamesPlayed}</td>
                   <td>{gs.wins}</td>
                   <td>{gs.losses}</td>
+                  <td>{gs.ties ?? 0}</td>
                   <td>{gs.rank}</td>
                   <td>{gs.mmr}</td>
                 </tr>
