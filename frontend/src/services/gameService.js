@@ -54,6 +54,10 @@ export function leaveGame(gameId) {
   return authFetch(`/games/${gameId}/leave`, { method: 'POST' });
 }
 
+export function getLeaderboard(gameType = 'overall') {
+  return authFetch(`/games/leaderboard?game_type=${encodeURIComponent(gameType)}`);
+}
+
 // ─── WebSocket helpers ────────────────────────────────────────────────
 
 /**
