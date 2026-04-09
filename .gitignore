@@ -3,6 +3,9 @@ target/
 !**/src/test/**/target/
 .kotlin
 
+### Environment Files ###
+.env
+
 ### python cache ###
 __pycache__/
 *.pyc
@@ -19,6 +22,9 @@ out/
 
 ### Mac OS ###
 .DS_Store
+
+# Python cache files
+__pycache__/
 
 # --- Logs ---
 *.log
