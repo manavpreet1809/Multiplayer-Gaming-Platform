@@ -3,7 +3,11 @@ import { Navigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 
 function ProtectedRoute({ children }) {
-  const { user } = useContext(AuthContext);
+  const { user, restoring } = useContext(AuthContext);
+
+  if (restoring) {
+    return null;
+  }
 
   if (!user) {
     return <Navigate to="/" replace />;
