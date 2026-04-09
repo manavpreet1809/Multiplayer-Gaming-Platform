@@ -1,14 +1,36 @@
 import React, { useMemo } from 'react';
 import './ChessBoard.css';
 
-/**
- * Unicode symbols for chess pieces.
- * White pieces: King ♔ Queen ♕ Rook ♖ Bishop ♗ Knight ♘ Pawn ♙
- * Black pieces: King ♚ Queen ♛ Rook ♜ Bishop ♝ Knight ♞ Pawn ♟
- */
-const PIECE_SYMBOLS = {
-  K: '\u2654', Q: '\u2655', R: '\u2656', B: '\u2657', N: '\u2658', P: '\u2659',
-  k: '\u265A', q: '\u265B', r: '\u265C', b: '\u265D', n: '\u265E', p: '\u265F',
+import B_Bishop from '../UIAssets/ChessPieces/B_Bishop.svg';
+import B_King from '../UIAssets/ChessPieces/B_King.svg';
+import B_Knight from '../UIAssets/ChessPieces/B_Knight.svg';
+import B_Pawn from '../UIAssets/ChessPieces/B_Pawn.svg';
+import B_Queen from '../UIAssets/ChessPieces/B_Queen.svg';
+import B_Rook from '../UIAssets/ChessPieces/B_Rook.svg';
+import W_Bishop from '../UIAssets/ChessPieces/W_Bishop.svg';
+import W_King from '../UIAssets/ChessPieces/W_King.svg';
+import W_Knight from '../UIAssets/ChessPieces/W_Knight.svg';
+import W_Pawn from '../UIAssets/ChessPieces/W_Pawn.svg';
+import W_Queen from '../UIAssets/ChessPieces/W_Queen.svg';
+import W_Rook from '../UIAssets/ChessPieces/W_Rook.svg';
+
+const PIECE_NAMES = {
+  K: 'king', Q: 'queen', R: 'rook', B: 'bishop', N: 'knight', P: 'pawn',
+};
+
+const PIECE_IMAGES = {
+  K: W_King,
+  Q: W_Queen,
+  R: W_Rook,
+  B: W_Bishop,
+  N: W_Knight,
+  P: W_Pawn,
+  k: B_King,
+  q: B_Queen,
+  r: B_Rook,
+  b: B_Bishop,
+  n: B_Knight,
+  p: B_Pawn,
 };
 
 const FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
@@ -141,7 +163,10 @@ function ChessBoard({
                 >
                   {piece && (
                     <span className={`chess-piece ${isWhitePiece(piece) ? 'chess-piece--white' : 'chess-piece--black'}`}>
-                      {PIECE_SYMBOLS[piece]}
+                      <img
+                        src={PIECE_IMAGES[piece]}
+                        alt={`${isWhitePiece(piece) ? 'White' : 'Black'} ${PIECE_NAMES[piece.toUpperCase()]}`}
+                      />
                     </span>
                   )}
                   {isHighlighted(ri, ci) && !piece && (
