@@ -5,6 +5,7 @@ target/
 
 ### Environment Files ###
 .env
+*.env.local
 
 ### python cache ###
 __pycache__/
@@ -23,8 +24,15 @@ out/
 ### Mac OS ###
 .DS_Store
 
-# Python cache files
+### Python ###
 __pycache__/
+venv/
+.venv/
+env/
+*.pyc
 
-# --- Logs ---
+### Node ###
+node_modules/
+
+### Logs ###
 *.log

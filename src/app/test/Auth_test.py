@@ -14,7 +14,7 @@ from src.app.services.authServices import limiter
 import random
 import string
 
-# --- Helper Function ---
+# --- Helper Functions ---
 def random_string(length=10):
     """Generate a random string for unique usernames/emails."""
     return ''.join(random.choices(string.ascii_letters, k=length))
@@ -301,6 +301,8 @@ def test_register_missing_required_fields():
         })
 
         assert response.status_code == 422
+        detail = response.json()["detail"]
+        assert any("password" in str(e).lower() for e in detail)
 
 
 def test_login_success():
