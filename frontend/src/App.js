@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { AuthProvider, AuthContext } from "./context/AuthContext";
+import { AuthContext } from "./context/AuthContext";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Login from "./components/Login";
 import Register from "./components/Register";
@@ -35,7 +35,7 @@ function App() {
   }
 
   const handleLogin = async (identifier, password) => {
-    const data = await authLogin(identifier, password);
+    await authLogin(identifier, password);
     const user = await getMe();
 
     login(user);

@@ -32,7 +32,6 @@ function GamePage() {
   // Chess interaction state
   const [selectedSquare, setSelectedSquare] = useState(null);
   const [highlightedSquares, setHighlightedSquares] = useState([]);
-  const [lastMove, setLastMove] = useState(null);
 
   // In-game chat
   const [chatMessages, setChatMessages] = useState([]);
@@ -148,6 +147,8 @@ function GamePage() {
       mounted = false;
       if (wsRef.current) wsRef.current.close();
     };
+    // gameType is read inside the WS handler to bootstrap type from state; adding it here would reconnect on every type resolution.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: single WS lifecycle per gameId/user
   }, [gameId, user?.username]);
 
   // ---- Chess square click handler ----
@@ -240,7 +241,6 @@ function GamePage() {
           {...chessStateToProps(engineState, playerColor, {
             selectedSquare,
             highlightedSquares,
-            lastMove,
           })}
           onSquareClick={handleChessSquareClick}
         />
