@@ -79,3 +79,36 @@ def test_all_corners_valid():
         move = TicTacToeMove(TicTacToePosition(row, col))
         assert engine.validateMove(state, move) == True
 
+# apply move
+def test_mark_placed():
+    # checks if the current player's mark is placed on the correct cell
+    engine, state = make_engine_and_state()
+    move = TicTacToeMove(TicTacToePosition(0, 0))
+    new_state = engine.applyMove(state, move)
+    assert new_state["board"].getCell(TicTacToePosition(0, 0)) == "Alice"
+
+def test_player_switches():
+    # checks if current player switches after a move
+    engine, state = make_engine_and_state()
+    move = TicTacToeMove(TicTacToePosition(0, 0))
+    new_state = engine.applyMove(state, move)
+    assert new_state["currentPlayer"] == "Bob"
+
+def test_apply_move_switches_back_to_first_player():
+    # checks if player switches back to first player after two moves
+    engine, state = make_engine_and_state()
+    state = apply_moves(engine, state, [(0,0), (1,1)])
+    assert state["currentPlayer"] == "Alice"
+
+def test_move_counter():
+    # checks if move counter increments after each move
+    engine, state = make_engine_and_state()
+    new_state = engine.applyMove(state, TicTacToeMove(TicTacToePosition(0, 0)))
+    assert new_state["moves"] == 1
+
+def test_no_mutation():
+    # checks if applying a move does not change the original board state
+    engine, state = make_engine_and_state()
+    move = TicTacToeMove(TicTacToePosition(0, 0))
+    engine.applyMove(state, move)
+    assert state["board"].getCell(TicTacToePosition(0, 0)) is None
