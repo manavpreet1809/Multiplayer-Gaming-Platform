@@ -241,7 +241,13 @@ async def leave_game(game_id: str, current_user=Depends(get_current_user)):
 # ─── WebSocket: per-game room ─────────────────────────────────────────
 
 @router.websocket("/ws/{game_id}")
-async def game_websocket(game_id: str, ws: WebSocket, token: str = Query(...)):
+async def game_websocket(game_id: str, ws: WebSocket):
+    token = ws.query_params.get('token')
+    if not token:
+        await ws.accept()
+        await ws.close(code=4001)
+        return
+
     try:
         current_user = await get_current_user_from_token(token)
         print(current_user.username, "connected to game", game_id)
@@ -319,7 +325,13 @@ async def game_websocket(game_id: str, ws: WebSocket, token: str = Query(...)):
 # ─── WebSocket: global chat ───────────────────────────────────────────
 
 @router.websocket("/chat/global")
-async def global_chat_ws(ws: WebSocket, token: str = Query(...)):
+async def global_chat_ws(ws: WebSocket):
+    token = ws.query_params.get('token')
+    if not token:
+        await ws.accept()
+        await ws.close(code=4001)
+        return
+
     try:
         current_user = await get_current_user_from_token(token)
     except Exception:
