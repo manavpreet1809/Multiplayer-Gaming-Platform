@@ -6,7 +6,14 @@ import Register from "./components/Register";
 import Profile from "./components/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import GameBoardDemo from "./components/GameBoardDemo";
-import Dashboard from "./components/Dashboard";
+import DashboardPage from "./components/DashboardPage/DashboardPage";
+import BrowseGamesPage from "./components/BrowseGamesPage/BrowseGamesPage";
+import CreateGamePage from "./components/CreateGamePage/CreateGamePage";
+import JoinGamePage from "./components/JoinGamePage/JoinGamePage";
+import MatchmakePage from "./components/MatchmakePage/MatchmakePage";
+import LobbyPage from "./components/LobbyPage/LobbyPage";
+import GamePage from "./components/GamePage/GamePage";
+import ChatPage from "./components/ChatPage/ChatPage";
 import ScreenshotPage from "./ScreenshotPage";
 import { useNavigate, Routes, Route } from "react-router-dom";
 import { login as authLogin } from "./services/authService";
@@ -73,7 +80,63 @@ function App() {
           path="/dashboard"
           element={
             <ProtectedRoute>
-              <Dashboard />
+              <DashboardPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/browse"
+          element={
+            <ProtectedRoute>
+              <BrowseGamesPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/create-game"
+          element={
+            <ProtectedRoute>
+              <CreateGamePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/join-game"
+          element={
+            <ProtectedRoute>
+              <JoinGamePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/matchmake"
+          element={
+            <ProtectedRoute>
+              <MatchmakePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/lobby/:gameId"
+          element={
+            <ProtectedRoute>
+              <LobbyPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/game/:gameId"
+          element={
+            <ProtectedRoute>
+              <GamePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/chat"
+          element={
+            <ProtectedRoute>
+              <ChatPage />
             </ProtectedRoute>
           }
         />

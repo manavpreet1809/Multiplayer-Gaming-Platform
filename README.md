@@ -21,6 +21,14 @@ MongoDB Compass (local database)
 
 pip install -r requirements.txt
 
+### 1.5 Install Mongo DB Server
+Install mongo db server, add mongod.exe to system path or navigate to this directory
+Then run the following in a new cmd
+```
+cd C:\Program Files\MongoDB\Server\8.2\bin
+mongod.exe
+```
+
 #### 2. Create .env in project root directory with following contents:
 
 \# Generate with: python -c "import secrets; print(secrets.token_hex(32)) and place here"
