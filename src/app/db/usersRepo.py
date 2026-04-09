@@ -1,12 +1,6 @@
-import os
+from app.db.mongo import db, close_mongo_connection
+from pymongo import IndexModel, ASCENDING
 
-from pymongo import AsyncMongoClient, IndexModel, ASCENDING
-
-MONGODB_URL = os.getenv("MONGODB_URL", "mongodb://localhost:27017")
-DB_NAME = os.getenv("DB_NAME", "myapp")
-
-client = AsyncMongoClient(MONGODB_URL)
-db = client[DB_NAME]
 users_collection = db["users"]
 revoked_tokens_collection = db["revoked_tokens"]
 
@@ -23,7 +17,3 @@ async def create_indexes():
         # Mongo auto-deletes the document once `expires_at` is reached
         IndexModel([("expires_at", ASCENDING)], expireAfterSeconds=0),
     ])
-
-
-def close_mongo_connection():
-    client.close()

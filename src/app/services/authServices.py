@@ -12,8 +12,8 @@ from pymongo.errors import DuplicateKeyError
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 
-from src.app.db.validUser_mongo import users_collection, revoked_tokens_collection
-from src.app.schemas.auth import TokenData, UserCreate, UserInDB, UserPublic
+from app.db.usersRepo import users_collection, revoked_tokens_collection
+from app.schemas.auth import TokenData, UserCreate, UserInDB, UserPublic
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -156,6 +156,36 @@ async def get_user_by_username(username: str) -> UserInDB | None:
     )
 
 
+async def get_user_by_identifier(identifier: str) -> UserInDB | None:
+    """Look up a user by username or email."""
+    doc = await users_collection.find_one({
+        "$or": [{"username": identifier}, {"email": identifier}]
+    })
+    if not doc:
+        return None
+    return UserInDB(
+        username=doc["username"],
+        email=doc.get("email"),
+        full_name=doc.get("full_name"),
+        disabled=doc.get("disabled", False),
+        hashed_password=doc["hashed_password"],
+        created_at=doc["created_at"],
+    )
+
+
+async def reset_password(identifier: str, new_password: str) -> None:
+    """Reset a user's password given their username or email."""
+    user = await get_user_by_identifier(identifier)
+    if user is None:
+        raise ValueError("User not found")
+
+    hashed = get_password_hash(new_password)
+    await users_collection.update_one(
+        {"username": user.username},
+        {"$set": {"hashed_password": hashed}},
+    )
+
+
 async def create_user(user: UserCreate) -> UserPublic:
 
 
@@ -195,6 +225,43 @@ async def authenticate_user(username: str, password: str) -> UserInDB | None:
         return None
 
     return user
+
+
+async def get_current_user_from_token(token: str) -> UserPublic:
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+    )
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        if payload.get("type") != "access":
+            raise credentials_exception
+
+        username: str | None = payload.get("sub")
+        jti: str | None = payload.get("jti")
+        if username is None or jti is None:
+            raise credentials_exception
+
+        if await is_token_revoked(jti):
+            raise credentials_exception
+
+        token_data = TokenData(username=username, jti=jti)
+    except InvalidTokenError:
+        raise credentials_exception
+
+    user = await get_user_by_username(token_data.username)
+    if user is None:
+        raise credentials_exception
+
+    if user.disabled:
+        raise HTTPException(status_code=400, detail="Inactive user")
+
+    return UserPublic(
+        username=user.username,
+        email=user.email,
+        full_name=user.full_name,
+        disabled=user.disabled,
+    )
 
 
 async def get_current_user(

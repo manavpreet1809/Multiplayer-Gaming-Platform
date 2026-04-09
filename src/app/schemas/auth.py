@@ -33,6 +33,22 @@ class UserCreate(BaseModel):
 
 
 
+class PasswordResetRequest(BaseModel):
+    identifier: str
+    new_password: str
+
+    @field_validator("new_password")
+    @classmethod
+    def validate_new_password(cls, v: str) -> str:
+        failures = [
+            msg for pattern, msg in PASSWORD_RULES
+            if not re.search(pattern, v)
+        ]
+        if failures:
+            raise ValueError("Password must contain " + ", ".join(failures))
+        return v
+
+
 class TokenData(BaseModel):
     username: str | None = None
     jti: str | None = None

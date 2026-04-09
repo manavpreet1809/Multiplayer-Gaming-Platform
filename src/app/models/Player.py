@@ -1,18 +1,39 @@
-from ConnectionStatus import ConnectionStatus
-from PlayerRole import PlayerRole
+from app.models.ConnectionStatus import ConnectionStatus
+from app.models.PlayerRole import PlayerRole
 
-#TODO: This class appears to be used by Game to track players
+
 class Player:
-    def __init__(self):
-        self.player_id = 21 #TODO stub imported from db
-        self.name = "test" #TODO stub imported from db
-        self.game_id = 124124 #TODO current game id
-        self.connection_status = ConnectionStatus.DISCONNECTED #TODO connection status, prob set by another method
-        self.role = PlayerRole.SPECTATOR #TODO player role, prob set by another method
-        pass
+    def __init__(self, player_id: str, name: str, game_id: str = None, role: PlayerRole = PlayerRole.SPECTATOR):
+        self.player_id: str = player_id
+        self.name: str = name
+        self.game_id: str = game_id
+        self.connection_status: ConnectionStatus = ConnectionStatus.DISCONNECTED
+        self.role: PlayerRole = role
 
     def reconnect(self):
-        pass #TODO
+        self.connection_status = ConnectionStatus.CONNECTED
 
     def disconnect(self):
-        pass #TODO
+        self.connection_status = ConnectionStatus.DISCONNECTED
+
+    def to_dict(self) -> dict:
+        return {
+            "player_id": self.player_id,
+            "name": self.name,
+            "game_id": self.game_id,
+            "connection_status": self.connection_status.value,
+            "role": self.role.value,
+        }
+
+    @staticmethod
+    def from_dict(data: dict) -> "Player":
+        player = Player(
+            player_id=data["player_id"],
+            name=data["name"],
+            game_id=data.get("game_id"),
+            role=PlayerRole(data.get("role", PlayerRole.SPECTATOR.value)),
+        )
+        player.connection_status = ConnectionStatus(
+            data.get("connection_status", ConnectionStatus.DISCONNECTED.value)
+        )
+        return player
