@@ -9,5 +9,5 @@ DB_NAME = os.getenv("DB_NAME", "myapp")
 client = AsyncMongoClient(MONGODB_URL)
 db = client[DB_NAME]
 
-def close_mongo_connection():
-    client.close()
+async def close_mongo_connection():
+    await client.close()
