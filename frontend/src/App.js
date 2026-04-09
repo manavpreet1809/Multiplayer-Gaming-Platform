@@ -3,7 +3,7 @@ import { AuthProvider, AuthContext } from "./context/AuthContext";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import Profile from "./components/Profile";
+import ProfilePage from "./components/Profile/ProfilePage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import GameBoardDemo from "./components/GameBoardDemo";
 import DashboardPage from "./components/DashboardPage/DashboardPage";
@@ -20,7 +20,7 @@ import { login as authLogin } from "./services/authService";
 import { getMe } from "./services/authService";
 import "./App.css";
 import ResetPassword from "./components/ResetPassword";
-import Leaderboard from "./components/Leaderboard";
+import LeaderboardPage from "./components/Leaderboard/LeaderboardPage";
 
 // Render screenshot page when ?screenshots is in the URL
 const isScreenshotMode = new URLSearchParams(window.location.search).has(
@@ -144,7 +144,7 @@ function App() {
           path="/profile"
           element={
             <ProtectedRoute>
-              <Profile />
+              <ProfilePage />
             </ProtectedRoute>
           }
         />
@@ -152,7 +152,7 @@ function App() {
           path="/leaderboard"
           element={
             <ProtectedRoute>
-              <Leaderboard gameTypes={["Chess", " TicTacToe"]} />
+              <LeaderboardPage />
             </ProtectedRoute>
           }
         />
