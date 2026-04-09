@@ -32,10 +32,10 @@ async def game_websocket(websocket: WebSocket, game_id: str, player_id: str):
                 if game.isValid(payload):
                     game.move(payload)
                     
-                    move_entry = {"player_id": player_id, "action": "make_move", "payload": payload, "timestamp": datetime.uctnow().isoformat()}
+                    move_entry = {"player_id": player_id, "action": "make_move", "payload": payload, "timestamp": datetime.utcnow().isoformat()}
                     await GameRepository.updateGameState(game_id, game.state.to_dict(), move_entry)
 
-                    await manager.broadcast(game_id, {"event": "game_state_update", "payload": game.toDict(), "timestamp": datetime.uctnow().isoformat()})
+                    await manager.broadcast(game_id, {"event": "game_state_update", "payload": game.to_dict(), "timestamp": datetime.utcnow().isoformat()})
                 else:
                     await websocket.send_json({"event": "move_rejected", "reason": "Invalid move"})
 
