@@ -69,28 +69,39 @@ class TicTacToeEngine(GameEngine):
 
         return state
 
-    def evaluateEnd(self, state: dict) -> Optional[dict]:
-        board = state["board"].grid
+def evaluateEnd(self, state: dict) -> Optional[dict]:
 
-        # rows
-        for row in board:
-            if row[0] is not None and row[0] == row[1] == row[2]:
-                return {"isOver": True, "result": "win", "winner": row[0]}
-
-        # columns
-        for col in range(3):
-            if board[0][col] is not None and board[0][col] == board[1][col] == board[2][col]:
-                return {"isOver": True, "result": "win", "winner": board[0][col]}
-
-        # diagonals
-        if board[0][0] is not None and board[0][0] == board[1][1] == board[2][2]:
-            return {"isOver": True, "result": "win", "winner": board[0][0]}
-
-        if board[0][2] is not None and board[0][2] == board[1][1] == board[2][0]:
-            return {"isOver": True, "result": "win", "winner": board[0][2]}
-
-        # draw
-        if state["moves"] == 9:
-            return {"isOver": True, "result": "draw"}
-
+    if state is None or "board" not in state:
         return None
+
+    board = state["board"].grid
+
+    if board is None:
+        return None
+
+    # rows
+    for row in board:
+        if row[0] is not None and row[0] == row[1] == row[2]:
+            return {"isOver": True, "result": "win", "winner": row[0]}
+
+    # columns
+    for col in range(3):
+        if board[0][col] is not None and board[0][col] == board[1][col] == board[2][col]:
+            return {"isOver": True, "result": "win", "winner": board[0][col]}
+
+    # diagonals
+    if board[0][0] is not None and board[0][0] == board[1][1] == board[2][2]:
+        return {"isOver": True, "result": "win", "winner": board[0][0]}
+
+    if board[0][2] is not None and board[0][2] == board[1][1] == board[2][0]:
+        return {"isOver": True, "result": "win", "winner": board[0][2]}
+
+    # draw
+    if "moves" in state and state["moves"] == 9:
+        return {"isOver": True, "result": "draw"}
+
+
+    if "moves" in state and state["moves"] >= 9:
+        return {"isOver": True, "result": "draw"}
+
+    return None
