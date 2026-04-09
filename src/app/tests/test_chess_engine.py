@@ -187,5 +187,44 @@ def test_knight_invalid_move():
     move = ChessMove(ChessPosition(0, 1), ChessPosition(2, 1))
     assert engine.validateMove(state, move) == False
 
+# queen moves
+def test_queen_moves_horizontally():
+    # checks if queen can move horizontally
+    engine, state = make_engine_and_state()
+    state["board"].removePiece(ChessPosition(0, 2))
+    state["board"].removePiece(ChessPosition(0, 1))
+    move = ChessMove(ChessPosition(0, 3), ChessPosition(0, 1))
+    assert engine.validateMove(state, move) == True
+
+def test_queen_moves_diagonally():
+    # checks if queen can move diagonally
+    engine, state = make_engine_and_state()
+    state["board"].removePiece(ChessPosition(1, 4))
+    move = ChessMove(ChessPosition(0, 3), ChessPosition(2, 5))
+    assert engine.validateMove(state, move) == True
+
+def test_queen_moves_vertically():
+    # checks if queen can move vertically
+    engine, state = make_engine_and_state()
+    state["board"].removePiece(ChessPosition(1, 3))
+    move = ChessMove(ChessPosition(0, 3), ChessPosition(2, 3))
+    assert engine.validateMove(state, move) == True
+
+def test_queen_blocked_by_piece():
+    # checks if queen is blocked when a piece is in its path
+    engine, state = make_engine_and_state()
+    move = ChessMove(ChessPosition(0, 3), ChessPosition(3, 3))
+    assert engine.validateMove(state, move) == False
+
+def test_queen_moves_forward():
+    # checks if queen can move forward one step
+    engine, state = make_engine_and_state()
+    state["board"].removePiece(ChessPosition(1, 3))
+    move = ChessMove(ChessPosition(0, 3), ChessPosition(1, 3))
+    assert engine.validateMove(state, move) == True
+
+
+
+
 
 
