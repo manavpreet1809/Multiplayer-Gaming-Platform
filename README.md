@@ -1,5 +1,7 @@
 **DO NOT USE SAFARI**
 
+**Team quick links:** [Local deployment & video capture](docs/LOCAL_DEPLOYMENT_AND_VIDEO.md) · [Video plan (segments & presenters)](docs/videoplanningdoc.md) · [Docs index](docs/README.md)
+
 ## Tech Stack
 
 - Database: MongoDB
@@ -13,7 +15,7 @@
 ### macOS
 
 - **Python 3.11+** — `python3 --version`. Install via [python.org](https://www.python.org/downloads/) or `brew install python@3.11`.
-- **Node.js 18+** — `node -v`. Install via [nodejs.org](https://nodejs.org/) or `brew install node`.
+- **Node.js 20+** — `node -v`. The frontend uses React Router v7, which expects Node 20+. Install via [nodejs.org](https://nodejs.org/) or `brew install node`.
 - **npm** — Ships with Node.js (`npm -v`).
 - **MongoDB** — Local server for development. Easiest: use a data folder under your home directory and `--dbpath` (see **Run the Project** → **macOS**). [Homebrew](https://brew.sh/) is optional.
 - **MongoDB Compass** (optional) — Download the macOS `.dmg` from [MongoDB Compass](https://www.mongodb.com/products/compass).
@@ -21,7 +23,7 @@
 ### Windows
 
 - **Python 3.11+** — Install from [python.org](https://www.python.org/downloads/) and ensure **Add Python to PATH** is checked, or use the Microsoft Store / `winget install Python.Python.3.11`.
-- **Node.js 18+** — Install the LTS installer from [nodejs.org](https://nodejs.org/) (includes npm).
+- **Node.js 20+** — Install the LTS installer from [nodejs.org](https://nodejs.org/) (includes npm). Use v20 or newer for compatibility with the current frontend dependencies.
 - **MongoDB** — Install [MongoDB Community Server](https://www.mongodb.com/try/download/community) for Windows, or use WSL2 and follow the Linux/Homebrew flow if you prefer.
 - **MongoDB Compass** (optional) — Windows installer from [MongoDB Compass](https://www.mongodb.com/products/compass).
 - **Terminal** — Use **PowerShell**, **Command Prompt**, or **Windows Terminal** for the commands below.
@@ -177,6 +179,12 @@ Then run the backend as shown above.
 - `PYTHONPATH=src` is required because the backend imports `app` from `src`.
 - If port `3000` is busy, use the alternate React port that is offered.
 
+### 2.8 Tests, screenshots, and video capture
+
+- **Run tests:** From repo root (venv on): `pytest src/app/test -q`. From `frontend/`: `npm test -- --watchAll=false` (PowerShell: `$env:CI='true'; npm test -- --watchAll=false`).
+- **UI screenshot strip (no login):** With the dev server running, open `http://localhost:3000/?screenshots` for a long page of static UI examples.
+- **Full guide for demos and course videos:** [docs/LOCAL_DEPLOYMENT_AND_VIDEO.md](docs/LOCAL_DEPLOYMENT_AND_VIDEO.md).
+
 ---
 
 ### Shared `.env` contents
@@ -200,9 +208,15 @@ REFRESH_TOKEN_EXPIRE_DAYS=7
 
 > **Important:** Set a real `SECRET_KEY` before starting the app. Do not commit `.env`.
 
+**Frontend API base URL (optional):** The React app defaults to `http://localhost:8000`. To use another host or port, create **`frontend/.env`** with `REACT_APP_API_URL=http://127.0.0.1:8000` and restart `npm start`.
+
 ---
 
-## 3. Build the App
+## 3. Detailed setup (by platform)
+
+The steps below expand on §2 with the same commands organized for macOS and Windows. If you already followed §2, you can skip to [§4. Production build](#4-production-build).
+
+### macOS
 
 #### Backend (FastAPI)
 
@@ -338,28 +352,11 @@ npm start      # or: yarn start
 
 ### Shared `.env` contents
 
-Create a file named `.env` in the **project root** with:
-
-```bash
-# Generate SECRET_KEY with:
-# python3 -c "import secrets; print(secrets.token_hex(32))"
-#   (Windows: py -c "import secrets; print(secrets.token_hex(32))")
-SECRET_KEY=
-
-# MongoDB
-MONGODB_URL=mongodb://localhost:27017
-DB_NAME=myapp
-
-# Token expiry
-ACCESS_TOKEN_EXPIRE_MINUTES=30
-REFRESH_TOKEN_EXPIRE_DAYS=7
-```
-
-> **Important:** Set a real `SECRET_KEY` before starting the app. Do not commit `.env`.
+Use the same **project root** `.env` as in [§2.1 Create `.env`](#21-create-env) (including optional `frontend/.env` for `REACT_APP_API_URL` if needed).
 
 ---
 
-## 3. Build the App
+## 4. Production build
 
 Production build steps are the same for the frontend on both platforms; only the way you open a terminal and `cd` into the repo differs.
 
@@ -393,7 +390,7 @@ There is no separate compile step; the FastAPI app runs with Python/Uvicorn. For
 
 ---
 
-## 4. Expected Result
+## 5. Expected result
 
 - Login page loads in the browser at [http://localhost:3000](http://localhost:3000).
 - Backend API responds; routes may be stubbed if the database is not fully connected.
@@ -401,7 +398,7 @@ There is no separate compile step; the FastAPI app runs with Python/Uvicorn. For
 
 ---
 
-## 5. Common Problems
+## 6. Common problems
 
 ### macOS
 
