@@ -188,3 +188,41 @@ def test_draw_when_board_full():
     assert result is not None
     assert result["isOver"] == True
     assert result["result"] == "draw"
+
+# game continues
+def test_game_continues_at_start():
+    # checks if evaluateEnd returns None at the start of the game
+    engine, state = make_engine_and_state()
+    result = engine.evaluateEnd(state)
+    assert result is None
+
+def test_game_continues_mid_game():
+    # checks if evaluateEnd returns None during an ongoing game
+    engine, state = make_engine_and_state()
+    state = apply_moves(engine, state, [(0,0),(1,1),(0,1)])
+    result = engine.evaluateEnd(state)
+    assert result is None
+
+# serialization
+def test_serialize_state_maps_players_to_symbols():
+    # checks that serializeState correctly maps player names to X/O symbols
+    engine, state = make_engine_and_state()
+    move = TicTacToeMove(TicTacToePosition(0, 0))
+    state = engine.applyMove(state, move)
+    serialized = engine.serializeState(state)
+
+    assert serialized["board"][0] == "X"
+    assert serialized["currentPlayer"] == "O"
+    assert serialized["players"]["X"] == "Alice"
+    assert serialized["players"]["O"] == "Bob"
+
+# deserialization
+def test_deserialize_converts_index_to_position():
+    # checks that deserializeMove correctly converts a index to row/col
+    engine, state = make_engine_and_state()
+    cases = [(0, 0, 0), (4, 1, 1), (8, 2, 2)]
+
+    for index, expected_row, expected_col in cases:
+        move = engine.deserializeMove({"index": index}, state)
+        assert move.position.row == expected_row
+        assert move.position.col == expected_col
