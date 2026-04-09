@@ -76,7 +76,7 @@ async def game_websocket(websocket: WebSocket, game_id: str, player_id: str):
                 # If that was the last player, and the game has not begun, shut down the entire lobby
                 # Note that we do not want to delete a game in progress; we will end it with a forfeit, and keep it 
                 if len(game.player_ids) == 1 and game.status == GameStatus.WAITING:
-                    await killLobby(game_id)
+                    await GameRepository.killLobby(game_id)
 
                 # TODO: Forfeit the game if it is running
 
