@@ -18,6 +18,92 @@ from app.schemas.auth import TokenData, UserCreate, UserInDB, UserPublic
 from dotenv import load_dotenv
 load_dotenv()
 
+DEFAULT_MMR = 1000
+
+
+def _default_game_stats() -> dict:
+    return {
+        "games_played": 0,
+        "wins": 0,
+        "losses": 0,
+        "ties": 0,
+        "mmr": DEFAULT_MMR,
+        "rank": "Bronze",
+    }
+
+
+def _default_stats() -> dict:
+    return {
+        "overall": _default_game_stats(),
+        "games": {
+            "chess": _default_game_stats(),
+            "tictactoe": _default_game_stats(),
+        },
+    }
+
+
+def normalize_stats(stats: dict | None) -> dict:
+    if not isinstance(stats, dict):
+        stats = {}
+    overall = stats.get("overall") or {}
+    games = stats.get("games") or {}
+    return {
+        "overall": {**_default_game_stats(), **overall},
+        "games": {
+            "chess": {**_default_game_stats(), **games.get("chess", {})},
+            "tictactoe": {**_default_game_stats(), **games.get("tictactoe", {})},
+        },
+    }
+
+
+def _rank_for_mmr(mmr: int) -> str:
+    if mmr >= 1800:
+        return "Diamond"
+    if mmr >= 1500:
+        return "Gold"
+    if mmr >= 1200:
+        return "Silver"
+    return "Bronze"
+
+
+async def update_user_stats(username: str, game_type: str, outcome: str) -> None:
+    if game_type not in ("chess", "tictactoe"):
+        return
+
+    doc = await users_collection.find_one({"username": username})
+    if not doc:
+        return
+
+    stats = normalize_stats(doc.get("stats"))
+    game_stats = stats["games"][game_type]
+
+    stats["overall"]["games_played"] += 1
+    game_stats["games_played"] += 1
+
+    if outcome == "win":
+        stats["overall"]["wins"] += 1
+        game_stats["wins"] += 1
+        delta = 25
+    elif outcome == "loss":
+        stats["overall"]["losses"] += 1
+        game_stats["losses"] += 1
+        delta = -10
+    elif outcome == "draw":
+        stats["overall"]["ties"] += 1
+        game_stats["ties"] += 1
+        delta = 5
+    else:
+        stats["overall"]["losses"] += 1
+        game_stats["losses"] += 1
+        delta = -10
+
+    stats["overall"]["mmr"] = max(0, stats["overall"]["mmr"] + delta)
+    game_stats["mmr"] = max(0, game_stats["mmr"] + delta)
+    stats["overall"]["rank"] = _rank_for_mmr(stats["overall"]["mmr"])
+    game_stats["rank"] = _rank_for_mmr(game_stats["mmr"])
+
+    await users_collection.update_one({"username": username}, {"$set": {"stats": stats}})
+
 SECRET_KEY = os.getenv("SECRET_KEY", "CHANGE_ME_TO_A_LONG_RANDOM_SECRET")
 if not SECRET_KEY or SECRET_KEY == "CHANGE_ME_TO_A_LONG_RANDOM_SECRET":
     raise RuntimeError(
@@ -153,6 +239,7 @@ async def get_user_by_username(username: str) -> UserInDB | None:
         disabled=doc.get("disabled", False),
         hashed_password=doc["hashed_password"],
         created_at=doc["created_at"],
+        stats=normalize_stats(doc.get("stats")),
     )
 
 
@@ -170,6 +257,7 @@ async def get_user_by_identifier(identifier: str) -> UserInDB | None:
         disabled=doc.get("disabled", False),
         hashed_password=doc["hashed_password"],
         created_at=doc["created_at"],
+        stats=normalize_stats(doc.get("stats")),
     )
 
 
@@ -196,6 +284,7 @@ async def create_user(user: UserCreate) -> UserPublic:
         "hashed_password": get_password_hash(user.password),
         "disabled": False,
         "created_at": datetime.now(timezone.utc),
+        "stats": _default_stats(),
     }
 
     try:
@@ -261,6 +350,7 @@ async def get_current_user_from_token(token: str) -> UserPublic:
         email=user.email,
         full_name=user.full_name,
         disabled=user.disabled,
+        stats=normalize_stats(user.stats),
     )
 
 
