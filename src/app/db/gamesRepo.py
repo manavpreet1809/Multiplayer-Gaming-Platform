@@ -94,7 +94,8 @@ async def get_leaderboard(game_type: str) -> list[dict]:
     ]
 
     rows = []
-    async for doc in game_results_collection.aggregate(pipeline):
+    cursor = await game_results_collection.aggregate(pipeline)
+    async for doc in cursor:
         mmr = _mmr(doc["wins"], doc["losses"])
         rows.append({
             "username": doc["_id"],
@@ -145,7 +146,8 @@ async def get_user_stats(username: str) -> dict:
     game_stats = []
     total = {"gamesPlayed": 0, "wins": 0, "losses": 0, "ties": 0}
 
-    async for doc in game_results_collection.aggregate(pipeline):
+    cursor = await game_results_collection.aggregate(pipeline)
+    async for doc in cursor:
         mmr = _mmr(doc["wins"], doc["losses"])
         game_stats.append({
             "gameType":    doc["_id"],
