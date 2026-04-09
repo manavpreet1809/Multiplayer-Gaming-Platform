@@ -212,9 +212,8 @@ function ChessBoard({
           )}
         </div>
 
-        {/* File labels (bottom) */}
+        {/* File labels (bottom) — aligned to board columns via CSS Grid */}
         <div className="chess-file-labels">
-          <span className="chess-label-spacer" />
           {colIndices.map((ci) => (
             <span key={ci} className="chess-label">{displayCols[playerColor === 'black' ? 7 - ci : ci]}</span>
           ))}
