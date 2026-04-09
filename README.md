@@ -1,3 +1,6 @@
+**DO NOT USE SAFARI**
+
+
 ## Tech Stack
 
 - Database: MongoDB
