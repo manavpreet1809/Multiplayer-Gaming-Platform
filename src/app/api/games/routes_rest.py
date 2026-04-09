@@ -134,20 +134,24 @@ def register_rest_routes(router: APIRouter) -> None:
             else:
                 bucket = stats["games"].get(normalized, {})
 
+            tier = bucket.get("rank", "Bronze")
             return {
-                "rank": bucket.get("rank", "Bronze"),
+                # `rank` kept for backward compatibility — value is MMR tier (Bronze/Silver/…), not ordinal.
+                "rank": tier,
+                "tier": tier,
                 "username": doc.get("username", ""),
-                "tier": bucket.get("rank", "Bronze"),
                 "mmr": bucket.get("mmr", 1000),
                 "wins": bucket.get("wins", 0),
                 "losses": bucket.get("losses", 0),
+                "ties": bucket.get("ties", 0),
+                "games_played": bucket.get("games_played", 0),
             }
 
-        results = sorted(
+        sorted_rows = sorted(
             (entry(doc) for doc in users),
             key=lambda r: (-r["mmr"], -r["wins"], r["losses"], r["username"]),
         )
-        return results[:limit]
+        return [{**row, "place": i + 1} for i, row in enumerate(sorted_rows[:limit])]
 
     @router.get("/{game_id}")
     async def get_game(game_id: str, current_user=Depends(get_current_user)):

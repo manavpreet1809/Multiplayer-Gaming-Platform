@@ -43,7 +43,13 @@ def test_leaderboard_path_not_shadowed_by_game_id():
             headers={"Authorization": f"Bearer {token}"},
         )
         assert r.status_code == 200
-        assert isinstance(r.json(), list)
+        data = r.json()
+        assert isinstance(data, list)
+        if len(data) > 0:
+            row = data[0]
+            assert row.get("place") == 1
+            assert "tier" in row
+            assert "mmr" in row
 
 
 def test_get_game_forbidden_for_non_participant():
