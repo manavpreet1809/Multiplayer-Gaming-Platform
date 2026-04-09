@@ -11,9 +11,6 @@ class GameState:
             "current_player": self.current_player,
         }
 
-    def toDict(self) -> dict:
-        return self.to_dict()
-
     @staticmethod
     def from_dict(data: dict) -> "GameState":
         if not data:
@@ -23,7 +20,3 @@ class GameState:
             data=data.get("data"),
             current_player=data.get("current_player"),
         )
-
-    @staticmethod
-    def fromDict(data: dict) -> "GameState":
-        return GameState.from_dict(data)
