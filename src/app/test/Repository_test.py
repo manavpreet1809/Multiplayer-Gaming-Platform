@@ -7,14 +7,19 @@ from unittest.mock import AsyncMock
 
 import pytest
 
+pytestmark = pytest.mark.filterwarnings(
+	"ignore:datetime\\.datetime\\.utcnow\\(\\) is deprecated.*:DeprecationWarning"
+)
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../app")))
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../app/db")))
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../app/models")))
 
 import GamesRepository as games_repo_module
+import usersRepo as users_repo_module
 
-
+# GamesRepository tests.
 @pytest.fixture
 def fake_collection(monkeypatch):
 	collection = SimpleNamespace(
@@ -154,3 +159,117 @@ def test_create_game_propagates_insert_errors(fake_collection):
 
 	with pytest.raises(RuntimeError, match="db write failed"):
 		asyncio.run(games_repo_module.GameRepository.createGame(game))
+
+
+def test_get_game_propagates_find_errors(fake_collection):
+	fake_collection.find_one.side_effect = RuntimeError("db read failed")
+
+	with pytest.raises(RuntimeError, match="db read failed"):
+		asyncio.run(games_repo_module.GameRepository.getGame("g-read-err"))
+
+
+def test_get_game_propagates_state_deserialization_errors(fake_collection, monkeypatch):
+	class FakeGame:
+		def __init__(self, game_id, lobby_code, visibility, status, host_id):
+			self.game_id = game_id
+			self.lobby_code = lobby_code
+			self.visibility = visibility
+			self.status = status
+			self.host_id = host_id
+
+	class FailingGameState:
+		@staticmethod
+		def from_dict(data):
+			raise ValueError("invalid game state")
+
+	monkeypatch.setattr(games_repo_module, "Game", FakeGame)
+	monkeypatch.setattr(games_repo_module, "GameState", FailingGameState)
+
+	fake_collection.find_one.return_value = {
+		"_id": "g-5",
+		"lobby_code": "ZZZZ",
+		"visibility": "PUBLIC",
+		"status": "WAITING",
+		"host_id": "host-5",
+		"current_state": {"bad": "state"},
+	}
+
+	with pytest.raises(ValueError, match="invalid game state"):
+		asyncio.run(games_repo_module.GameRepository.getGame("g-5"))
+
+
+def test_update_player_membership_propagates_update_errors(fake_collection):
+	fake_collection.update_one.side_effect = RuntimeError("membership update failed")
+
+	with pytest.raises(RuntimeError, match="membership update failed"):
+		asyncio.run(games_repo_module.GameRepository.updatePlayerMembership("g-6", ["p1"]))
+
+
+def test_update_game_state_propagates_update_errors(fake_collection):
+	fake_collection.update_one.side_effect = RuntimeError("state update failed")
+
+	with pytest.raises(RuntimeError, match="state update failed"):
+		asyncio.run(games_repo_module.GameRepository.updateGameState("g-7", {"board": []}, {"move": 2}))
+
+
+# usersRepo tests.
+@pytest.fixture
+def fake_user_collections(monkeypatch):
+	users_collection = SimpleNamespace(create_indexes=AsyncMock())
+	revoked_tokens_collection = SimpleNamespace(create_indexes=AsyncMock())
+
+	monkeypatch.setattr(users_repo_module, "users_collection", users_collection)
+	monkeypatch.setattr(users_repo_module, "revoked_tokens_collection", revoked_tokens_collection)
+
+	return users_collection, revoked_tokens_collection
+
+
+def test_users_create_indexes_creates_expected_indexes_on_both_collections(fake_user_collections, monkeypatch):
+	class FakeIndexModel:
+		def __init__(self, keys, **kwargs):
+			self.keys = keys
+			self.kwargs = kwargs
+
+	monkeypatch.setattr(users_repo_module, "IndexModel", FakeIndexModel)
+
+	users_collection, revoked_tokens_collection = fake_user_collections
+
+	asyncio.run(users_repo_module.create_indexes())
+
+	users_collection.create_indexes.assert_awaited_once()
+	revoked_tokens_collection.create_indexes.assert_awaited_once()
+
+	users_indexes = users_collection.create_indexes.await_args.args[0]
+	assert len(users_indexes) == 2
+	assert users_indexes[0].keys == [("username", users_repo_module.ASCENDING)]
+	assert users_indexes[0].kwargs == {"unique": True}
+	assert users_indexes[1].keys == [("email", users_repo_module.ASCENDING)]
+	assert users_indexes[1].kwargs == {"unique": True, "sparse": True}
+
+	revoked_indexes = revoked_tokens_collection.create_indexes.await_args.args[0]
+	assert len(revoked_indexes) == 2
+	assert revoked_indexes[0].keys == [("jti", users_repo_module.ASCENDING)]
+	assert revoked_indexes[0].kwargs == {"unique": True}
+	assert revoked_indexes[1].keys == [("expires_at", users_repo_module.ASCENDING)]
+	assert revoked_indexes[1].kwargs == {"expireAfterSeconds": 0}
+
+
+def test_users_create_indexes_propagates_users_collection_errors(fake_user_collections):
+	users_collection, revoked_tokens_collection = fake_user_collections
+	users_collection.create_indexes.side_effect = RuntimeError("users index failed")
+
+	with pytest.raises(RuntimeError, match="users index failed"):
+		asyncio.run(users_repo_module.create_indexes())
+
+	revoked_tokens_collection.create_indexes.assert_not_awaited()
+
+
+def test_users_create_indexes_propagates_revoked_tokens_errors(fake_user_collections):
+	users_collection, revoked_tokens_collection = fake_user_collections
+	revoked_tokens_collection.create_indexes.side_effect = RuntimeError("revoked index failed")
+
+	with pytest.raises(RuntimeError, match="revoked index failed"):
+		asyncio.run(users_repo_module.create_indexes())
+
+	users_collection.create_indexes.assert_awaited_once()
+	revoked_tokens_collection.create_indexes.assert_awaited_once()
