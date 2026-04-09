@@ -112,4 +112,80 @@ def test_pawn_cannot_capture_forward():
     move = ChessMove(ChessPosition(1, 0), ChessPosition(2, 0))
     assert engine.validateMove(state, move) == False
 
+# rook moves
+def test_rook_moves_horizontally():
+    # checks if rook can move horizontally on an empty row
+    engine, state = make_engine_and_state()
+    state["board"].removePiece(ChessPosition(1, 0))
+    state["board"].removePiece(ChessPosition(0, 1))
+    state["board"].removePiece(ChessPosition(0, 2))
+    state["board"].removePiece(ChessPosition(0, 3))
+    move = ChessMove(ChessPosition(0, 0), ChessPosition(0, 3))
+    assert engine.validateMove(state, move) == True
+
+def test_rook_moves_vertically():
+    # checks if rook can move vertically on an empty column
+    engine, state = make_engine_and_state()
+    state["board"].removePiece(ChessPosition(1, 0))
+    state["board"].removePiece(ChessPosition(2, 0))
+    state["board"].removePiece(ChessPosition(3, 0))
+    move = ChessMove(ChessPosition(0, 0), ChessPosition(3, 0))
+    assert engine.validateMove(state, move) == True
+
+def test_rook_blocked_by_piece():
+    # checks if rook is blocked when a piece is in front of it
+    engine, state = make_engine_and_state()
+    move = ChessMove(ChessPosition(0, 0), ChessPosition(3, 0))
+    assert engine.validateMove(state, move) == False
+
+def test_rook_cannot_move_diagonally():
+    # checks if rook cannot move diagonally
+    engine, state = make_engine_and_state()
+    state["board"].removePiece(ChessPosition(1, 0))
+    move = ChessMove(ChessPosition(0, 0), ChessPosition(2, 2))
+    assert engine.validateMove(state, move) == False
+
+# bishop moves
+def test_bishop_moves_diagonally():
+    # checks if bishop can move diagonally on a clear path
+    engine, state = make_engine_and_state()
+    state["board"].removePiece(ChessPosition(1, 1))
+    state["board"].removePiece(ChessPosition(1, 3))
+    move = ChessMove(ChessPosition(0, 2), ChessPosition(2, 4))
+    assert engine.validateMove(state, move) == True
+
+def test_bishop_cannot_move_straight():
+    # checks if bishop cannot move in a straight line
+    engine, state = make_engine_and_state()
+    state["board"].removePiece(ChessPosition(1, 2))
+    move = ChessMove(ChessPosition(0, 2), ChessPosition(3, 2))
+    assert engine.validateMove(state, move) == False
+
+def test_bishop_blocked_by_piece():
+    # checks if bishop is blocked when a piece is in its diagonal path
+    engine, state = make_engine_and_state()
+    move = ChessMove(ChessPosition(0, 2), ChessPosition(2, 4))
+    assert engine.validateMove(state, move) == False
+
+
+# knight moves
+def test_knight_moves_L_shape():
+    # checks if knight can move in L-shape
+    engine, state = make_engine_and_state()
+    move = ChessMove(ChessPosition(0, 1), ChessPosition(2, 2))
+    assert engine.validateMove(state, move) == True
+
+def test_knight_jumps_over_pieces():
+    # checks if knight can jump over pieces
+    engine, state = make_engine_and_state()
+    move = ChessMove(ChessPosition(0, 1), ChessPosition(2, 0))
+    assert engine.validateMove(state, move) == True
+
+def test_knight_invalid_move():
+    # checks if knight cannot move in a non L-shape
+    engine, state = make_engine_and_state()
+    move = ChessMove(ChessPosition(0, 1), ChessPosition(2, 1))
+    assert engine.validateMove(state, move) == False
+
+
 
