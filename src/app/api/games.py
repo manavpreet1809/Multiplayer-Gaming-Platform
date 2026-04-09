@@ -304,6 +304,21 @@ async def game_websocket(game_id: str, ws: WebSocket):
                     msg["status"] = outcome["status"]
                 await manager.broadcast(game_id, msg)
 
+            elif msg_type == "select_piece":
+                if game.status != GameStatus.IN_PROGRESS:
+                    continue
+                if game.active_player_id != current_user.username:
+                    continue
+                pos = data.get("position", {})
+                fe_row = pos.get("row")
+                fe_col = pos.get("col")
+                if fe_row is None or fe_col is None:
+                    continue
+                engine = game._get_engine()
+                be_row = 7 - fe_row
+                moves = engine.getLegalMovesForSquare(game._engine_state, be_row, fe_col)
+                await ws.send_json({"type": "legal_moves", "moves": moves})
+
             elif msg_type == "chat":
                 text = str(data.get("text", "")).strip()[:500]
                 if text:
