@@ -5,7 +5,7 @@ from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
 from src.app.api.auth import router as auth_router
-from src.app.db.validUser_mongo import create_indexes, close_mongo_connection
+from app.db.usersRepo import create_indexes, close_mongo_connection
 from src.app.services.authServices import limiter
 
 
