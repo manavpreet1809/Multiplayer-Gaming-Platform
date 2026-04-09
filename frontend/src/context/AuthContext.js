@@ -1,4 +1,5 @@
 import { createContext, useState } from "react";
+import { logout as authLogout } from "../services/authService";
 
 export const AuthContext = createContext();
 
@@ -9,8 +10,12 @@ export function AuthProvider({ children }) {
     setUser(userData);
   };
 
-  const logout = () => {
-    setUser(null);
+  const logout = async () => {
+    try {
+      await authLogout();
+    } finally {
+      setUser(null);
+    }
   };
 
   return (
