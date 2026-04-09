@@ -77,4 +77,39 @@ def test_validate_capture_own_piece_rejected():
     move = ChessMove(ChessPosition(0, 0), ChessPosition(1, 0))
     assert engine.validateMove(state, move) == False
 
+# pawn moves
+def test_white_pawn_one_step_forward():
+    # checks if white pawn can move one step forward
+    engine, state = make_engine_and_state()
+    move = ChessMove(ChessPosition(1, 0), ChessPosition(2, 0))
+    assert engine.validateMove(state, move) == True
+
+def test_white_pawn_two_steps_from_start():
+    # checks if white pawn can move two steps from starting row
+    engine, state = make_engine_and_state()
+    move = ChessMove(ChessPosition(1, 0), ChessPosition(3, 0))
+    assert engine.validateMove(state, move) == True
+
+def test_white_pawn_cannot_move_backward():
+    # checks if white pawn cannot move backward
+    engine, state = make_engine_and_state()
+    state["board"].removePiece(ChessPosition(1, 0))
+    state["board"].setPiece(ChessPosition(3, 0), ChessPiece(PieceType.PAWN, Color.WHITE))
+    move = ChessMove(ChessPosition(3, 0), ChessPosition(2, 0))
+    assert engine.validateMove(state, move) == False
+
+def test_pawn_diagonal_capture():
+    # checks if pawn can capture diagonally
+    engine, state = make_engine_and_state()
+    state["board"].setPiece(ChessPosition(2, 1), ChessPiece(PieceType.PAWN, Color.BLACK))
+    move = ChessMove(ChessPosition(1, 0), ChessPosition(2, 1))
+    assert engine.validateMove(state, move) == True
+
+def test_pawn_cannot_capture_forward():
+    # checks if pawn cannot capture a piece directly in front of it and cannot move forward either
+    engine, state = make_engine_and_state()
+    state["board"].setPiece(ChessPosition(2, 0), ChessPiece(PieceType.PAWN, Color.BLACK))
+    move = ChessMove(ChessPosition(1, 0), ChessPosition(2, 0))
+    assert engine.validateMove(state, move) == False
+
 
