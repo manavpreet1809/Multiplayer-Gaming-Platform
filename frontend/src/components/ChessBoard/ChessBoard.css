@@ -54,8 +54,27 @@
 }
 
 .chess-captured-piece {
-  font-size: 1.25rem;
+  display: inline-flex;
+  align-items: center;
   line-height: 1;
+}
+
+.chess-captured-thumb {
+  width: 28px;
+  height: auto;
+  vertical-align: middle;
+}
+
+.chess-captured-thumb--white {
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
+}
+
+.chess-captured-thumb--black {
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
+}
+
+.chess-captured-fallback {
+  font-size: 1.25rem;
 }
 
 /* Board layout */

@@ -22,6 +22,8 @@ class ChessEngine(GameEngine):
             },
             "enPassantTarget": None,
             "halfmoveClock": 0,
+            "capturedByWhite": [],
+            "capturedByBlack": [],
         }
 
     def validateMove(self, state: dict, move: ChessMove) -> bool:
@@ -116,6 +118,15 @@ class ChessEngine(GameEngine):
 
         newColor = Color.BLACK if state["activeColor"] == Color.WHITE else Color.WHITE
 
+        captured_by_white = list(state.get("capturedByWhite", []))
+        captured_by_black = list(state.get("capturedByBlack", []))
+        if captured is not None:
+            code = captured.toCode()
+            if state["activeColor"] == Color.WHITE:
+                captured_by_white.append(code)
+            else:
+                captured_by_black.append(code)
+
         return {
             "board": board,
             "players": state["players"],
@@ -123,6 +134,8 @@ class ChessEngine(GameEngine):
             "castlingRights": castlingRights,
             "enPassantTarget": enPassantTarget,
             "halfmoveClock": halfmoveClock,
+            "capturedByWhite": captured_by_white,
+            "capturedByBlack": captured_by_black,
         }
 
     def isLegalMove(self, state: dict, move: ChessMove, piece: ChessPiece, target: Optional[ChessPiece]) -> bool:
@@ -324,6 +337,8 @@ class ChessEngine(GameEngine):
                 state["enPassantTarget"].col
             ),
             "halfmoveClock": state["halfmoveClock"],
+            "capturedByWhite": list(state.get("capturedByWhite", [])),
+            "capturedByBlack": list(state.get("capturedByBlack", [])),
         }
 
     def findKing(self, board: ChessBoard, color: Color) -> ChessPosition:
@@ -514,6 +529,8 @@ class ChessEngine(GameEngine):
             },
             "enPassantTarget": en_passant,
             "halfmoveClock": state["halfmoveClock"],
+            "capturedByWhite": list(state.get("capturedByWhite", [])),
+            "capturedByBlack": list(state.get("capturedByBlack", [])),
         }
 
     def deserializeMove(self, move_dict: dict, state: dict = None) -> ChessMove:
