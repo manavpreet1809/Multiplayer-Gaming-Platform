@@ -12,13 +12,35 @@ import { AuthContext } from "../../context/AuthContext";
  *   onEditSettings()– navigate to account settings (UC-10)
  */
 function Profile({
-  generalStats = { gamesPlayed: 0, wins: 0, losses: 0, ties: 0 },
-  gameStats = [],
+  generalStats,
+  gameStats,
   onEditSettings,
 }) {
-  const hasPlayed = generalStats.gamesPlayed > 0;
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const inheritedGeneral = user?.stats?.overall || {};
+  const general = {
+    gamesPlayed:
+      generalStats?.gamesPlayed ?? generalStats?.games_played ?? inheritedGeneral?.games_played ?? 0,
+    wins: generalStats?.wins ?? inheritedGeneral?.wins ?? 0,
+    losses: generalStats?.losses ?? inheritedGeneral?.losses ?? 0,
+    ties: generalStats?.ties ?? inheritedGeneral?.ties ?? 0,
+  };
+
+  const gameStatsFromUser = user?.stats?.games
+    ? Object.entries(user.stats.games).map(([gameType, stats]) => ({
+        gameType: gameType === "tictactoe" ? "Tic-Tac-Toe" : gameType.charAt(0).toUpperCase() + gameType.slice(1),
+        gamesPlayed: stats.games_played ?? stats.gamesPlayed ?? 0,
+        wins: stats.wins ?? 0,
+        losses: stats.losses ?? 0,
+        rank: stats.rank || "Bronze",
+        mmr: stats.mmr ?? 0,
+      }))
+    : [];
+
+  const displayGameStats = gameStats?.length > 0 ? gameStats : gameStatsFromUser;
+  const hasPlayed = general.gamesPlayed > 0;
 
   return (
     <div className="profile">
@@ -47,20 +69,20 @@ function Profile({
           <div className="profile-stat-grid">
             <div className="profile-stat">
               <span className="profile-stat-value">
-                {generalStats.gamesPlayed}
+                {general.gamesPlayed}
               </span>
               <span className="profile-stat-label">Games Played</span>
             </div>
             <div className="profile-stat">
-              <span className="profile-stat-value">{generalStats.wins}</span>
+              <span className="profile-stat-value">{general.wins}</span>
               <span className="profile-stat-label">Wins</span>
             </div>
             <div className="profile-stat">
-              <span className="profile-stat-value">{generalStats.losses}</span>
+              <span className="profile-stat-value">{general.losses}</span>
               <span className="profile-stat-label">Losses</span>
             </div>
             <div className="profile-stat">
-              <span className="profile-stat-value">{generalStats.ties}</span>
+              <span className="profile-stat-value">{general.ties}</span>
               <span className="profile-stat-label">Ties</span>
             </div>
           </div>
@@ -69,7 +91,7 @@ function Profile({
         )}
       </section>
 
-      {gameStats.length > 0 && (
+      {displayGameStats.length > 0 && (
         <section className="profile-game-stats">
           <h3>Per-Game Stats</h3>
           <table className="profile-table">
@@ -84,7 +106,7 @@ function Profile({
               </tr>
             </thead>
             <tbody>
-              {gameStats.map((gs) => (
+              {displayGameStats.map((gs) => (
                 <tr key={gs.gameType}>
                   <td>{gs.gameType}</td>
                   <td>{gs.gamesPlayed}</td>

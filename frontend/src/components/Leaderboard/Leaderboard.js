@@ -1,7 +1,5 @@
 import "./Leaderboard.css";
-import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../context/AuthContext";
 
 /**
  * Leaderboard component (UC-12).

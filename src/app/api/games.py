@@ -20,11 +20,17 @@ from fastapi import APIRouter, Depends, HTTPException, Query, WebSocket, WebSock
 from pydantic import BaseModel
 
 from app.db.ConnectionManager import manager
+from app.db.usersRepo import users_collection
 from app.models.Game import Game
 from app.models.GameSettings import GameSettings
 from app.models.GameStatus import GameStatus
 from app.models.Visibility import Visibility
-from app.services.authServices import get_current_user, get_current_user_from_token
+from app.services.authServices import (
+    get_current_user,
+    get_current_user_from_token,
+    update_user_stats,
+    normalize_stats,
+)
 
 router = APIRouter(prefix="/games", tags=["games"])
 
@@ -73,6 +79,45 @@ def _full_response(game: Game) -> dict:
     if game.state:
         base["state"] = game.state.to_dict()
     return base
+
+def _normalize_game_type(raw: str) -> str:
+    if not raw:
+        return "overall"
+    normalized = raw.strip().lower().replace("-", "").replace(" ", "")
+    return normalized if normalized in {"overall", "chess", "tictactoe"} else "overall"
+
+
+async def _record_game_result(game: Game, serialized_state: dict, result: dict, forfeited_user: str | None = None):
+    if not result or not result.get("isOver"):
+        return
+
+    game_type = game.game_type
+    players = serialized_state.get("players", {}) if isinstance(serialized_state, dict) else {}
+
+    if result.get("result") == "draw":
+        for username in players.values():
+            await update_user_stats(username, game_type, "draw")
+        return
+
+    if result.get("result") == "win":
+        winner_key = result.get("winner")
+        winner = players.get(winner_key)
+        loser = next((user for key, user in players.items() if user != winner), None)
+        if winner:
+            await update_user_stats(winner, game_type, "win")
+        if loser:
+            await update_user_stats(loser, game_type, "loss")
+        return
+
+    if result.get("result") == "forfeit":
+        if forfeited_user:
+            remaining = next((user for user in players.values() if user != forfeited_user), None)
+            if remaining:
+                await update_user_stats(remaining, game_type, "win")
+            await update_user_stats(forfeited_user, game_type, "loss")
+        else:
+            for username in players.values():
+                await update_user_stats(username, game_type, "loss")
 
 # ─── REST endpoints ───────────────────────────────────────────────────
 
@@ -173,6 +218,39 @@ async def get_game(game_id: str, current_user=Depends(get_current_user)):
     return _full_response(game)
 
 
+@router.get("/leaderboard")
+async def get_leaderboard(
+    current_user=Depends(get_current_user),
+    game_type: Optional[str] = Query("overall"),
+    limit: int = Query(50, ge=1, le=100),
+):
+    normalized = _normalize_game_type(game_type)
+    cursor = users_collection.find({})
+    users = await cursor.to_list(length=1000)
+
+    def entry(doc: dict) -> dict:
+        stats = normalize_stats(doc.get("stats"))
+        if normalized == "overall":
+            bucket = stats["overall"]
+        else:
+            bucket = stats["games"].get(normalized, {})
+
+        return {
+            "rank": bucket.get("rank", "Bronze"),
+            "username": doc.get("username", ""),
+            "tier": bucket.get("rank", "Bronze"),
+            "mmr": bucket.get("mmr", 1000),
+            "wins": bucket.get("wins", 0),
+            "losses": bucket.get("losses", 0),
+        }
+
+    results = sorted(
+        (entry(doc) for doc in users),
+        key=lambda r: (-r["mmr"], -r["wins"], r["losses"], r["username"]),
+    )
+    return results[:limit]
+
+
 @router.post("/{game_id}/join")
 async def join_game(game_id: str, current_user=Depends(get_current_user)):
     game = _games.get(game_id)
@@ -218,6 +296,8 @@ async def leave_game(game_id: str, current_user=Depends(get_current_user)):
     game.removePlayer(current_user.username)
     if was_in_progress:
         game.status = GameStatus.FINISHED
+        serialized = game._get_engine().serializeState(game._engine_state) if game._engine_state is not None else {}
+        await _record_game_result(game, serialized, {"isOver": True, "result": "forfeit", "winner": None}, forfeited_user=current_user.username)
         await manager.broadcast(game_id, {
             "type": "game_over",
             "result": {"isOver": True, "result": "forfeit", "winner": None},
@@ -302,6 +382,8 @@ async def game_websocket(game_id: str, ws: WebSocket):
                     msg["result"] = outcome["result"]
                 if outcome.get("status"):
                     msg["status"] = outcome["status"]
+                if outcome["result"] and outcome["result"].get("isOver"):
+                    await _record_game_result(game, serialized, outcome["result"])
                 await manager.broadcast(game_id, msg)
 
             elif msg_type == "select_piece":
