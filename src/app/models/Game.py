@@ -138,9 +138,6 @@ class Game:
             "move_history": self.move_history,
         }
 
-    def toDict(self) -> dict:
-        return self.to_dict()
-
     @staticmethod
     def from_dict(data: dict) -> "Game":
         if not data:
@@ -166,7 +163,3 @@ class Game:
         game.state = GameState.from_dict(data.get("current_state"))
         game.move_history = data.get("move_history", [])
         return game
-
-    @staticmethod
-    def fromDict(data: dict) -> "Game":
-        return Game.from_dict(data)
