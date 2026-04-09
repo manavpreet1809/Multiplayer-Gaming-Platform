@@ -97,6 +97,8 @@ Backend URLs:
 - API: `http://localhost:8000`
 - Docs: `http://localhost:8000/docs`
 
+**Game lobbies and live matches** are held in server memory. Use a **single Uvicorn worker** (the commands above default to one process). Restarting the backend clears open lobbies and in-progress games.
+
 ### 2.4 Start the frontend
 
 Open a second terminal and run:
