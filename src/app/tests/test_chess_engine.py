@@ -20,7 +20,6 @@ def make_engine_and_state():
     state = engine.createInitialState(["Alice", "Bob"])
     return engine, state
 
-
 # initial state
 def test_initial_state_white_goes_first():
     # checks if white is the active player at the start of the game
@@ -431,15 +430,15 @@ def test_capture_removes_opponent_piece():
     assert piece.pieceType == PieceType.ROOK
     assert piece.color == Color.WHITE
 
-# checkmate testcase
+#checkmate
 def test_checkmate_detected():
-    # checks if checkmate is detected in a position where white queen and rook trap the black king
+    ## checks if the engine correctly identifies a checkmate situation and declares a win
     engine = ChessEngine()
     board = ChessBoard()
-    board.setPiece(ChessPosition(7, 4), ChessPiece(PieceType.KING, Color.BLACK))
+    board.setPiece(ChessPosition(7, 7), ChessPiece(PieceType.KING, Color.BLACK))
     board.setPiece(ChessPosition(0, 4), ChessPiece(PieceType.KING, Color.WHITE))
-    board.setPiece(ChessPosition(5, 7), ChessPiece(PieceType.QUEEN, Color.WHITE))
-    board.setPiece(ChessPosition(5, 5), ChessPiece(PieceType.ROOK, Color.WHITE))
+    board.setPiece(ChessPosition(6, 5), ChessPiece(PieceType.QUEEN, Color.WHITE))
+    board.setPiece(ChessPosition(5, 7), ChessPiece(PieceType.ROOK, Color.WHITE))
     state = {
         "board": board,
         "players": {Color.WHITE: "Alice", Color.BLACK: "Bob"},
@@ -453,7 +452,7 @@ def test_checkmate_detected():
     assert result is not None
     assert result["isOver"] == True
     assert result["result"] == "win"
-    assert result["reason"] == "checkmate"
+    assert result["winner"] == Color.WHITE
 
 
 # stalemate

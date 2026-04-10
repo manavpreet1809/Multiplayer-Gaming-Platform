@@ -128,15 +128,6 @@ def test_diff_promos_not_equal():
     rook_promo = ChessMove(ChessPosition(6, 0), ChessPosition(7, 0), promotion=PieceType.ROOK)
     assert bishop_promo.promotion != rook_promo.promotion
 
-@pytest.mark.skip(reason="move validation not yet implemented in models - tested in engine tests")
-def test_pawn_blocked_by_piece():
-    # checks if pawn is blocked when enemy piece is directly in front of it
-    board = ChessBoard()
-    board.setupInitialPosition()
-    board.setPiece(ChessPosition(2, 0), ChessPiece(PieceType.PAWN, Color.BLACK))
-    move = ChessMove(ChessPosition(1, 0), ChessPosition(2, 0))
-    assert board.isValidMove(move) == False
-
 
 #  Board setup test cases - initial position checks before game starts
 def test_white_pawns_position():

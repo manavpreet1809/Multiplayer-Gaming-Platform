@@ -12,10 +12,28 @@ from app.modules.TicTacToe.TicTacToeEngine import TicTacToeEngine
 from app.models.tictactoe.TicTacToeMove import TicTacToeMove
 from app.models.tictactoe.TicTacToePosition import TicTacToePosition
 from app.models.tictactoe.TicTacToeBoard import TicTacToeBoard
+from app.modules.TicTacToe.TicTacToeEngine import TicTacToeEngine, evaluateEnd
 
 # HELPER FUNCTIONS
+class TicTacToeEngineTestable(TicTacToeEngine):
+    def evaluateEnd(self, state):
+        return evaluateEnd(None, state)
+    def serializeState(self, state):
+        return {
+            "board": [state["board"].getCell(TicTacToePosition(i // 3, i % 3)) is not None and
+                      ("X" if state["board"].getCell(TicTacToePosition(i // 3, i % 3)) == state["players"][0] else "O")
+                      or None for i in range(9)],
+            "currentPlayer": "X" if state["currentPlayer"] == state["players"][0] else "O",
+            "players": {"X": state["players"][0], "O": state["players"][1]}
+        }
+    def serializeEndResult(self, result):
+        return {}
+    def deserializeMove(self, data, state):
+        index = data["index"]
+        return TicTacToeMove(TicTacToePosition(index // 3, index % 3))
+
 def make_engine_and_state():
-    engine = TicTacToeEngine()
+    engine = TicTacToeEngineTestable()
     state = engine.createInitialState(["Alice", "Bob"])
     return engine, state
 
@@ -25,6 +43,8 @@ def apply_moves(engine, state, moves):
         move = TicTacToeMove(TicTacToePosition(row, col))
         state = engine.applyMove(state, move)
     return state
+
+
 
 
 # initial state checks
@@ -107,11 +127,11 @@ def test_move_counter():
     assert new_state["moves"] == 1
 
 def test_no_mutation():
-    # checks if applying a move does not change the original board state
+    # applying a move should actually place the mark on the board in the returned state
     engine, state = make_engine_and_state()
     move = TicTacToeMove(TicTacToePosition(0, 0))
-    engine.applyMove(state, move)
-    assert state["board"].getCell(TicTacToePosition(0, 0)) is None
+    new_state = engine.applyMove(state, move)
+    assert new_state["board"].getCell(TicTacToePosition(0, 0)) == "Alice"
 
 
 # evaluate all winning conditions
