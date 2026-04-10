@@ -3,6 +3,9 @@ target/
 !**/src/test/**/target/
 .kotlin
 
+## Secrets
+*.env
+
 ### IntelliJ IDEA ###
 .idea/
 out/
@@ -12,6 +15,7 @@ out/
 
 ### VS Code ###
 .vscode/
+*.code-workspace
 
 ### Mac OS ###
 .DS_Store
