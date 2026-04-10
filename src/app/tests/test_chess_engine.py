@@ -223,6 +223,104 @@ def test_queen_moves_forward():
     move = ChessMove(ChessPosition(0, 3), ChessPosition(1, 3))
     assert engine.validateMove(state, move) == True
 
+# check king moves test cases
+def test_king_moves_one_square():
+    # checks if king can move one square in any direction
+    engine, state = make_engine_and_state()
+    state["board"].removePiece(ChessPosition(1, 4))
+    move = ChessMove(ChessPosition(0, 4), ChessPosition(1, 4))
+    assert engine.validateMove(state, move) == True
+
+def test_king_cannot_move_two_squares():
+    # checks if king cannot move two squares without castling
+    engine, state = make_engine_and_state()
+    state["board"].removePiece(ChessPosition(1, 4))
+    state["board"].removePiece(ChessPosition(2, 4))
+    move = ChessMove(ChessPosition(0, 4), ChessPosition(2, 4))
+    assert engine.validateMove(state, move) == False
+
+def test_king_cannot_move_into_check():
+    # checks if king cannot move into a square attacked by opponent
+    engine = ChessEngine()
+    board = ChessBoard()
+    # white king at (4,4), black rook at (4,7) attacking the row
+    board.setPiece(ChessPosition(4, 4), ChessPiece(PieceType.KING, Color.WHITE))
+    board.setPiece(ChessPosition(4, 7), ChessPiece(PieceType.ROOK, Color.BLACK))
+    board.setPiece(ChessPosition(7, 0), ChessPiece(PieceType.KING, Color.BLACK))
+    state = {
+        "board": board,
+        "players": {Color.WHITE: "Alice", Color.BLACK: "Bob"},
+        "activeColor": Color.WHITE,
+        "castlingRights": {Color.WHITE: {"kingside": False, "queenside": False},
+                           Color.BLACK: {"kingside": False, "queenside": False}},
+        "enPassantTarget": None,
+        "halfmoveClock": 0,
+    }
+    move = ChessMove(ChessPosition(4, 4), ChessPosition(4, 5))
+    assert engine.validateMove(state, move) == False
+
+# castling
+def test_kingside_castling_valid():
+    # checks if white can castle kingside when path is clear
+    engine, state = make_engine_and_state()
+    state["board"].removePiece(ChessPosition(0, 5))
+    state["board"].removePiece(ChessPosition(0, 6))
+    move = ChessMove(ChessPosition(0, 4), ChessPosition(0, 6))
+    assert engine.validateMove(state, move) == True
+
+def test_queenside_castling_valid():
+    # checks if white can castle queenside when path is clear
+    engine, state = make_engine_and_state()
+    state["board"].removePiece(ChessPosition(0, 1))
+    state["board"].removePiece(ChessPosition(0, 2))
+    state["board"].removePiece(ChessPosition(0, 3))
+    move = ChessMove(ChessPosition(0, 4), ChessPosition(0, 2))
+    assert engine.validateMove(state, move) == True
+
+def test_castling_blocked_by_piece():
+    # checks if castling is rejected when pieces are in the way
+    engine, state = make_engine_and_state()
+    move = ChessMove(ChessPosition(0, 4), ChessPosition(0, 6))
+    assert engine.validateMove(state, move) == False
+
+def test_castling_rights_revoked_after_king_moves():
+    # checks if castling rights are revoked after king moves
+    engine, state = make_engine_and_state()
+    state["board"].removePiece(ChessPosition(1, 4))
+    move = ChessMove(ChessPosition(0, 4), ChessPosition(1, 4))
+    new_state = engine.applyMove(state, move)
+    assert new_state["castlingRights"][Color.WHITE]["kingside"] == False
+    assert new_state["castlingRights"][Color.WHITE]["queenside"] == False
+
+
+# en passant
+def test_en_passant_target_set():
+    # when a pawn jumps two squares forward, the square it skipped over should be saved as the en passant target
+    engine, state = make_engine_and_state()
+    move = ChessMove(ChessPosition(1, 4), ChessPosition(3, 4))
+    new_state = engine.applyMove(state, move)
+    assert new_state["enPassantTarget"] == ChessPosition(2, 4)
+
+def test_en_passant_capture():
+    # white pawn should be able to capture diagonally behind the black pawn that just double moved
+    engine = ChessEngine()
+    board = ChessBoard()
+    board.setPiece(ChessPosition(4, 4), ChessPiece(PieceType.PAWN, Color.WHITE))
+    board.setPiece(ChessPosition(4, 5), ChessPiece(PieceType.PAWN, Color.BLACK))
+    board.setPiece(ChessPosition(0, 4), ChessPiece(PieceType.KING, Color.WHITE))
+    board.setPiece(ChessPosition(7, 4), ChessPiece(PieceType.KING, Color.BLACK))
+    state = {
+        "board": board,
+        "players": {Color.WHITE: "Alice", Color.BLACK: "Bob"},
+        "activeColor": Color.WHITE,
+        "castlingRights": {Color.WHITE: {"kingside": False, "queenside": False},
+                           Color.BLACK: {"kingside": False, "queenside": False}},
+        "enPassantTarget": ChessPosition(5, 5),
+        "halfmoveClock": 0,
+    }
+    move = ChessMove(ChessPosition(4, 4), ChessPosition(5, 5))
+    assert engine.validateMove(state, move) == True
+
 
 
 
