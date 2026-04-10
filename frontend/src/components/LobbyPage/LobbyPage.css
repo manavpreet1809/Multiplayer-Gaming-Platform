@@ -1,0 +1,43 @@
+.lobby-page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+}
+
+.lobby-page-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 30vh;
+  font-size: 1rem;
+  color: var(--color-text-muted, #666);
+}
+
+.lobby-page-error {
+  color: var(--color-error, #c0392b);
+  background: var(--color-error-bg, #fdf0ef);
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+}
+
+.lobby-page-info {
+  color: var(--color-text-muted, #666);
+  font-size: 0.875rem;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.lobby-page-code {
+  text-align: center;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--color-text-muted, #666);
+}
+
+.lobby-page-code strong {
+  font-size: 1.25rem;
+  letter-spacing: 0.25rem;
+  color: var(--color-primary, #2c3e50);
+}

@@ -1,0 +1,45 @@
+stages:
+  - verify
+
+hello-world:
+  stage: verify
+  script:
+    - 'echo "Hello from GitLab CI"'
+    - 'echo "Branch: $CI_COMMIT_BRANCH"'
+    - 'echo "Commit: $CI_COMMIT_SHA"'
+
+
+# stages:
+#   - verify
+#   - build
+
+# variables:
+#   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+# cache:
+#   paths:
+#     - .m2/repository
+
+# default:
+#   image: eclipse-temurin:25-jdk
+
+# verify-environment:
+#   stage: verify
+#   script:
+#     - java -version
+#     - ./mvnw --version
+#     - ./mvnw -B -q clean validate
+#   artifacts:
+#     when: always
+#   only:
+#     - branches
+#     - merge_requests
+
+# build-project:
+#   stage: build
+#   script:
+#     - ./mvnw -B clean package
+#   artifacts:
+#     paths:
+#       - target/
+#     expire_in: 1 week

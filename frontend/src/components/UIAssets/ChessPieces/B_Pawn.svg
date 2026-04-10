@@ -1,0 +1,10 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+	<defs>
+		<image  width="32" height="32" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAAXNSR0IB2cksfwAAAA9QTFRFAAAALgVKZwKJTwRqNgNQHt0CegAAAAV0Uk5TAP////8c0CZSAAAAsklEQVR4nI2QwQ3CMAxF7QUoIZxpygQobEDXb5UJKligjcUABLeExkmFhA8+PP3vbxuhKPwBcA+BJDgwuAuADbeJEtAVt4/kb1BTAYzPAd484ShS4FiH4MQeemqha5ywWA+F5USql5bqHB6vlIKWT1Uw0KpQlsJz9HLGBQZ5/nxM/g+Ozf6xAdpwTH5tDtACfD0rYEkC2nDzuHMRYDsbePeOokLBlXu/4LipgmVsAqk24A1n8k8hlHDkEQAAAABJRU5ErkJggg=="/>
+	</defs>
+	<style>
+	</style>
+	<g id="Black">
+		<use id="Pawn" href="#img1" x="0" y="0"/>
+	</g>
+</svg>

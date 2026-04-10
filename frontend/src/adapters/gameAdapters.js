@@ -24,13 +24,14 @@
  */
 export function chessStateToProps(state, localPlayer, extra = {}) {
   const opponentColor = localPlayer === 'white' ? 'black' : 'white';
+  const players = state?.players || {};
 
   return {
-    board: state.board,                          // 8x8 array of piece codes / null
-    currentPlayer: state.activeColor,            // "white" | "black"
-    isMyTurn: state.activeColor === localPlayer,
+    board: state?.board || [],                   // 8x8 array of piece codes / null
+    currentPlayer: state?.activeColor || 'white',// "white" | "black"
+    isMyTurn: state?.activeColor === localPlayer,
     playerColor: localPlayer,
-    opponentName: state.players[opponentColor],
+    opponentName: players[opponentColor] || opponentColor,
     // These are typically managed by frontend interaction state:
     selectedSquare: extra.selectedSquare ?? null,
     highlightedSquares: extra.highlightedSquares ?? [],
@@ -70,13 +71,14 @@ export function buildChessMove(from, to, promotion = null) {
  */
 export function tttStateToProps(state, localSymbol, extra = {}) {
   const opponentSymbol = localSymbol === 'X' ? 'O' : 'X';
+  const players = state?.players || {};
 
   return {
-    board: state.board,                            // flat array of 9: "X" | "O" | null
-    currentPlayer: state.currentPlayer,            // "X" | "O"
-    isMyTurn: state.currentPlayer === localSymbol,
+    board: state?.board || Array(9).fill(null),    // flat array of 9: "X" | "O" | null
+    currentPlayer: state?.currentPlayer || 'X',    // "X" | "O"
+    isMyTurn: state?.currentPlayer === localSymbol,
     playerSymbol: localSymbol,
-    opponentName: state.players[opponentSymbol],
+    opponentName: players[opponentSymbol] || opponentSymbol,
     winningCells: extra.winningCells ?? null,
   };
 }
