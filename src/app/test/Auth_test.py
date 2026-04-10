@@ -204,9 +204,6 @@ def test_register_success():
         assert "password" not in data  # Password should never be returned
 
 
-
-
-
 def test_register_duplicate_username():
     """Test that registering the same username twice fails."""
     with TestClient(app) as client:
