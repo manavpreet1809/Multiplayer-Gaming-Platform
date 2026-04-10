@@ -1,140 +1,418 @@
-# First-Day Setup Checklist — JavaFX Maven Project
+**DO NOT USE SAFARI**
 
-Use this checklist **before you start working** on the project.  
-If all items pass, your environment is correctly set up.
+**Team quick links:** [Local deployment & video capture](docs/LOCAL_DEPLOYMENT_AND_VIDEO.md) · [Video plan (segments & presenters)](docs/videoplanningdoc.md) · [Docs index](docs/README.md)
+
+## Tech Stack
+
+- Database: MongoDB
+- Backend: FastAPI (Python)
+- Frontend: React.js (JavaScript)
 
 ---
 
 ## 1. Required Software
 
-Confirm you have **all** of the following:
+### macOS
 
-- ✅ **JDK 25** installed
-- ✅ **IntelliJ IDEA** (Community or Ultimate)
-- ✅ Git installed
+- **Python 3.11+** — `python3 --version`. Install via [python.org](https://www.python.org/downloads/) or `brew install python@3.11`.
+- **Node.js 20+** — `node -v`. The frontend uses React Router v7, which expects Node 20+. Install via [nodejs.org](https://nodejs.org/) or `brew install node`.
+- **npm** — Ships with Node.js (`npm -v`).
+- **MongoDB** — Local server for development. Easiest: use a data folder under your home directory and `--dbpath` (see **Run the Project** → **macOS**). [Homebrew](https://brew.sh/) is optional.
+- **MongoDB Compass** (optional) — Download the macOS `.dmg` from [MongoDB Compass](https://www.mongodb.com/products/compass).
 
-> ⚠ **IntelliJ is the expected IDE for this course.**  
-> Students using any other IDE may encounter setup and collaboration issues when working in groups that use IntelliJ exclusively.  
-> If you use something other than IntelliJ, you are responsible for resolving any IDE-specific issues.
+### Windows
 
----
-
-## 2. Clone the Repository
-
-Clone the starter repository using Git (HTTPS or SSH):
-
-```
-git clone <repo-url>
-cd <repo-directory>
-```
-
-Do not copy files manually between machines.
+- **Python 3.11+** — Install from [python.org](https://www.python.org/downloads/) and ensure **Add Python to PATH** is checked, or use the Microsoft Store / `winget install Python.Python.3.11`.
+- **Node.js 20+** — Install the LTS installer from [nodejs.org](https://nodejs.org/) (includes npm). Use v20 or newer for compatibility with the current frontend dependencies.
+- **MongoDB** — Install [MongoDB Community Server](https://www.mongodb.com/try/download/community) for Windows, or use WSL2 and follow the Linux/Homebrew flow if you prefer.
+- **MongoDB Compass** (optional) — Windows installer from [MongoDB Compass](https://www.mongodb.com/products/compass).
+- **Terminal** — Use **PowerShell**, **Command Prompt**, or **Windows Terminal** for the commands below.
 
 ---
 
-## 3. Open the Project in IntelliJ
+## 2. Run the Project Locally
 
-1. Open IntelliJ IDEA
-2. Choose Open
-3. Select the root folder of the repository
-4. When prompted:
-    - Trust the project
-    - Allow IntelliJ to import the Maven project
+These instructions assume you are in the **repository root** (the folder that contains `frontend/`, `src/`, and `requirements.txt`).
 
-IntelliJ should detect this as a Maven project automatically.
+### 2.1 Create `.env`
 
----
+Create a file named `.env` in the repository root with the values shown in [Shared `.env` contents](#shared-env-contents).
 
-## 4. Verify the JDK in IntelliJ
+> `SECRET_KEY` must be set before the backend can start successfully.
 
-In IntelliJ:
+### 2.2 Install dependencies
 
-1. File -> Project Structure -> Project
-2. Confirm:
-    - Project SDK: JDK 25
-    - Language level: 25
+From the repository root:
 
-If this is incorrect, fix it before continuing.
+#### macOS / Linux
 
----
-
-## 5. Do NOT Run MainApp Directly
-
-Do not click the green Run button on MainApp.
-
-Doing so will result in the following error:
-
-```
-JavaFX runtime components are missing
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+cd frontend
+npm install
 ```
 
-This project must be run using Maven, which correctly configures JavaFX.
+#### Windows PowerShell
 
----
-
-## 6. Run the Project (Choose One Method)
-
-### Option A - Run in IntelliJ (recommended)
-
-1. Open the Maven tool window
-2. Expand:
-   Project
-   -> Plugins
-   -> javafx
-3. Double-click:
-   javafx:run
-
-A JavaFX window should open.
-
----
-
-### Option B - Run from the Terminal (Maven Wrapper)
-
-This project uses the Maven Wrapper.
-You do not need to install Maven.
-
-Windows (PowerShell):
-
-```
-.\mvnw.cmd javafx:run
+```powershell
+py -3.11 -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+cd frontend
+npm install
 ```
 
-macOS or Linux:
+If `py` is unavailable, use `python -m venv .venv` instead.
 
+### 2.3 Start the backend
+
+Open a new terminal, go to the repository root, activate the Python virtual environment, then start Uvicorn.
+
+#### macOS / Linux
+
+```bash
+cd /path/to/seng300-202601-pg-3
+source .venv/bin/activate
+export PYTHONPATH=src
+uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
-./mvnw javafx:run
+
+#### Windows PowerShell
+
+```powershell
+cd C:\path\to\seng300-202601-pg-3
+.venv\Scripts\Activate.ps1
+$env:PYTHONPATH = 'src'
+uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-First run note:
-The first run may take one to two minutes while dependencies download. This is normal.
+If `uvicorn` is not found, run it explicitly with Python:
+
+```powershell
+.\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+Backend URLs:
+
+- API: `http://localhost:8000`
+- Docs: `http://localhost:8000/docs`
+
+**Game lobbies and live matches** are held in server memory. Use a **single Uvicorn worker** (the commands above default to one process). Restarting the backend clears open lobbies and in-progress games.
+
+### 2.4 Start the frontend
+
+Open a second terminal and run:
+
+```bash
+cd frontend
+npm start
+```
+
+The frontend will usually open at `http://localhost:3000`. If port `3000` is already in use, React will offer to run on an alternate port such as `3001`.
+
+### 2.5 Quick start script
+
+You can also use the repository helper script to start MongoDB (if needed), the backend, and the frontend together.
+
+These scripts are located in `scripts/` and will:
+
+- start MongoDB if port `27017` is free,
+- launch the FastAPI backend with `uvicorn`, and
+- start the React frontend with `npm start`.
+
+The scripts assume a working `.venv` and `.env` file. If `frontend/node_modules` is missing, the macOS script will install frontend dependencies automatically.
+
+#### macOS / Linux
+
+```bash
+cd /path/to/seng300-202601-pg-3
+./scripts/dev-macos.sh
+```
+
+#### Windows PowerShell
+
+```powershell
+cd C:\path\to\seng300-202601-pg-3
+.\scripts\dev-windows.ps1
+```
+
+The helper scripts expect a working `.venv` and `.env` file.
+
+If MongoDB is already running, add `SKIP_MONGO=1` before the command:
+
+```bash
+SKIP_MONGO=1 ./scripts/dev-macos.sh
+```
+
+```powershell
+$env:SKIP_MONGO = '1'; .\scripts\dev-windows.ps1
+```
+
+To use a custom MongoDB data directory, set `MONGO_DATA`.
+
+### 2.6 Start MongoDB manually (if needed)
+
+If you are not using the helper script, start MongoDB in a separate terminal:
+
+#### macOS / Linux
+
+```bash
+mkdir -p ~/mongodb-data
+mongod --dbpath ~/mongodb-data
+```
+
+#### Windows PowerShell
+
+```powershell
+cd "C:\Program Files\MongoDB\Server\<version>\bin"
+.\mongod.exe
+```
+
+Then run the backend as shown above.
+
+### 2.7 Quick troubleshooting
+
+- `.env` must exist in the repository root.
+- The Python virtual environment must be activated before starting the backend.
+- `PYTHONPATH=src` is required because the backend imports `app` from `src`.
+- If port `3000` is busy, use the alternate React port that is offered.
+
+### 2.8 Tests, screenshots, and video capture
+
+- **Run tests:** From repo root (venv on): `pytest src/app/test -q`. From `frontend/`: `npm test -- --watchAll=false` (PowerShell: `$env:CI='true'; npm test -- --watchAll=false`).
+- **UI screenshot strip (no login):** With the dev server running, open `http://localhost:3000/?screenshots` for a long page of static UI examples.
+- **Full guide for demos and course videos:** [docs/LOCAL_DEPLOYMENT_AND_VIDEO.md](docs/LOCAL_DEPLOYMENT_AND_VIDEO.md).
 
 ---
 
-## 7. Expected Result
+### Shared `.env` contents
 
-If everything is correct:
-- A JavaFX window opens
-- No JavaFX runtime errors appear
-- No additional setup is required
+Create a file named `.env` in the **project root** with:
 
-You are ready to start the project.
+```bash
+# Generate SECRET_KEY with:
+# python3 -c "import secrets; print(secrets.token_hex(32))"
+#   (Windows: py -c "import secrets; print(secrets.token_hex(32))")
+SECRET_KEY=
+
+# MongoDB
+MONGODB_URL=mongodb://localhost:27017
+DB_NAME=myapp
+
+# Token expiry
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+REFRESH_TOKEN_EXPIRE_DAYS=7
+```
+
+> **Important:** Set a real `SECRET_KEY` before starting the app. Do not commit `.env`.
+
+**Frontend API base URL (optional):** The React app defaults to `http://localhost:8000`. To use another host or port, create **`frontend/.env`** with `REACT_APP_API_URL=http://127.0.0.1:8000` and restart `npm start`.
 
 ---
 
-## 8. Common Problems (Quick Check)
+## 3. Detailed setup (by platform)
 
-If something goes wrong, check these first:
+The steps below expand on §2 with the same commands organized for macOS and Windows. If you already followed §2, you can skip to [§4. Production build](#4-production-build).
 
-- Running MainApp directly instead of javafx:run
-- Wrong JDK selected in IntelliJ
-- Installing JavaFX manually
-- Using mvn instead of mvnw or mvnw.cmd
+### macOS
 
-If the JavaFX window opens, your setup is correct.
+#### Backend (FastAPI)
+
+1. **Virtual environment (recommended)**
+
+   ```bash
+   python3 -m venv .venv
+   source .venv/bin/activate
+   ```
+
+2. **Install Python dependencies**
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **MongoDB**
+
+   **Option A — Data directory in your home folder (recommended)**
+
+   Plain `mongod` with no arguments uses `/data/db`, which does not exist on macOS by default. Use a folder you own:
+
+   ```bash
+   mkdir -p ~/mongodb-data
+   mongod --dbpath ~/mongodb-data
+   ```
+
+   **Important:** Creating `~/mongodb-data` does not switch MongoDB away from `/data/db`. You must start the server with **`mongod --dbpath ~/mongodb-data`** every time. Running plain `mongod` will always look for `/data/db` and fail on macOS unless you created that path.
+
+   Leave that terminal open while you develop. To stop MongoDB, press Ctrl+C in that window.
+
+   **Option B — Homebrew service**
+
+   ```bash
+   brew tap mongodb/brew
+   brew install mongodb-community
+   brew services start mongodb-community
+   ```
+
+   Stop later with: `brew services stop mongodb-community`.
+
+   **Option C — Homebrew `mongod` with its config (second terminal)**
+
+   ```bash
+   mongod --config "$(brew --prefix)/etc/mongod.conf"
+   ```
+
+   (Apple Silicon: Homebrew is often under `/opt/homebrew`; Intel Macs: `/usr/local`.)
+
+4. **Environment file** — Create `.env` in the **project root** (see [Shared `.env` contents](#shared-env-contents) below).
+
+5. **Start the backend** (venv activated, from project root). The app imports `app.*`, so `src` must be on `PYTHONPATH`:
+
+   ```bash
+   PYTHONPATH=src uvicorn app.main:app --reload
+   ```
+
+   - API: [http://localhost:8000](http://localhost:8000)
+   - Docs: [http://localhost:8000/docs](http://localhost:8000/docs)
+
+#### Frontend (React)
+
+Open another terminal tab/window.
+
+```bash
+cd frontend
+npm install    # or: yarn
+npm start      # or: yarn start
+```
+
+- App: [http://localhost:3000](http://localhost:3000)
 
 ---
 
-## Summary
+### Windows
 
-If the project runs using javafx:run, your setup is correct and you may begin work.
+```powershell
+cd C:\path\to\seng300-202601-pg-3
+```
 
+#### Backend (FastAPI)
+
+1. **Virtual environment (recommended)**
+
+   ```powershell
+   py -3.11 -m venv .venv
+   .venv\Scripts\activate
+   ```
+
+   If `py` is not available, use `python -m venv .venv` and the same `activate` line.
+
+2. **Install Python dependencies**
+
+   ```powershell
+   pip install -r requirements.txt
+   ```
+
+3. **MongoDB**
+   - Install MongoDB Community and add the **bin** folder to your **PATH**, **or** run `mongod.exe` from the install directory (version varies), for example:
+
+   ```powershell
+   cd "C:\Program Files\MongoDB\Server\8.2\bin"
+   .\mongod.exe
+   ```
+
+   Keep that window open, or install MongoDB as a **Windows Service** so it starts automatically.
+
+4. **Environment file** — Create `.env` in the **project root** (see [Shared `.env` contents](#shared-env-contents) below).
+
+5. **Start the backend** (venv activated, from project root). The app imports `app.*`, so `src` must be on `PYTHONPATH`:
+
+   ```powershell
+   $env:PYTHONPATH = "src"
+   uvicorn app.main:app --reload
+   ```
+
+   - API: [http://localhost:8000](http://localhost:8000)
+   - Docs: [http://localhost:8000/docs](http://localhost:8000/docs)
+
+#### Frontend (React)
+
+Open a second terminal.
+
+```powershell
+cd frontend
+npm install    # or: yarn
+npm start      # or: yarn start
+```
+
+- App: [http://localhost:3000](http://localhost:3000)
+
+---
+
+### Shared `.env` contents
+
+Use the same **project root** `.env` as in [§2.1 Create `.env`](#21-create-env) (including optional `frontend/.env` for `REACT_APP_API_URL` if needed).
+
+---
+
+## 4. Production build
+
+Production build steps are the same for the frontend on both platforms; only the way you open a terminal and `cd` into the repo differs.
+
+### macOS
+
+From the repository root:
+
+```bash
+cd frontend
+npm install
+npm run build
+```
+
+Output: `frontend/build/`.
+
+### Windows
+
+From the repository root:
+
+```powershell
+cd frontend
+npm install
+npm run build
+```
+
+Output: `frontend/build/`.
+
+### Backend
+
+There is no separate compile step; the FastAPI app runs with Python/Uvicorn. For deployment, install dependencies on the server and run the same command with `PYTHONPATH=src` (or set `PYTHONPATH` in the service environment).
+
+---
+
+## 5. Expected result
+
+- Login page loads in the browser at [http://localhost:3000](http://localhost:3000).
+- Backend API responds; routes may be stubbed if the database is not fully connected.
+- FastAPI docs are available at `/docs` on the backend port.
+
+---
+
+## 6. Common problems
+
+### macOS
+
+- **Port already in use** — Stop the other app or use `PORT=3001 npm start` for React.
+- **MongoDB connection refused** — Ensure `mongod` is running (`mongod --dbpath ~/mongodb-data` in a terminal, or `brew services list` if you use Homebrew). Confirm `MONGODB_URL` in `.env`.
+- **`NonExistentPath: Data directory /data/db not found`** — You ran `mongod` without `--dbpath`. Create a folder and use it: `mkdir -p ~/mongodb-data` then `mongod --dbpath ~/mongodb-data`.
+- **`uvicorn: command not found`** — Activate the venv (`source .venv/bin/activate`) or run `PYTHONPATH=src python3 -m uvicorn app.main:app --reload`.
+
+### Windows
+
+- **Port already in use** — Another app uses `3000` or `8000`. Close it or set `set PORT=3001` then `npm start` (CMD) or `$env:PORT=3001` (PowerShell).
+- **MongoDB connection refused** — Ensure `mongod` is running (service or dedicated terminal); confirm `MONGODB_URL` in `.env`.
+- **`uvicorn` is not recognized** — Activate `.venv\Scripts\activate` first, then set `PYTHONPATH` to `src` and run `uvicorn app.main:app --reload` (see the Windows run section).
+
+### All platforms
+
+- **`SECRET_KEY` errors** — The app requires a non-empty `SECRET_KEY` in `.env` at the project root when running Uvicorn from the repo root.

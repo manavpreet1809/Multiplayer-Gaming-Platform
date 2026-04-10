@@ -1,0 +1,96 @@
+.ttt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
+
+.ttt-info {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.ttt-players {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.ttt-player {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text-light);
+  padding: 0.3rem 0.75rem;
+  border-radius: 4px;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.ttt-player--active {
+  color: var(--color-primary);
+  background-color: var(--color-primary-light);
+  font-weight: 700;
+}
+
+.ttt-vs {
+  font-size: 0.75rem;
+  color: var(--color-text-disabled);
+  text-transform: uppercase;
+}
+
+.ttt-turn {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+/* Board */
+.ttt-board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  background-color: var(--color-primary);
+  border-radius: 8px;
+  overflow: hidden;
+  width: 300px;
+  height: 300px;
+}
+
+.ttt-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-surface);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.15s;
+}
+
+.ttt-cell:hover:not(:disabled) {
+  background-color: var(--color-primary-light);
+}
+
+.ttt-cell:disabled {
+  cursor: default;
+}
+
+.ttt-cell--winning {
+  background-color: var(--color-accent);
+}
+
+/* Marks */
+.ttt-mark {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1;
+  user-select: none;
+}
+
+.ttt-cell--x .ttt-mark {
+  color: var(--color-primary);
+}
+
+.ttt-cell--o .ttt-mark {
+  color: var(--color-error);
+}

@@ -1,0 +1,234 @@
+import React, { useMemo } from 'react';
+import './ChessBoard.css';
+
+import B_Bishop from '../UIAssets/ChessPieces/B_Bishop.svg';
+import B_King from '../UIAssets/ChessPieces/B_King.svg';
+import B_Knight from '../UIAssets/ChessPieces/B_Knight.svg';
+import B_Pawn from '../UIAssets/ChessPieces/B_Pawn.svg';
+import B_Queen from '../UIAssets/ChessPieces/B_Queen.svg';
+import B_Rook from '../UIAssets/ChessPieces/B_Rook.svg';
+import W_Bishop from '../UIAssets/ChessPieces/W_Bishop.svg';
+import W_King from '../UIAssets/ChessPieces/W_King.svg';
+import W_Knight from '../UIAssets/ChessPieces/W_Knight.svg';
+import W_Pawn from '../UIAssets/ChessPieces/W_Pawn.svg';
+import W_Queen from '../UIAssets/ChessPieces/W_Queen.svg';
+import W_Rook from '../UIAssets/ChessPieces/W_Rook.svg';
+
+const PIECE_NAMES = {
+  K: 'king', Q: 'queen', R: 'rook', B: 'bishop', N: 'knight', P: 'pawn',
+};
+
+const PIECE_IMAGES = {
+  K: W_King,
+  Q: W_Queen,
+  R: W_Rook,
+  B: W_Bishop,
+  N: W_Knight,
+  P: W_Pawn,
+  k: B_King,
+  q: B_Queen,
+  r: B_Rook,
+  b: B_Bishop,
+  n: B_Knight,
+  p: B_Pawn,
+};
+
+/** Unicode symbols for captured-pieces strip (matches PIECE_IMAGES keys). */
+const PIECE_SYMBOLS = {
+  K: '♔',
+  Q: '♕',
+  R: '♖',
+  B: '♗',
+  N: '♘',
+  P: '♙',
+  k: '♚',
+  q: '♛',
+  r: '♜',
+  b: '♝',
+  n: '♞',
+  p: '♟',
+};
+
+const FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+const RANKS = [8, 7, 6, 5, 4, 3, 2, 1];
+
+function CapturedPieceThumb({ piece }) {
+  const src = PIECE_IMAGES[piece];
+  const isWhite = piece && piece === piece.toUpperCase();
+  if (src) {
+    return (
+      <img
+        className={`chess-captured-thumb ${isWhite ? 'chess-captured-thumb--white' : 'chess-captured-thumb--black'}`}
+        src={src}
+        alt={`${isWhite ? 'White' : 'Black'} ${PIECE_NAMES[piece.toUpperCase()] || 'piece'}`}
+      />
+    );
+  }
+  return <span className="chess-captured-fallback">{PIECE_SYMBOLS[piece] ?? piece}</span>;
+}
+
+/**
+ * ChessBoard – visual board component (UC-13 UI).
+ *
+ * Props:
+ *   board              – 8x8 array of piece codes (e.g. "K","p") or null for empty.
+ *                         board[row][col], row 0 = rank 8 (black's back rank).
+ *   selectedSquare     – { row, col } of the currently selected square, or null
+ *   highlightedSquares – array of { row, col } for legal-move indicators
+ *   lastMove           – { from: {row,col}, to: {row,col} } to highlight the last move
+ *   currentPlayer      – "white" | "black"
+ *   isMyTurn           – whether the local player can interact
+ *   onSquareClick(row, col) – called when a square is clicked
+ *   playerColor        – "white" | "black" – the local player's color
+ *   opponentName       – display name of the opponent
+ *   capturedByWhite    – array of piece codes captured by white
+ *   capturedByBlack    – array of piece codes captured by black
+ */
+function ChessBoard({
+  board,
+  selectedSquare,
+  highlightedSquares = [],
+  lastMove,
+  currentPlayer,
+  isMyTurn = false,
+  onSquareClick,
+  playerColor = 'white',
+  opponentName,
+  capturedByWhite = [],
+  capturedByBlack = [],
+}) {
+  const isLight = (row, col) => (row + col) % 2 === 0;
+
+  const isSelected = (row, col) =>
+    selectedSquare && selectedSquare.row === row && selectedSquare.col === col;
+
+  const isHighlighted = (row, col) =>
+    highlightedSquares.some((sq) => sq.row === row && sq.col === col);
+
+  const isLastMove = (row, col) =>
+    lastMove &&
+    ((lastMove.from.row === row && lastMove.from.col === col) ||
+      (lastMove.to.row === row && lastMove.to.col === col));
+
+  const isWhitePiece = (piece) => piece && piece === piece.toUpperCase();
+
+  // Flip board if playing black (memoized — only recomputes when playerColor changes)
+  const { displayRows, displayCols, rowIndices, colIndices } = useMemo(() => {
+    const flipped = playerColor === 'black';
+    const seq = [0, 1, 2, 3, 4, 5, 6, 7];
+    const rev = [7, 6, 5, 4, 3, 2, 1, 0];
+    return {
+      displayRows: flipped ? [...RANKS].reverse() : RANKS,
+      displayCols: flipped ? [...FILES].reverse() : FILES,
+      rowIndices: flipped ? rev : seq,
+      colIndices: flipped ? rev : seq,
+    };
+  }, [playerColor]);
+
+  // Default starting position if no board prop provided
+  const defaultBoard = [
+    ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
+    ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null],
+    ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+    ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'],
+  ];
+
+  const currentBoard = board || defaultBoard;
+
+  return (
+    <div className="chess">
+      <div className="chess-info">
+        <div className="chess-players">
+          <span className={`chess-player ${currentPlayer === playerColor ? 'chess-player--active' : ''}`}>
+            You ({playerColor})
+          </span>
+          <span className="chess-vs">vs</span>
+          <span className={`chess-player ${currentPlayer !== playerColor ? 'chess-player--active' : ''}`}>
+            {opponentName || 'Opponent'} ({playerColor === 'white' ? 'black' : 'white'})
+          </span>
+        </div>
+        <p className="chess-turn">
+          {isMyTurn ? 'Your turn' : "Opponent's turn"}
+        </p>
+      </div>
+
+      <div className="chess-captured chess-captured--opponent" aria-label="Pieces your opponent captured">
+        {(playerColor === 'white' ? capturedByBlack : capturedByWhite).map((piece, i) => (
+          <span key={`${piece}-${i}`} className="chess-captured-piece">
+            <CapturedPieceThumb piece={piece} />
+          </span>
+        ))}
+      </div>
+
+      <div className="chess-board-wrapper">
+        {/* Rank labels (left side) */}
+        <div className="chess-rank-labels">
+          {rowIndices.map((ri) => (
+            <span key={ri} className="chess-label">{displayRows[playerColor === 'black' ? 7 - ri : ri]}</span>
+          ))}
+        </div>
+
+        <div className="chess-board" role="grid" aria-label="Chess board">
+          {rowIndices.map((ri) =>
+            colIndices.map((ci) => {
+              const piece = currentBoard[ri][ci];
+              return (
+                <button
+                  key={`${ri}-${ci}`}
+                  className={[
+                    'chess-square',
+                    isLight(ri, ci) ? 'chess-square--light' : 'chess-square--dark',
+                    isSelected(ri, ci) ? 'chess-square--selected' : '',
+                    isHighlighted(ri, ci) ? 'chess-square--highlighted' : '',
+                    isLastMove(ri, ci) ? 'chess-square--last-move' : '',
+                  ]
+                    .filter(Boolean)
+                    .join(' ')}
+                  onClick={() => onSquareClick && onSquareClick(ri, ci)}
+                  disabled={!isMyTurn && !selectedSquare}
+                  aria-label={`${displayCols[playerColor === 'black' ? 7 - ci : ci]}${displayRows[playerColor === 'black' ? 7 - ri : ri]}${piece ? `, ${isWhitePiece(piece) ? 'white' : 'black'} ${piece.toLowerCase()}` : ''}`}
+                >
+                  {piece && (
+                    <span className={`chess-piece ${isWhitePiece(piece) ? 'chess-piece--white' : 'chess-piece--black'}`}>
+                      <img
+                        src={PIECE_IMAGES[piece]}
+                        alt={`${isWhitePiece(piece) ? 'White' : 'Black'} ${PIECE_NAMES[piece.toUpperCase()]}`}
+                      />
+                    </span>
+                  )}
+                  {isHighlighted(ri, ci) && !piece && (
+                    <span className="chess-move-dot" />
+                  )}
+                  {isHighlighted(ri, ci) && piece && (
+                    <span className="chess-capture-ring" />
+                  )}
+                </button>
+              );
+            })
+          )}
+        </div>
+
+        {/* File labels (bottom) — aligned to board columns via CSS Grid */}
+        <div className="chess-file-labels">
+          {colIndices.map((ci) => (
+            <span key={ci} className="chess-label">{displayCols[playerColor === 'black' ? 7 - ci : ci]}</span>
+          ))}
+        </div>
+      </div>
+
+      <div className="chess-captured chess-captured--player" aria-label="Pieces you captured">
+        {(playerColor === 'white' ? capturedByWhite : capturedByBlack).map((piece, i) => (
+          <span key={`${piece}-${i}`} className="chess-captured-piece">
+            <CapturedPieceThumb piece={piece} />
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default ChessBoard;
