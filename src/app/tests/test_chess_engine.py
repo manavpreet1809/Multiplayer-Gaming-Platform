@@ -431,6 +431,67 @@ def test_capture_removes_opponent_piece():
     assert piece.pieceType == PieceType.ROOK
     assert piece.color == Color.WHITE
 
+# checkmate testcase
+def test_checkmate_detected():
+    # checks if checkmate is detected in a position where white queen and rook trap the black king
+    engine = ChessEngine()
+    board = ChessBoard()
+    board.setPiece(ChessPosition(7, 4), ChessPiece(PieceType.KING, Color.BLACK))
+    board.setPiece(ChessPosition(0, 4), ChessPiece(PieceType.KING, Color.WHITE))
+    board.setPiece(ChessPosition(5, 7), ChessPiece(PieceType.QUEEN, Color.WHITE))
+    board.setPiece(ChessPosition(5, 5), ChessPiece(PieceType.ROOK, Color.WHITE))
+    state = {
+        "board": board,
+        "players": {Color.WHITE: "Alice", Color.BLACK: "Bob"},
+        "activeColor": Color.BLACK,
+        "castlingRights": {Color.WHITE: {"kingside": False, "queenside": False},
+                           Color.BLACK: {"kingside": False, "queenside": False}},
+        "enPassantTarget": None,
+        "halfmoveClock": 0,
+    }
+    result = engine.evaluateEnd(state)
+    assert result is not None
+    assert result["isOver"] == True
+    assert result["result"] == "win"
+    assert result["reason"] == "checkmate"
+
+
+# stalemate
+def test_stalemate_detected():
+    # checks if the engine correctly identifies a stalemate situation and declares a draw
+    engine = ChessEngine()
+    board = ChessBoard()
+    board.setPiece(ChessPosition(7, 7), ChessPiece(PieceType.KING, Color.BLACK))
+    board.setPiece(ChessPosition(5, 6), ChessPiece(PieceType.KING, Color.WHITE))
+    board.setPiece(ChessPosition(6, 5), ChessPiece(PieceType.QUEEN, Color.WHITE))
+    state = {
+        "board": board,
+        "players": {Color.WHITE: "Alice", Color.BLACK: "Bob"},
+        "activeColor": Color.BLACK,
+        "castlingRights": {Color.WHITE: {"kingside": False, "queenside": False},
+                           Color.BLACK: {"kingside": False, "queenside": False}},
+        "enPassantTarget": None,
+        "halfmoveClock": 0,
+    }
+    result = engine.evaluateEnd(state)
+    assert result is not None
+    assert result["isOver"] == True
+    assert result["result"] == "draw"
+    assert result["reason"] == "stalemate"
+
+
+# fifty move rule
+def test_fifty_move_rule_draw():
+    # checks if the game ends in a draw when 50-move rule (100 half moves) is reached
+    engine, state = make_engine_and_state()
+    state["halfmoveClock"] = 100
+    result = engine.evaluateEnd(state)
+    assert result is not None
+    assert result["isOver"] == True
+    assert result["result"] == "draw"
+    assert result["reason"] == "50-move rule"
+
+
 
 
 
