@@ -202,7 +202,9 @@ def test_register_success():
         assert data["username"] == username
         assert data["email"] == email
         assert "password" not in data  # Password should never be returned
-@pytest.mark.xfail(reason="yet to confirm if we can create user with optional email/full_name fields")
+
+
+@pytest.mark.xfail(reason="Registration without email is not stable with current backend/DB constraints")
 def test_register_required_fields_only_success():
     """Test registration succeeds when only username and password are provided."""
     with TestClient(app) as client:
@@ -467,7 +469,7 @@ def test_me_with_deleted_user_returns_401(monkeypatch):
 
         assert response.status_code == 401
 
-def test_rate_limit():
+def test_login_rate_limit():
     """Test that rate limiting works on the login endpoint."""
     with TestClient(app) as client:
         # Register the user via helper
@@ -490,6 +492,31 @@ def test_rate_limit():
 
         assert hit_limit is True
         # precise error message depends on slowapi default or custom config
+        assert "Too Many Requests" in response.text or "Rate limit exceeded" in response.text
+
+
+def test_refresh_rate_limit():
+    """Test that rate limiting works on the refresh endpoint."""
+    with TestClient(app) as client:
+        _, _, refresh_token = register_and_login(client)
+
+        hit_limit = False
+        current_refresh = refresh_token
+
+        for _ in range(30):
+            response = client.post("/auth/refresh", json={"refresh_token": current_refresh})
+
+            if response.status_code == 200:
+                current_refresh = response.json()["refresh_token"]
+                continue
+
+            if response.status_code == 429:
+                hit_limit = True
+                break
+
+            assert False, f"unexpected status during refresh rate-limit test: {response.status_code}"
+
+        assert hit_limit is True
         assert "Too Many Requests" in response.text or "Rate limit exceeded" in response.text
 
 def test_refresh_revokes_old_token():
@@ -659,7 +686,6 @@ def test_logout_with_wrong_token_type():
         assert response.status_code == 401
 
 
-@pytest.mark.xfail(reason="/auth/reset-password endpoint is not implemented yet")
 def test_reset_password():
     """Test resetting a user's password and logging in with the new one."""
     with TestClient(app) as client:
@@ -684,3 +710,76 @@ def test_reset_password():
         })
         assert new_login.status_code == 200
         assert "access_token" in new_login.json()
+
+
+def test_reset_password_by_email():
+    """Reset password using email identifier and verify old password no longer works."""
+    with TestClient(app) as client:
+        username, _, _ = register_and_login(client)
+        email = f"{username}@example.com"
+        new_password = "NewPassword3#"
+
+        response = client.post("/auth/reset-password", json={
+            "identifier": email,
+            "new_password": new_password,
+        })
+        assert response.status_code == 200
+
+        old_login = client.post("/auth/login", data={
+            "username": username,
+            "password": "MyPassword1!",
+        })
+        assert old_login.status_code == 401
+
+        new_login = client.post("/auth/login", data={
+            "username": username,
+            "password": new_password,
+        })
+        assert new_login.status_code == 200
+
+
+def test_reset_password_unknown_identifier_returns_400():
+    """Unknown username/email should return a user-not-found business error."""
+    with TestClient(app) as client:
+        response = client.post("/auth/reset-password", json={
+            "identifier": f"missing_{random_string()}",
+            "new_password": "NewPassword4$",
+        })
+
+        assert response.status_code == 400
+        assert response.json()["detail"] == "User not found"
+
+
+def test_reset_password_weak_new_password_returns_422():
+    """Password policy should be enforced for reset-password requests."""
+    with TestClient(app) as client:
+        username, _, _ = register_and_login(client)
+
+        response = client.post("/auth/reset-password", json={
+            "identifier": username,
+            "new_password": "weak",
+        })
+
+        assert response.status_code == 422
+
+
+def test_reset_password_rate_limit():
+    """Test that rate limiting works on the reset-password endpoint."""
+    with TestClient(app) as client:
+        username, _, _ = register_and_login(client)
+
+        hit_limit = False
+        for i in range(8):
+            response = client.post("/auth/reset-password", json={
+                "identifier": username,
+                "new_password": f"StrongPass{i}#A",
+            })
+
+            if response.status_code == 429:
+                hit_limit = True
+                break
+
+            assert response.status_code == 200, response.text
+
+        assert hit_limit is True
+        assert "Too Many Requests" in response.text or "Rate limit exceeded" in response.text

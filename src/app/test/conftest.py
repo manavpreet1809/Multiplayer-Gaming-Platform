@@ -8,6 +8,8 @@ import app.main as main_module
 from app.main import app
 from app.db import mongo as validUser_mongo
 from app.db import usersRepo
+from app.db.ConnectionManager import manager
+from app.api import games as games_api
 from app.services import authServices
 
 @pytest.fixture(scope="session", autouse=True)
@@ -56,3 +58,29 @@ def patch_lifespan():
     # Swap in the wrapper for tests.
     app.router.lifespan_context = new_lifespan_wrapper
     yield
+
+
+@pytest.fixture(autouse=True)
+def reset_backend_shared_state():
+    """Keep backend tests isolated by resetting shared in-memory state."""
+    storage = getattr(authServices.limiter, "_storage", None)
+    if storage and hasattr(storage, "reset"):
+        storage.reset()
+
+    games_api._games.clear()
+    games_api._lobby_codes.clear()
+    games_api._global_chat.clear()
+    games_api._global_ws.clear()
+    manager.active_connections.clear()
+
+    yield
+
+    storage = getattr(authServices.limiter, "_storage", None)
+    if storage and hasattr(storage, "reset"):
+        storage.reset()
+
+    games_api._games.clear()
+    games_api._lobby_codes.clear()
+    games_api._global_chat.clear()
+    games_api._global_ws.clear()
+    manager.active_connections.clear()
