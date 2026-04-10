@@ -2,10 +2,15 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 .kotlin
+.venv
 
 ### Environment Files ###
 .env
 *.env.local
+
+### python cache ###
+__pycache__/
+*.pyc
 
 ### IntelliJ IDEA ###
 .idea/

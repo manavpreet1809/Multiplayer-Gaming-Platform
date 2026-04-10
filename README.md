@@ -1,140 +1,94 @@
-# First-Day Setup Checklist — JavaFX Maven Project
+**DO NOT USE SAFARI**
 
-Use this checklist **before you start working** on the project.  
-If all items pass, your environment is correctly set up.
+
+## Tech Stack
+
+- Database: MongoDB
+- Backend: FastAPI (Python)
+- Frontend: React.js (JavaScript)
 
 ---
 
 ## 1. Required Software
 
-Confirm you have **all** of the following:
+Python 3.11+
+Node.js 18+ (for React frontend)
+npm or yarn (frontend package manager)
+MongoDB Compass (local database)
 
-- ✅ **JDK 25** installed
-- ✅ **IntelliJ IDEA** (Community or Ultimate)
-- ✅ Git installed
+## 2. Run the Project
 
-> ⚠ **IntelliJ is the expected IDE for this course.**  
-> Students using any other IDE may encounter setup and collaboration issues when working in groups that use IntelliJ exclusively.  
-> If you use something other than IntelliJ, you are responsible for resolving any IDE-specific issues.
+### Backend (FastAPI)
 
----
+#### 1. Install Python dependencies:
 
-## 2. Clone the Repository
+pip install -r requirements.txt
 
-Clone the starter repository using Git (HTTPS or SSH):
-
+### 1.5 Install Mongo DB Server
+Install mongo db server, add mongod.exe to system path or navigate to this directory
+Then run the following in a new cmd
 ```
-git clone <repo-url>
-cd <repo-directory>
-```
-
-Do not copy files manually between machines.
-
----
-
-## 3. Open the Project in IntelliJ
-
-1. Open IntelliJ IDEA
-2. Choose Open
-3. Select the root folder of the repository
-4. When prompted:
-    - Trust the project
-    - Allow IntelliJ to import the Maven project
-
-IntelliJ should detect this as a Maven project automatically.
-
----
-
-## 4. Verify the JDK in IntelliJ
-
-In IntelliJ:
-
-1. File -> Project Structure -> Project
-2. Confirm:
-    - Project SDK: JDK 25
-    - Language level: 25
-
-If this is incorrect, fix it before continuing.
-
----
-
-## 5. Do NOT Run MainApp Directly
-
-Do not click the green Run button on MainApp.
-
-Doing so will result in the following error:
-
-```
-JavaFX runtime components are missing
+cd C:\Program Files\MongoDB\Server\8.2\bin
+mkdir C:\data\db
+mongod --dbpath C:\data\db
 ```
 
-This project must be run using Maven, which correctly configures JavaFX.
+#### 2. Create .env in project root directory with following contents:
 
----
+\# Generate with: python -c "import secrets; print(secrets.token_hex(32)) and place here"
+SECRET_KEY=
 
-## 6. Run the Project (Choose One Method)
+\# MongoDB
+MONGODB_URL=mongodb://localhost:27017
+DB_NAME=myapp
 
-### Option A - Run in IntelliJ (recommended)
+\# Token expiry
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+REFRESH_TOKEN_EXPIRE_DAYS=7
 
-1. Open the Maven tool window
-2. Expand:
-   Project
-   -> Plugins
-   -> javafx
-3. Double-click:
-   javafx:run
+#### 4. Navigate to the frontend folder
 
-A JavaFX window should open.
+cd src
 
----
+#### 3. Start the backend server:
 
-### Option B - Run from the Terminal (Maven Wrapper)
+uvicorn app.main:app --reload
 
-This project uses the Maven Wrapper.
-You do not need to install Maven.
+FastAPI server runs at localhost:8000
+API docs available at localhost:8000/docs
 
-Windows (PowerShell):
+### Frontend (React)
 
-```
-.\mvnw.cmd javafx:run
-```
+#### 1. Navigate to the frontend folder
 
-macOS or Linux:
+cd frontend
 
-```
-./mvnw javafx:run
-```
+#### 2. Install Node dependencies
 
-First run note:
-The first run may take one to two minutes while dependencies download. This is normal.
+##### If using npm:
 
----
+npm install
 
-## 7. Expected Result
+##### If using yarn:
 
-If everything is correct:
-- A JavaFX window opens
-- No JavaFX runtime errors appear
-- No additional setup is required
+yarn
 
-You are ready to start the project.
+#### 3. Start the frontend server
 
----
+##### If using npm
 
-## 8. Common Problems (Quick Check)
+npm start
 
-If something goes wrong, check these first:
+##### If using yarn
 
-- Running MainApp directly instead of javafx:run
-- Wrong JDK selected in IntelliJ
-- Installing JavaFX manually
-- Using mvn instead of mvnw or mvnw.cmd
+yarn start
 
-If the JavaFX window opens, your setup is correct.
+React frontend runs at http://localhost:3000
 
----
+## 3. Expected Result
 
-## Summary
+Login page loads in browser (http://localhost:3000)
+Backend API accessible and routes respond (stubbed if database is not fully connected)
+FastAPI docs visible at /docs
 
-If the project runs using javafx:run, your setup is correct and you may begin work.
-
+## 4. Common Problems

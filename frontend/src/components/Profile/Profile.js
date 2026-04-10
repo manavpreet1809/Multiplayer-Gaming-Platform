@@ -1,46 +1,43 @@
-import React from 'react';
-import './Profile.css';
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import "./Profile.css";
+import { AuthContext } from "../../context/AuthContext";
 
 /**
  * Profile component (UC-09).
  *
  * Props:
- *   username        – player's username
- *   email           – player's email
  *   generalStats    – { gamesPlayed, wins, losses, ties }
  *   gameStats       – array of { gameType, gamesPlayed, wins, losses, rank, mmr }
  *   onEditSettings()– navigate to account settings (UC-10)
- *   onBack()        – return to dashboard
  */
 function Profile({
-  username,
-  email,
   generalStats = { gamesPlayed: 0, wins: 0, losses: 0, ties: 0 },
   gameStats = [],
   onEditSettings,
-  onBack,
 }) {
   const hasPlayed = generalStats.gamesPlayed > 0;
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   return (
     <div className="profile">
       <div className="profile-header">
         <h2 className="profile-title">Player Profile</h2>
-        {onBack && (
-          <button className="profile-back" onClick={onBack}>
-            Back to Dashboard
-          </button>
-        )}
+
+        <button className="profile-back" onClick={() => navigate("/dashboard")}>
+          Back to Dashboard
+        </button>
       </div>
 
       <section className="profile-info">
         <div className="profile-field">
           <span className="profile-field-label">Username</span>
-          <span className="profile-field-value">{username}</span>
+          <span className="profile-field-value">{user.username}</span>
         </div>
         <div className="profile-field">
           <span className="profile-field-label">Email</span>
-          <span className="profile-field-value">{email}</span>
+          <span className="profile-field-value">{user.email}</span>
         </div>
       </section>
 
@@ -49,7 +46,9 @@ function Profile({
         {hasPlayed ? (
           <div className="profile-stat-grid">
             <div className="profile-stat">
-              <span className="profile-stat-value">{generalStats.gamesPlayed}</span>
+              <span className="profile-stat-value">
+                {generalStats.gamesPlayed}
+              </span>
               <span className="profile-stat-label">Games Played</span>
             </div>
             <div className="profile-stat">

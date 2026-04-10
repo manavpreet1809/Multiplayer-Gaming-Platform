@@ -1,6 +1,6 @@
 from app.models.Game import Game
 from app.models.Player import Player
-from app.models.Move import Move
+from app.models.Move import MoveRecord
 from app.models.GameState import GameState
 from app.models.GameSettings import GameSettings
 from app.models.GameStatus import GameStatus
