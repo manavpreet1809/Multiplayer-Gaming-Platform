@@ -1,10 +1,21 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import Dashboard from './Dashboard';
+import { AuthContext } from '../../context/AuthContext';
+
+const mockNavigate = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+    useNavigate: () => mockNavigate,
+}), { virtual: true });
 
 describe('Dashboard component', () => {
-    const mockOnLogout = jest.fn();
-    const mockOnNavigate = jest.fn();
+    const mockLogout = jest.fn();
+    const mockOnBrowseGames = jest.fn();
+    const mockOnCreateGame = jest.fn();
+    const mockOnJoinGame = jest.fn();
+    const mockOnEnqueue = jest.fn();
+    const mockOnOpenChat = jest.fn();
 
     beforeEach(() => {
         jest.clearAllMocks();
@@ -12,12 +23,16 @@ describe('Dashboard component', () => {
 
     function renderDashboard(props = {}) {
         return render(
-            <Dashboard
-                onLogout={mockOnLogout}
-                onNavigate={mockOnNavigate}
-                username="TestUser"
-                {...props}
-            />
+            <AuthContext.Provider value={{ user: { username: 'TestUser' }, logout: mockLogout, login: jest.fn() }}>
+                <Dashboard
+                    onBrowseGames={mockOnBrowseGames}
+                    onCreateGame={mockOnCreateGame}
+                    onJoinGame={mockOnJoinGame}
+                    onEnqueue={mockOnEnqueue}
+                    onOpenChat={mockOnOpenChat}
+                    {...props}
+                />
+            </AuthContext.Provider>
         );
     }
 
@@ -37,14 +52,8 @@ describe('Dashboard component', () => {
     test('calls onNavigate when a navigation option is clicked', () => {
         renderDashboard();
 
-        // Try clicking any visible navigation element
-        const navElement = screen.getAllByRole('button')[0];
-        fireEvent.click(navElement);
-
-        // Only check if handler exists
-        if (mockOnNavigate.mock.calls.length > 0) {
-            expect(mockOnNavigate).toHaveBeenCalled();
-        }
+        fireEvent.click(screen.getByRole('button', { name: /profile/i }));
+        expect(mockNavigate).toHaveBeenCalledWith('/profile');
     });
 
     test('calls onLogout when logout button is clicked', () => {
@@ -53,7 +62,7 @@ describe('Dashboard component', () => {
         const logoutButton = screen.getByRole('button', { name: /logout|log out/i });
         fireEvent.click(logoutButton);
 
-        expect(mockOnLogout).toHaveBeenCalled();
+        expect(mockLogout).toHaveBeenCalled();
     });
 
     test('renders main dashboard container', () => {

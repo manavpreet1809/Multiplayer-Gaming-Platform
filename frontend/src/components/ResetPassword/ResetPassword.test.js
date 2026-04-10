@@ -1,20 +1,29 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import ResetPassword from './ResetPassword';
+import { resetPassword } from '../../services/authService';
+
+const mockNavigate = jest.fn();
+
+jest.mock('../../services/authService', () => ({
+    resetPassword: jest.fn(),
+}));
+
+jest.mock('react-router-dom', () => ({
+    useNavigate: () => mockNavigate,
+}), { virtual: true });
 
 describe('ResetPassword component', () => {
-    const mockOnResetPassword = jest.fn();
     const mockOnBackToLogin = jest.fn();
 
     beforeEach(() => {
         jest.clearAllMocks();
-        mockOnResetPassword.mockResolvedValue(undefined);
+        resetPassword.mockResolvedValue(undefined);
     });
 
     function renderResetPassword(props = {}) {
         return render(
             <ResetPassword
-                onResetPassword={mockOnResetPassword}
                 onBackToLogin={mockOnBackToLogin}
                 {...props}
             />
@@ -71,15 +80,28 @@ describe('ResetPassword component', () => {
         fireEvent.click(screen.getByRole('button', { name: /^reset password$/i }));
 
         await waitFor(() => {
-            expect(mockOnResetPassword).toHaveBeenCalled();
+            expect(resetPassword).toHaveBeenCalledWith('user1', 'ValidPass1!');
         });
     });
 
     test('calls onBackToLogin when back button is clicked', () => {
         renderResetPassword();
 
-        fireEvent.click(screen.getByRole('button', { name: /back to log in/i }));
+        fireEvent.change(screen.getByLabelText(/username or email/i), {
+            target: { value: 'user1' },
+        });
+        fireEvent.click(screen.getByRole('button', { name: /continue/i }));
+        fireEvent.change(screen.getByLabelText(/^new password$/i), {
+            target: { value: 'ValidPass1!' },
+        });
+        fireEvent.change(screen.getByLabelText(/confirm new password/i), {
+            target: { value: 'ValidPass1!' },
+        });
+        fireEvent.click(screen.getByRole('button', { name: /^reset password$/i }));
 
-        expect(mockOnBackToLogin).toHaveBeenCalled();
+        return waitFor(() => {
+            fireEvent.click(screen.getAllByRole('button', { name: /back to log in/i })[0]);
+            expect(mockOnBackToLogin).toHaveBeenCalled();
+        });
     });
 });
