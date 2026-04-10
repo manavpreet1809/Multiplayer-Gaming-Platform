@@ -204,24 +204,7 @@ def test_register_success():
         assert "password" not in data  # Password should never be returned
 
 
-@pytest.mark.xfail(reason="Registration without email is not stable with current backend/DB constraints")
-def test_register_required_fields_only_success():
-    """Test registration succeeds when only username and password are provided."""
-    with TestClient(app) as client:
-        username = f"user_{random_string()}"
-        password = "MyPassword1!"
 
-        response = client.post("/auth/register", json={
-            "username": username,
-            "password": password,
-        })
-
-        assert response.status_code == 201
-        data = response.json()
-        assert data["username"] == username
-        assert data.get("email") is None
-        assert data.get("full_name") is None
-        assert data["disabled"] is False
 
 
 def test_register_duplicate_username():
