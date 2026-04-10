@@ -1,23 +1,44 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import Register from './Register';
+import { AuthContext } from '../../context/AuthContext';
+import {
+    register as authRegister,
+    login as authLogin,
+    getMe,
+} from '../../services/authService';
+
+const mockNavigate = jest.fn();
+const mockLogin = jest.fn();
+
+jest.mock('../../services/authService', () => ({
+    register: jest.fn(),
+    login: jest.fn(),
+    getMe: jest.fn(),
+}));
+
+jest.mock('react-router-dom', () => ({
+    useNavigate: () => mockNavigate,
+}), { virtual: true });
 
 describe('Register component', () => {
-    const mockOnRegister = jest.fn();
     const mockOnLogin = jest.fn();
 
     beforeEach(() => {
         jest.clearAllMocks();
-        mockOnRegister.mockResolvedValue(undefined);
+        authRegister.mockResolvedValue(undefined);
+        authLogin.mockResolvedValue({ access_token: 'token' });
+        getMe.mockResolvedValue({ username: 'user1', email: 'user1@example.com' });
     });
 
     function renderRegister(props = {}) {
         return render(
-            <Register
-                onRegister={mockOnRegister}
-                onLogin={mockOnLogin}
-                {...props}
-            />
+            <AuthContext.Provider value={{ user: null, login: mockLogin, logout: jest.fn() }}>
+                <Register
+                    onLogin={mockOnLogin}
+                    {...props}
+                />
+            </AuthContext.Provider>
         );
     }
 
@@ -37,7 +58,7 @@ describe('Register component', () => {
         fireEvent.click(screen.getByRole('button', { name: /create account/i }));
 
         expect(screen.getByRole('alert')).toHaveTextContent(/all fields are required/i);
-        expect(mockOnRegister).not.toHaveBeenCalled();
+        expect(authRegister).not.toHaveBeenCalled();
     });
 
     test('shows validation error when passwords do not match', () => {
@@ -59,7 +80,7 @@ describe('Register component', () => {
         fireEvent.click(screen.getByRole('button', { name: /create account/i }));
 
         expect(screen.getByRole('alert')).toHaveTextContent(/passwords do not match/i);
-        expect(mockOnRegister).not.toHaveBeenCalled();
+        expect(authRegister).not.toHaveBeenCalled();
     });
 
     test('shows password rule validation error for weak password', () => {
@@ -81,10 +102,10 @@ describe('Register component', () => {
         fireEvent.click(screen.getByRole('button', { name: /create account/i }));
 
         expect(screen.getByRole('alert')).toHaveTextContent(/password must contain/i);
-        expect(mockOnRegister).not.toHaveBeenCalled();
+        expect(authRegister).not.toHaveBeenCalled();
     });
 
-    test('calls onRegister with trimmed username and email when form is valid', async () => {
+    test('submits valid form and logs user in', async () => {
         renderRegister();
 
         fireEvent.change(screen.getByLabelText(/username/i), {
@@ -103,16 +124,20 @@ describe('Register component', () => {
         fireEvent.click(screen.getByRole('button', { name: /create account/i }));
 
         await waitFor(() => {
-            expect(mockOnRegister).toHaveBeenCalledWith(
+            expect(authRegister).toHaveBeenCalledWith(
                 'user1',
                 'user1@example.com',
                 'ValidPass1!'
             );
         });
+        expect(authLogin).toHaveBeenCalledWith('user1', 'ValidPass1!');
+        expect(getMe).toHaveBeenCalled();
+        expect(mockLogin).toHaveBeenCalledWith({ username: 'user1', email: 'user1@example.com' });
+        expect(mockNavigate).toHaveBeenCalledWith('/dashboard');
     });
 
     test('shows backend error when registration fails', async () => {
-        mockOnRegister.mockRejectedValue(new Error('Email already exists'));
+        authRegister.mockRejectedValue(new Error('Email already exists'));
         renderRegister();
 
         fireEvent.change(screen.getByLabelText(/username/i), {
@@ -139,6 +164,6 @@ describe('Register component', () => {
         renderRegister();
 
         fireEvent.click(screen.getByRole('button', { name: /already have an account\? log in/i }));
-        expect(mockOnLogin).toHaveBeenCalled();
+        expect(mockNavigate).toHaveBeenCalledWith('/');
     });
 });

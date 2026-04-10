@@ -1,22 +1,26 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import Profile from './Profile';
+import { AuthContext } from '../../context/AuthContext';
+
+const mockNavigate = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+    useNavigate: () => mockNavigate,
+}), { virtual: true });
 
 describe('Profile component', () => {
-    const mockOnBack = jest.fn();
-
     beforeEach(() => {
         jest.clearAllMocks();
     });
 
     function renderProfile(props = {}) {
         return render(
-            <Profile
-                onBack={mockOnBack}
-                username="TestUser"
-                email="testuser@example.com"
-                {...props}
-            />
+            <AuthContext.Provider
+                value={{ user: { username: 'TestUser', email: 'testuser@example.com' }, login: jest.fn(), logout: jest.fn() }}
+            >
+                <Profile {...props} />
+            </AuthContext.Provider>
         );
     }
 
@@ -52,6 +56,6 @@ describe('Profile component', () => {
 
         fireEvent.click(screen.getByRole('button', { name: /back to dashboard/i }));
 
-        expect(mockOnBack).toHaveBeenCalled();
+        expect(mockNavigate).toHaveBeenCalledWith('/dashboard');
     });
 });
