@@ -321,6 +321,115 @@ def test_en_passant_capture():
     move = ChessMove(ChessPosition(4, 4), ChessPosition(5, 5))
     assert engine.validateMove(state, move) == True
 
+# pawn promotion test cases
+def test_pawn_promotion_to_rook():
+    #  checks that pawn can promote to a rook
+    engine = ChessEngine()
+    board = ChessBoard()
+    board.setPiece(ChessPosition(6, 0), ChessPiece(PieceType.PAWN, Color.WHITE))
+    board.setPiece(ChessPosition(0, 4), ChessPiece(PieceType.KING, Color.WHITE))
+    board.setPiece(ChessPosition(7, 4), ChessPiece(PieceType.KING, Color.BLACK))
+    state = {
+        "board": board,
+        "players": {Color.WHITE: "Alice", Color.BLACK: "Bob"},
+        "activeColor": Color.WHITE,
+        "castlingRights": {Color.WHITE: {"kingside": False, "queenside": False},
+                           Color.BLACK: {"kingside": False, "queenside": False}},
+        "enPassantTarget": None,
+        "halfmoveClock": 0,
+    }
+    move = ChessMove(ChessPosition(6, 0), ChessPosition(7, 0), PieceType.ROOK)
+    new_state = engine.applyMove(state, move)
+    promoted = new_state["board"].getPiece(ChessPosition(7, 0))
+    assert promoted.pieceType == PieceType.ROOK
+    assert promoted.color == Color.WHITE
+
+def test_pawn_promotion_default_queen():
+    # checks if pawn promotes to queen by default when no promotion specified
+    engine = ChessEngine()
+    board = ChessBoard()
+    board.setPiece(ChessPosition(6, 0), ChessPiece(PieceType.PAWN, Color.WHITE))
+    board.setPiece(ChessPosition(0, 4), ChessPiece(PieceType.KING, Color.WHITE))
+    board.setPiece(ChessPosition(7, 4), ChessPiece(PieceType.KING, Color.BLACK))
+    state = {
+        "board": board,
+        "players": {Color.WHITE: "Alice", Color.BLACK: "Bob"},
+        "activeColor": Color.WHITE,
+        "castlingRights": {Color.WHITE: {"kingside": False, "queenside": False},
+                           Color.BLACK: {"kingside": False, "queenside": False}},
+        "enPassantTarget": None,
+        "halfmoveClock": 0,
+    }
+    move = ChessMove(ChessPosition(6, 0), ChessPosition(7, 0))
+    new_state = engine.applyMove(state, move)
+    promoted = new_state["board"].getPiece(ChessPosition(7, 0))
+    assert promoted.pieceType == PieceType.QUEEN
+
+def test_turn_switches_after_move():
+    # checks if turn switches from white to black after white makes a move
+    engine, state = make_engine_and_state()
+    move = ChessMove(ChessPosition(1, 0), ChessPosition(2, 0))
+    new_state = engine.applyMove(state, move)
+    assert new_state["activeColor"] == Color.BLACK
+
+def test_halfmove_clock_increments():
+    # halfmove clock should go up by 1 when no pawn moved and nothing got captured
+    engine = ChessEngine()
+    board = ChessBoard()
+    board.setPiece(ChessPosition(4, 4), ChessPiece(PieceType.ROOK, Color.WHITE))
+    board.setPiece(ChessPosition(0, 4), ChessPiece(PieceType.KING, Color.WHITE))
+    board.setPiece(ChessPosition(7, 4), ChessPiece(PieceType.KING, Color.BLACK))
+    state = {
+        "board": board,
+        "players": {Color.WHITE: "Alice", Color.BLACK: "Bob"},
+        "activeColor": Color.WHITE,
+        "castlingRights": {Color.WHITE: {"kingside": False, "queenside": False},
+                           Color.BLACK: {"kingside": False, "queenside": False}},
+        "enPassantTarget": None,
+        "halfmoveClock": 0,
+    }
+    move = ChessMove(ChessPosition(4, 4), ChessPosition(4, 5))
+    new_state = engine.applyMove(state, move)
+    assert new_state["halfmoveClock"] == 1
+
+def test_halfmove_clock_resets_on_pawn_move():
+    # checks if halfmove clock resets to 0 after a pawn move
+    engine, state = make_engine_and_state()
+    state["halfmoveClock"] = 10
+    move = ChessMove(ChessPosition(1, 0), ChessPosition(2, 0))
+    new_state = engine.applyMove(state, move)
+    assert new_state["halfmoveClock"] == 0
+
+def test_piece_marked_as_moved():
+    # checks if piece hasMoved flag is set to True after moving
+    engine, state = make_engine_and_state()
+    move = ChessMove(ChessPosition(1, 0), ChessPosition(2, 0))
+    new_state = engine.applyMove(state, move)
+    piece = new_state["board"].getPiece(ChessPosition(2, 0))
+    assert piece.hasMoved == True
+
+def test_capture_removes_opponent_piece():
+    # checks if capturing an opponent piece removes it from the board
+    engine = ChessEngine()
+    board = ChessBoard()
+    board.setPiece(ChessPosition(4, 4), ChessPiece(PieceType.ROOK, Color.WHITE))
+    board.setPiece(ChessPosition(4, 7), ChessPiece(PieceType.PAWN, Color.BLACK))
+    board.setPiece(ChessPosition(0, 4), ChessPiece(PieceType.KING, Color.WHITE))
+    board.setPiece(ChessPosition(7, 4), ChessPiece(PieceType.KING, Color.BLACK))
+    state = {
+        "board": board,
+        "players": {Color.WHITE: "Alice", Color.BLACK: "Bob"},
+        "activeColor": Color.WHITE,
+        "castlingRights": {Color.WHITE: {"kingside": False, "queenside": False},
+                           Color.BLACK: {"kingside": False, "queenside": False}},
+        "enPassantTarget": None,
+        "halfmoveClock": 0,
+    }
+    move = ChessMove(ChessPosition(4, 4), ChessPosition(4, 7))
+    new_state = engine.applyMove(state, move)
+    piece = new_state["board"].getPiece(ChessPosition(4, 7))
+    assert piece.pieceType == PieceType.ROOK
+    assert piece.color == Color.WHITE
 
 
 
