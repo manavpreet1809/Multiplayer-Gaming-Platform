@@ -3,40 +3,94 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import GameLobby from './GameLobby';
 
 describe('GameLobby', () => {
-  test('renders lobby and players', () => {
-    const onLeave = jest.fn();
-    render(
-      <GameLobby
-        lobbyId="ABCD"
-        gameName="Chess"
-        status="waiting"
-        players={[{ id: 'a', username: 'a', isReady: false }]}
-        requiredPlayers={2}
-        onLeaveLobby={onLeave}
-      />,
-    );
-    expect(screen.getByText(/chess lobby/i)).toBeInTheDocument();
-    expect(screen.getByText(/ABCD/)).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: /leave lobby/i }));
-    expect(onLeave).toHaveBeenCalled();
+  const mockLeave = jest.fn();
+  const mockToggleReady = jest.fn();
+  const mockStartGame = jest.fn();
+
+  const players = [
+    { id: 1, username: 'Alice', isReady: true },
+    { id: 2, username: 'Bob', isReady: false },
+  ];
+
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  test('shows start when host can start', () => {
-    const onStart = jest.fn();
+  test('renders lobby title, id, and waiting status', () => {
     render(
       <GameLobby
-        lobbyId="X"
+        lobbyId="12345"
         gameName="Chess"
         status="waiting"
-        players={[
-          { id: 'a', username: 'a', isReady: true },
-          { id: 'b', username: 'b', isReady: true },
-        ]}
-        requiredPlayers={2}
-        onStartGame={onStart}
-      />,
+        players={players}
+      />
     );
-    fireEvent.click(screen.getByRole('button', { name: /start game/i }));
-    expect(onStart).toHaveBeenCalled();
+
+    expect(screen.getByText('Chess Lobby')).toBeInTheDocument();
+    expect(screen.getByText('Lobby ID: 12345')).toBeInTheDocument();
+    expect(screen.getByText('Waiting for players')).toBeInTheDocument();
+  });
+
+  test('renders players and empty waiting slots correctly', () => {
+    render(
+      <GameLobby
+        lobbyId="12345"
+        gameName="Chess"
+        players={[players[0]]}
+        requiredPlayers={2}
+      />
+    );
+
+    expect(screen.getByText('Alice')).toBeInTheDocument();
+    expect(screen.getByText('Ready')).toBeInTheDocument();
+    expect(screen.getByText('Waiting for player…')).toBeInTheDocument();
+  });
+
+  test('calls onLeaveLobby when leave button is clicked', () => {
+    render(
+      <GameLobby
+        lobbyId="12345"
+        gameName="Chess"
+        players={players}
+        onLeaveLobby={mockLeave}
+      />
+    );
+
+    fireEvent.click(screen.getByText('Leave Lobby'));
+    expect(mockLeave).toHaveBeenCalled();
+  });
+
+  test('calls onToggleReady when toggle ready button is clicked', () => {
+    render(
+      <GameLobby
+        lobbyId="12345"
+        gameName="Chess"
+        status="waiting"
+        players={players}
+        onToggleReady={mockToggleReady}
+      />
+    );
+
+    fireEvent.click(screen.getByText('Toggle Ready'));
+    expect(mockToggleReady).toHaveBeenCalled();
+  });
+
+  test('shows start game button only when enough players are present and calls onStartGame', () => {
+    render(
+      <GameLobby
+        lobbyId="12345"
+        gameName="Chess"
+        status="waiting"
+        players={players}
+        requiredPlayers={2}
+        onStartGame={mockStartGame}
+      />
+    );
+
+    const startButton = screen.getByText('Start Game');
+    expect(startButton).toBeInTheDocument();
+
+    fireEvent.click(startButton);
+    expect(mockStartGame).toHaveBeenCalled();
   });
 });
