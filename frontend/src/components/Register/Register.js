@@ -50,7 +50,7 @@ function Register({ onRegister, onLogin }) {
     setLoading(true);
     try {
       await authRegister(username.trim(), email.trim(), password);
-      const tokenData = await authLogin(username.trim(), password);
+      await authLogin(username.trim(), password);
       const user = await getMe();
       login(user);
       navigate("/dashboard");
@@ -139,7 +139,7 @@ function Register({ onRegister, onLogin }) {
             onClick={() => navigate("/")}
             disabled={loading}
           >
-            ? "Already have an account? Log in"
+            Already have an account? Log in
           </button>
         </div>
       </form>

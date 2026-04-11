@@ -35,3 +35,9 @@
 ## Test execution demonstration (~2 minutes)
 •	Quality and testing 
 
+---
+
+## Local environment for recording
+
+Everyone who appears in the video should be able to run the app on their own machine. Follow **[LOCAL_DEPLOYMENT_AND_VIDEO.md](./LOCAL_DEPLOYMENT_AND_VIDEO.md)** for install order, `.env` files, `REACT_APP_API_URL`, running **pytest** and **npm test**, and tips for **two-player demos** and the **`?screenshots`** UI strip.
+

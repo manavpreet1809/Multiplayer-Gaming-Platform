@@ -78,7 +78,7 @@ REFRESH_TOKEN_EXPIRE_DAYS=7
 ### Run the server
 
 ```bash
-uvicorn src.app.main:app --reload
+PYTHONPATH=src uvicorn app.main:app --reload
 ```
 
 API will be available at `http://localhost:8000`.  
@@ -295,7 +295,9 @@ npm install axios
 
 ### Token storage
 
-Store both tokens in memory (a React context or Zustand store). Do **not** store them in `localStorage` it is accessible to JavaScript and vulnerable to XSS attacks.
+Store both tokens in memory (a React context or Zustand store). Do **not** store them in `localStorage` — it is accessible to JavaScript and vulnerable to XSS attacks.
+
+**This repo’s React client** keeps tokens in memory and mirrors them to **`sessionStorage`** so a full page refresh in the same tab can restore the session; tokens are cleared when the tab closes. That is still JavaScript-visible (avoid `localStorage` for long-lived secrets across tabs).
 
 ```ts
 // src/auth/tokenStore.ts

@@ -1,9 +1,9 @@
-import { useState, useContext } from "react";
-import { AuthProvider, AuthContext } from "./context/AuthContext";
+import { useContext } from "react";
+import { AuthContext } from "./context/AuthContext";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import Profile from "./components/Profile";
+import ProfilePage from "./components/Profile/ProfilePage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import GameBoardDemo from "./components/GameBoardDemo";
 import DashboardPage from "./components/DashboardPage/DashboardPage";
@@ -16,11 +16,10 @@ import GamePage from "./components/GamePage/GamePage";
 import ChatPage from "./components/ChatPage/ChatPage";
 import ScreenshotPage from "./ScreenshotPage";
 import { useNavigate, Routes, Route } from "react-router-dom";
-import { login as authLogin } from "./services/authService";
-import { getMe } from "./services/authService";
+import { login as authLogin, getMe } from "./services/authService";
 import "./App.css";
 import ResetPassword from "./components/ResetPassword";
-import Leaderboard from "./components/Leaderboard";
+import LeaderboardPage from "./components/Leaderboard/LeaderboardPage";
 
 // Render screenshot page when ?screenshots is in the URL
 const isScreenshotMode = new URLSearchParams(window.location.search).has(
@@ -28,7 +27,6 @@ const isScreenshotMode = new URLSearchParams(window.location.search).has(
 );
 
 function App() {
-  const [view, setView] = useState("login");
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
@@ -37,11 +35,10 @@ function App() {
   }
 
   const handleLogin = async (identifier, password) => {
-    const data = await authLogin(identifier, password);
+    await authLogin(identifier, password);
     const user = await getMe();
 
     login(user);
-    console.log(user);
     navigate("/dashboard");
   };
 
@@ -52,14 +49,6 @@ function App() {
   const handleRegister = () => {
     navigate("/register");
   };
-
-  if (view === "demo") {
-    return (
-      <ErrorBoundary>
-        <GameBoardDemo />
-      </ErrorBoundary>
-    );
-  }
 
   return (
     <ErrorBoundary>
@@ -144,7 +133,7 @@ function App() {
           path="/profile"
           element={
             <ProtectedRoute>
-              <Profile />
+              <ProfilePage />
             </ProtectedRoute>
           }
         />
@@ -152,7 +141,7 @@ function App() {
           path="/leaderboard"
           element={
             <ProtectedRoute>
-              <Leaderboard gameTypes={["Chess", " TicTacToe"]} />
+              <LeaderboardPage />
             </ProtectedRoute>
           }
         />

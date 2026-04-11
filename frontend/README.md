@@ -8,37 +8,42 @@ React-based client UI for the OMG gaming platform. Supports **Chess** and **Tic-
 cd frontend
 npm install
 npm start        # dev server at http://localhost:3000
-npm test         # run all tests
-npm run build    # production build
+npm test         # interactive watch mode; CI-style once: npm test -- --watchAll=false
+npm run build    # production build → build/
 ```
+
+Optional **`frontend/.env`**:
+
+```bash
+# Defaults to http://localhost:8000 if omitted
+REACT_APP_API_URL=http://127.0.0.1:8000
+```
+
+Restart the dev server after changing env files.
 
 ## Tech Stack
 
 - **React 19** (Create React App)
+- **react-router-dom** v7 (in-app routing)
 - **Roboto** font (Google Fonts, loaded globally)
 - **Plain CSS** (component-scoped, no framework)
-- **Jest + React Testing Library** for tests
+- **Jest + React Testing Library** for tests (see `setupTests.js` and `package.json` `jest` keys for React Router / `TextEncoder` compatibility)
 
 ## Project Structure
 
 ```
 frontend/src/
-├── components/
-│   ├── Login/              AUTH-02 / UC-03 — Log in form
-│   ├── Register/           AUTH-01 / UC-02 — Account registration form
-│   ├── ResetPassword/      AUTH-03        — Password reset flow
-│   ├── Dashboard/          UC-04          — Authenticated landing page
-│   ├── GameList/           UC-01          — Browse available games
-│   ├── GameLobby/          UC-05          — Pre-game waiting room
-│   ├── Chat/               UC-07          — Chat messages panel
-│   ├── Profile/            UC-09          — Player stats and info
-│   ├── Leaderboard/        UC-12          — Rankings table
-│   ├── GameResults/        UC-14          — Post-game results screen
-│   ├── ChessBoard/         UC-13 UI       — Chess board visual component
-│   └── TicTacToeBoard/     UC-13 UI       — Tic-Tac-Toe board visual component
-├── App.js                  Root component
-├── App.css
-├── index.js                Entry point
+├── components/             Feature folders (each with .js, .css, tests, often index.js)
+│   ├── Login, Register, ResetPassword, Dashboard, GameList, GameLobby, Chat, …
+│   ├── *Page/              Routed pages (e.g. DashboardPage, LobbyPage, GamePage)
+│   ├── ChessBoard/, TicTacToeBoard/, GameBoardDemo/, ErrorBoundary/, …
+├── context/                AuthContext (+ tests)
+├── services/               authService, gameService (+ __mocks__/gameService.js for Jest)
+├── test/                   renderWithAuth / renderWithRouter helpers
+├── adapters/               game state → board props
+├── App.js                  Routes, protected routes, screenshot mode (?screenshots)
+├── ScreenshotPage.js       Long UI strip for captures / design review
+├── index.js                Entry (BrowserRouter + AuthProvider)
 └── index.css               Global styles (Roboto import)
 ```
 
@@ -56,7 +61,7 @@ ComponentName/
 
 ### Props-Driven / No Baked-In Logic
 
-All components are **UI shells**. They receive data and callbacks via props and contain no routing, authentication, or game logic. This allows the backend team to wire them up with any state management or routing solution.
+Most presentational components are **props-driven shells** (no embedded API calls). **`App.js`**, **`*Page` components**, and **`AuthContext`** own routing, auth session, and service calls. Board and lobby pieces stay visual / callback-driven for clarity.
 
 ### Conditional Rendering
 
@@ -198,16 +203,18 @@ Optional features (nav links, action buttons) only render when their correspondi
 
 **Use case**: UC-09 — View Profile
 
+Reads **`AuthContext.user`** for username, email, and nested stats when used in the real app. Optional props override display when context has no user (e.g. **`ScreenshotPage`**).
+
 | Prop | Type | Description |
 |------|------|-------------|
-| `username` | `string` | Player's username |
-| `email` | `string` | Player's email |
-| `generalStats` | `{ gamesPlayed, wins, losses, ties }` | Overall stats |
-| `gameStats` | `[{ gameType, gamesPlayed, wins, losses, rank, mmr }]` | Per-game stats |
+| `username` | `string` | Optional display fallback if `user` missing in context |
+| `email` | `string` | Optional display fallback if `user` missing in context |
+| `generalStats` | `{ gamesPlayed, wins, losses, ties }` | Overall stats (props or inferred from `user.stats.overall`) |
+| `gameStats` | `[{ gameType, gamesPlayed, wins, losses, ties?, rank, mmr }]` | Per-game stats (props or inferred from `user.stats.games`) |
 | `onEditSettings()` | `function` | Navigate to account settings |
 | `onBack()` | `function` | Return to dashboard |
 
-**Features**: Info card, stat grid, per-game stats table, "no games played" state.
+**Features**: Info card, stat grid, per-game stats table (only games with `gamesPlayed > 0`), "no games played" state.
 
 ---
 
@@ -220,11 +227,11 @@ Optional features (nav links, action buttons) only render when their correspondi
 | `gameTypes` | `string[]` | Available game type tabs (e.g. `["Chess", "Tic-Tac-Toe", "Overall"]`) |
 | `selectedGameType` | `string` | Active tab |
 | `onSelectGameType(type)` | `function` | Switch leaderboard |
-| `rankings` | `[{ rank, username, tier, mmr, wins, losses }]` | Leaderboard entries |
+| `rankings` | `[{ place, username, tier, mmr, wins, losses, ties?, rank? }]` | Rows from API: **`place`** is standings position; legacy **`rank`** may mean tier only |
 | `currentUsername` | `string` | Local player (to highlight their row) |
 | `onBack()` | `function` | Return to dashboard |
 
-**Features**: Game-type tabs, ranking table, current-player highlight, unranked message.
+**Features**: Game-type tabs, table columns `#` / W-L-T, current-player highlight, empty state when no rankings.
 
 ---
 
@@ -290,11 +297,9 @@ Renders the default starting position when no `board` prop is provided.
 
 ---
 
-## Integration Notes
+## Integration notes
 
-These components are designed to be wired up by the backend/integration team:
-
-1. **Routing**: No router is installed yet. Add `react-router-dom` and map components to routes.
-2. **State management**: Components are stateless (aside from form inputs). Add Context, Redux, or similar to manage auth sessions and game state.
-3. **API calls**: Pass async functions as callback props (e.g., `onLogin` should call the auth API and throw on failure).
-4. **Game logic**: Board components only render state and forward clicks. Move validation, turn management, and win detection belong in the backend / game engine layer.
+1. **Routing**: `BrowserRouter` and routes live in `index.js` / `App.js`. Use `MemoryRouter` in tests (`renderWithAuth` in `src/test/testUtils.js`).
+2. **Auth**: `AuthProvider` + `sessionStorage`-backed tokens in `services/authService.js`.
+3. **Games**: `services/gameService.js` (REST + WebSocket helpers) — Jest uses `src/services/__mocks__/gameService.js` so partial mocks do not break other tests.
+4. **Game logic**: Board components render state and forward clicks; validation and engine rules stay on the server.

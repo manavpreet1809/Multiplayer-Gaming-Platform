@@ -54,6 +54,10 @@ export function leaveGame(gameId) {
   return authFetch(`/games/${gameId}/leave`, { method: 'POST' });
 }
 
+export function getLeaderboard(gameType = 'overall') {
+  return authFetch(`/games/leaderboard?game_type=${encodeURIComponent(gameType)}`);
+}
+
 // ─── WebSocket helpers ────────────────────────────────────────────────
 
 /**
@@ -71,8 +75,11 @@ export async function createGameWebSocket(gameId, onMessage, onOpen, onClose, on
   if (!token) {
     throw new Error('Not authenticated. Please log in again.');
   }
-  const ws = new WebSocket(`${WS_BASE}/games/ws/${gameId}?token=${encodeURIComponent(token)}`);
-  ws.onopen = () => onOpen && onOpen();
+  const ws = new WebSocket(`${WS_BASE}/games/ws/${gameId}`);
+  ws.onopen = () => {
+    ws.send(JSON.stringify({ type: 'auth', token }));
+    if (onOpen) onOpen();
+  };
   ws.onmessage = (e) => {
     try {
       onMessage(JSON.parse(e.data));
@@ -95,6 +102,16 @@ export function sendMove(ws, movePayload) {
 }
 
 /**
+ * Request legal moves for the piece at (row, col) over the game WebSocket.
+ * Server responds with a "legal_moves" message.
+ */
+export function sendSelectPiece(ws, row, col) {
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    ws.send(JSON.stringify({ type: 'select_piece', position: { row, col } }));
+  }
+}
+
+/**
  * Send a lobby/game chat message over the game WebSocket.
  */
 export function sendGameChat(ws, text) {
@@ -111,8 +128,11 @@ export async function createGlobalChatWebSocket(onMessage, onOpen, onClose, onEr
   if (!token) {
     throw new Error('Not authenticated. Please log in again.');
   }
-  const ws = new WebSocket(`${WS_BASE}/games/chat/global?token=${encodeURIComponent(token)}`);
-  ws.onopen = () => onOpen && onOpen();
+  const ws = new WebSocket(`${WS_BASE}/games/chat/global`);
+  ws.onopen = () => {
+    ws.send(JSON.stringify({ type: 'auth', token }));
+    if (onOpen) onOpen();
+  };
   ws.onmessage = (e) => {
     try {
       onMessage(JSON.parse(e.data));

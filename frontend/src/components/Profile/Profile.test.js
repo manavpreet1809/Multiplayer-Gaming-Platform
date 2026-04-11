@@ -1,61 +1,57 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import Profile from './Profile';
 import { AuthContext } from '../../context/AuthContext';
 
-const mockNavigate = jest.fn();
+const userWithStats = {
+  username: 'pat',
+  email: 'pat@example.com',
+  stats: {
+    overall: { games_played: 4, wins: 2, losses: 1, ties: 1, mmr: 1015, rank: 'Bronze' },
+    games: {
+      chess: { games_played: 2, wins: 1, losses: 1, ties: 0, mmr: 1015, rank: 'Bronze' },
+      tictactoe: { games_played: 2, wins: 1, losses: 0, ties: 1, mmr: 1015, rank: 'Bronze' },
+    },
+  },
+};
 
-jest.mock('react-router-dom', () => ({
-    useNavigate: () => mockNavigate,
-}), { virtual: true });
+function renderProfile(ctxUser = userWithStats, profileProps = {}) {
+  return render(
+    <MemoryRouter>
+      <AuthContext.Provider
+        value={{ user: ctxUser, login: jest.fn(), logout: jest.fn(), restoring: false }}
+      >
+        <Profile {...profileProps} />
+      </AuthContext.Provider>
+    </MemoryRouter>,
+  );
+}
 
-describe('Profile component', () => {
-    beforeEach(() => {
-        jest.clearAllMocks();
-    });
+describe('Profile', () => {
+  test('shows overall stats from context user', () => {
+    renderProfile();
+    expect(screen.getByText('pat')).toBeInTheDocument();
+    expect(screen.getByText('4')).toBeInTheDocument();
+    const winsStat = screen.getByText('Wins').closest('.profile-stat');
+    expect(within(winsStat).getByText('2')).toBeInTheDocument();
+  });
 
-    function renderProfile(props = {}) {
-        return render(
-            <AuthContext.Provider
-                value={{ user: { username: 'TestUser', email: 'testuser@example.com' }, login: jest.fn(), logout: jest.fn() }}
-            >
-                <Profile {...props} />
-            </AuthContext.Provider>
-        );
-    }
+  test('shows per-game table only for games with plays', () => {
+    renderProfile();
+    expect(screen.getByText('Chess')).toBeInTheDocument();
+    expect(screen.getByText('Tic-Tac-Toe')).toBeInTheDocument();
+  });
 
-    test('renders profile heading and user information', () => {
-        renderProfile();
-
-        expect(screen.getByText(/player profile/i)).toBeInTheDocument();
-        expect(screen.getByText(/^TestUser$/i)).toBeInTheDocument(); // FIXED
-        expect(screen.getByText(/testuser@example.com/i)).toBeInTheDocument();
-    });
-
-    test('renders profile labels correctly', () => {
-        renderProfile();
-
-        expect(screen.getByText(/username/i)).toBeInTheDocument();
-        expect(screen.getByText(/email/i)).toBeInTheDocument();
-    });
-
-    test('displays stats section', () => {
-        renderProfile();
-
-        expect(screen.getByText(/overall stats/i)).toBeInTheDocument();
-    });
-
-    test('shows empty stats message when no data', () => {
-        renderProfile();
-
-        expect(screen.getByText(/no games played yet/i)).toBeInTheDocument();
-    });
-
-    test('calls onBack when back button is clicked', () => {
-        renderProfile();
-
-        fireEvent.click(screen.getByRole('button', { name: /back to dashboard/i }));
-
-        expect(mockNavigate).toHaveBeenCalledWith('/dashboard');
-    });
+  test('shows no games message when overall games_played is zero', () => {
+    const u = {
+      ...userWithStats,
+      stats: {
+        overall: { games_played: 0, wins: 0, losses: 0, ties: 0, mmr: 1000, rank: 'Bronze' },
+        games: { chess: { games_played: 0, wins: 0, losses: 0, ties: 0, mmr: 1000, rank: 'Bronze' }, tictactoe: { games_played: 0, wins: 0, losses: 0, ties: 0, mmr: 1000, rank: 'Bronze' } },
+      },
+    };
+    renderProfile(u);
+    expect(screen.getByText(/no games played yet/i)).toBeInTheDocument();
+  });
 });

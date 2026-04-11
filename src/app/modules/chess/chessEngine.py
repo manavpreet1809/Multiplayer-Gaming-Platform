@@ -22,6 +22,8 @@ class ChessEngine(GameEngine):
             },
             "enPassantTarget": None,
             "halfmoveClock": 0,
+            "capturedByWhite": [],
+            "capturedByBlack": [],
         }
 
     def validateMove(self, state: dict, move: ChessMove) -> bool:
@@ -116,6 +118,15 @@ class ChessEngine(GameEngine):
 
         newColor = Color.BLACK if state["activeColor"] == Color.WHITE else Color.WHITE
 
+        captured_by_white = list(state.get("capturedByWhite", []))
+        captured_by_black = list(state.get("capturedByBlack", []))
+        if captured is not None:
+            code = captured.toCode()
+            if state["activeColor"] == Color.WHITE:
+                captured_by_white.append(code)
+            else:
+                captured_by_black.append(code)
+
         return {
             "board": board,
             "players": state["players"],
@@ -123,6 +134,8 @@ class ChessEngine(GameEngine):
             "castlingRights": castlingRights,
             "enPassantTarget": enPassantTarget,
             "halfmoveClock": halfmoveClock,
+            "capturedByWhite": captured_by_white,
+            "capturedByBlack": captured_by_black,
         }
 
     def isLegalMove(self, state: dict, move: ChessMove, piece: ChessPiece, target: Optional[ChessPiece]) -> bool:
@@ -324,6 +337,8 @@ class ChessEngine(GameEngine):
                 state["enPassantTarget"].col
             ),
             "halfmoveClock": state["halfmoveClock"],
+            "capturedByWhite": list(state.get("capturedByWhite", [])),
+            "capturedByBlack": list(state.get("capturedByBlack", [])),
         }
 
     def findKing(self, board: ChessBoard, color: Color) -> ChessPosition:
@@ -514,6 +529,8 @@ class ChessEngine(GameEngine):
             },
             "enPassantTarget": en_passant,
             "halfmoveClock": state["halfmoveClock"],
+            "capturedByWhite": list(state.get("capturedByWhite", [])),
+            "capturedByBlack": list(state.get("capturedByBlack", [])),
         }
 
     def deserializeMove(self, move_dict: dict, state: dict = None) -> ChessMove:
@@ -536,6 +553,53 @@ class ChessEngine(GameEngine):
             promotion = promo_map.get(move_dict["promotion"].upper())
 
         return ChessMove(from_pos, to_pos, promotion)
+
+    def getLegalMovesForSquare(self, state: dict, row: int, col: int) -> list:
+        """Return all legal destination squares for the piece at (row, col).
+
+        Coordinates use backend convention (row 0 = white's back rank).
+        Returns a list of {"row": int, "col": int} in frontend coordinates
+        (row 0 = rank 8) so the result can be sent directly to the client.
+        """
+        board = state["board"]
+        from_pos = ChessPosition(row, col)
+        piece = board.getPiece(from_pos)
+
+        if piece is None or piece.color != state["activeColor"]:
+            return []
+
+        test_state = self.cloneState(state)
+        test_state["activeColor"] = piece.color
+
+        moves = []
+        seen = set()
+
+        for to_row in range(8):
+            for to_col in range(8):
+                if to_row == row and to_col == col:
+                    continue
+
+                to_pos = ChessPosition(to_row, to_col)
+                move = ChessMove(from_pos, to_pos)
+
+                if self.validateMove(test_state, move):
+                    frontend_pos = (7 - to_row, to_col)
+                    if frontend_pos not in seen:
+                        seen.add(frontend_pos)
+                        moves.append({"row": frontend_pos[0], "col": frontend_pos[1]})
+                    continue
+
+                if piece.pieceType == PieceType.PAWN:
+                    last_row = 7 if piece.color == Color.WHITE else 0
+                    if to_row == last_row:
+                        promo_move = ChessMove(from_pos, to_pos, PieceType.QUEEN)
+                        if self.validateMove(test_state, promo_move):
+                            frontend_pos = (7 - to_row, to_col)
+                            if frontend_pos not in seen:
+                                seen.add(frontend_pos)
+                                moves.append({"row": frontend_pos[0], "col": frontend_pos[1]})
+
+        return moves
 
     def hasAnyLegalMove(self, state: dict, color: Color) -> bool:
         board = state["board"]

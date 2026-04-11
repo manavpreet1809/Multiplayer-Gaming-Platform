@@ -3,14 +3,32 @@
  *
  * Key detail: the /auth/login endpoint follows the OAuth2 spec and expects
  * application/x-www-form-urlencoded, NOT JSON.  All other endpoints use JSON.
+ *
+ * Tokens are kept in memory and mirrored to sessionStorage so a full page
+ * refresh can restore the session within the same browser tab.
  */
 
 const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
-// ─── Token storage (in-memory only — never localStorage) ────────────
+const STORAGE_ACCESS = 'seng300_auth_access';
+const STORAGE_REFRESH = 'seng300_auth_refresh';
+
+// ─── Token storage: memory + sessionStorage (tab session, survives refresh) ─
 
 let accessToken = null;
 let refreshToken = null;
+
+function readStoredTokens() {
+  try {
+    accessToken = sessionStorage.getItem(STORAGE_ACCESS);
+    refreshToken = sessionStorage.getItem(STORAGE_REFRESH);
+  } catch {
+    accessToken = null;
+    refreshToken = null;
+  }
+}
+
+readStoredTokens();
 
 export const getAccessToken = () => accessToken;
 export const getRefreshToken = () => refreshToken;
@@ -36,11 +54,25 @@ function isTokenExpired(token, leewaySeconds = 20) {
 export function setTokens(access, refresh) {
   accessToken = access;
   refreshToken = refresh;
+  try {
+    if (access) sessionStorage.setItem(STORAGE_ACCESS, access);
+    else sessionStorage.removeItem(STORAGE_ACCESS);
+    if (refresh) sessionStorage.setItem(STORAGE_REFRESH, refresh);
+    else sessionStorage.removeItem(STORAGE_REFRESH);
+  } catch {
+    /* ignore quota / private mode */
+  }
 }
 
 export function clearTokens() {
   accessToken = null;
   refreshToken = null;
+  try {
+    sessionStorage.removeItem(STORAGE_ACCESS);
+    sessionStorage.removeItem(STORAGE_REFRESH);
+  } catch {
+    /* ignore */
+  }
 }
 
 // ─── Helpers ────────────────────────────────────────────────────────

@@ -1,38 +1,24 @@
-import { render, screen } from '@testing-library/react';
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import ChessBoard from './ChessBoard';
 
-describe('ChessBoard component', () => {
-    test('renders chess board using role grid', () => {
-        render(<ChessBoard />);
-
-        const board = screen.getByRole('grid', { name: /chess board/i });
-        expect(board).toBeInTheDocument();
-    });
-
-    test('renders multiple squares (buttons)', () => {
-        render(<ChessBoard />);
-
-        const squares = screen.getAllByRole('button');
-        expect(squares.length).toBeGreaterThan(0);
-    });
-
-    test('renders chess pieces on the board', () => {
-        render(<ChessBoard />);
-
-        const pieces = document.querySelectorAll('.chess-piece');
-        expect(pieces.length).toBeGreaterThan(0);
-    });
-
-    test('displays player names correctly', () => {
-        render(<ChessBoard />);
-
-        expect(screen.getByText(/You/i)).toBeInTheDocument();
-        expect(screen.getByText(/Opponent\s*\(/i)).toBeInTheDocument();
-    });
-
-    test('displays current turn information', () => {
-        render(<ChessBoard />);
-
-        expect(screen.getByText(/turn/i)).toBeInTheDocument();
-    });
+describe('ChessBoard', () => {
+  test('renders grid and player labels', () => {
+    const onClick = jest.fn();
+    render(
+      <ChessBoard
+        currentPlayer="white"
+        isMyTurn
+        onSquareClick={onClick}
+        playerColor="white"
+        opponentName="Other"
+      />,
+    );
+    expect(screen.getByRole('grid', { name: /chess board/i })).toBeInTheDocument();
+    expect(screen.getByText(/you \(white\)/i)).toBeInTheDocument();
+    const squares = screen.getAllByRole('button');
+    expect(squares.length).toBeGreaterThanOrEqual(64);
+    fireEvent.click(squares[0]);
+    expect(onClick).toHaveBeenCalled();
+  });
 });

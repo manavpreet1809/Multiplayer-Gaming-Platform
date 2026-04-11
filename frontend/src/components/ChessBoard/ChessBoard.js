@@ -33,8 +33,39 @@ const PIECE_IMAGES = {
   p: B_Pawn,
 };
 
+/** Unicode symbols for captured-pieces strip (matches PIECE_IMAGES keys). */
+const PIECE_SYMBOLS = {
+  K: '♔',
+  Q: '♕',
+  R: '♖',
+  B: '♗',
+  N: '♘',
+  P: '♙',
+  k: '♚',
+  q: '♛',
+  r: '♜',
+  b: '♝',
+  n: '♞',
+  p: '♟',
+};
+
 const FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 const RANKS = [8, 7, 6, 5, 4, 3, 2, 1];
+
+function CapturedPieceThumb({ piece }) {
+  const src = PIECE_IMAGES[piece];
+  const isWhite = piece && piece === piece.toUpperCase();
+  if (src) {
+    return (
+      <img
+        className={`chess-captured-thumb ${isWhite ? 'chess-captured-thumb--white' : 'chess-captured-thumb--black'}`}
+        src={src}
+        alt={`${isWhite ? 'White' : 'Black'} ${PIECE_NAMES[piece.toUpperCase()] || 'piece'}`}
+      />
+    );
+  }
+  return <span className="chess-captured-fallback">{PIECE_SYMBOLS[piece] ?? piece}</span>;
+}
 
 /**
  * ChessBoard – visual board component (UC-13 UI).
@@ -125,10 +156,10 @@ function ChessBoard({
         </p>
       </div>
 
-      <div className="chess-captured chess-captured--opponent">
+      <div className="chess-captured chess-captured--opponent" aria-label="Pieces your opponent captured">
         {(playerColor === 'white' ? capturedByBlack : capturedByWhite).map((piece, i) => (
-          <span key={i} className="chess-captured-piece">
-            {PIECE_SYMBOLS[piece]}
+          <span key={`${piece}-${i}`} className="chess-captured-piece">
+            <CapturedPieceThumb piece={piece} />
           </span>
         ))}
       </div>
@@ -181,19 +212,18 @@ function ChessBoard({
           )}
         </div>
 
-        {/* File labels (bottom) */}
+        {/* File labels (bottom) — aligned to board columns via CSS Grid */}
         <div className="chess-file-labels">
-          <span className="chess-label-spacer" />
           {colIndices.map((ci) => (
             <span key={ci} className="chess-label">{displayCols[playerColor === 'black' ? 7 - ci : ci]}</span>
           ))}
         </div>
       </div>
 
-      <div className="chess-captured chess-captured--player">
+      <div className="chess-captured chess-captured--player" aria-label="Pieces you captured">
         {(playerColor === 'white' ? capturedByWhite : capturedByBlack).map((piece, i) => (
-          <span key={i} className="chess-captured-piece">
-            {PIECE_SYMBOLS[piece]}
+          <span key={`${piece}-${i}`} className="chess-captured-piece">
+            <CapturedPieceThumb piece={piece} />
           </span>
         ))}
       </div>

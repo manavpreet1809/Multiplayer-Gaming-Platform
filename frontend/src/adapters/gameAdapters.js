@@ -36,8 +36,10 @@ export function chessStateToProps(state, localPlayer, extra = {}) {
     selectedSquare: extra.selectedSquare ?? null,
     highlightedSquares: extra.highlightedSquares ?? [],
     lastMove: extra.lastMove ?? null,
-    capturedByWhite: extra.capturedByWhite ?? [],
-    capturedByBlack: extra.capturedByBlack ?? [],
+    capturedByWhite:
+      state?.capturedByWhite ?? extra.capturedByWhite ?? [],
+    capturedByBlack:
+      state?.capturedByBlack ?? extra.capturedByBlack ?? [],
   };
 }
 

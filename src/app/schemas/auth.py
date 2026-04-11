@@ -1,6 +1,6 @@
 import re
 from datetime import datetime
-from pydantic import BaseModel, EmailStr, field_validator
+from pydantic import BaseModel, EmailStr, Field, field_validator
 
 
 PASSWORD_RULES = (
@@ -59,6 +59,34 @@ class UserPublic(BaseModel):
     email: str | None = None
     full_name: str | None = None
     disabled: bool = False
+    stats: dict = Field(default_factory=lambda: {
+        "overall": {
+            "games_played": 0,
+            "wins": 0,
+            "losses": 0,
+            "ties": 0,
+            "mmr": 1000,
+            "rank": "Bronze",
+        },
+        "games": {
+            "chess": {
+                "games_played": 0,
+                "wins": 0,
+                "losses": 0,
+                "ties": 0,
+                "mmr": 1000,
+                "rank": "Bronze",
+            },
+            "tictactoe": {
+                "games_played": 0,
+                "wins": 0,
+                "losses": 0,
+                "ties": 0,
+                "mmr": 1000,
+                "rank": "Bronze",
+            },
+        },
+    })
 
 
 class UserInDB(UserPublic):
