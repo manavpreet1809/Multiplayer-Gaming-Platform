@@ -2,54 +2,87 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import ErrorBoundary from './ErrorBoundary';
 
-function Boom() {
-  throw new Error('Test explosion');
-}
+// Helper component that throws error
+const ProblemChild = ({ shouldThrow }) => {
+  if (shouldThrow) {
+    throw new Error('Test error');
+  }
+  return <div>Safe Component</div>;
+};
 
 describe('ErrorBoundary', () => {
-  const err = console.error;
-  beforeAll(() => {
-    console.error = jest.fn();
-  });
-  afterAll(() => {
-    console.error = err;
+  beforeEach(() => {
+    jest.spyOn(console, 'error').mockImplementation(() => {}); // suppress error logs
   });
 
-  test('renders children when no error', () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  test('renders children when no error occurs', () => {
     render(
       <ErrorBoundary>
-        <div>OK</div>
-      </ErrorBoundary>,
+        <ProblemChild shouldThrow={false} />
+      </ErrorBoundary>
     );
-    expect(screen.getByText('OK')).toBeInTheDocument();
+
+    expect(screen.getByText('Safe Component')).toBeInTheDocument();
   });
 
-  test('shows fallback on child error', () => {
+  test('displays fallback UI when an error is thrown', () => {
     render(
       <ErrorBoundary>
-        <Boom />
-      </ErrorBoundary>,
+        <ProblemChild shouldThrow={true} />
+      </ErrorBoundary>
     );
-    expect(screen.getByText(/something went wrong/i)).toBeInTheDocument();
-    expect(screen.getByText(/test explosion/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /try again/i })).toBeInTheDocument();
+
+    expect(screen.getByText('Something went wrong')).toBeInTheDocument();
+    expect(screen.getByText('Test error')).toBeInTheDocument();
   });
 
-  test('Try Again re-renders children after error', () => {
-    let shouldThrow = true;
-    function MaybeBoom() {
-      if (shouldThrow) throw new Error('boom');
-      return <div>Recovered</div>;
-    }
+  test('shows default error message if no error message is provided', () => {
+    const SilentErrorChild = () => {
+      throw new Error('');
+    };
 
     render(
       <ErrorBoundary>
-        <MaybeBoom />
-      </ErrorBoundary>,
+        <SilentErrorChild />
+      </ErrorBoundary>
     );
-    expect(screen.getByText(/something went wrong/i)).toBeInTheDocument();
-    shouldThrow = false;
-    fireEvent.click(screen.getByRole('button', { name: /try again/i }));
-    expect(screen.getByText('Recovered')).toBeInTheDocument();
+
+    expect(screen.getByText('An unexpected error occurred.')).toBeInTheDocument();
+  });
+
+  test('resets error state when "Try Again" is clicked', () => {
+    const { rerender } = render(
+      <ErrorBoundary>
+        <ProblemChild shouldThrow={true} />
+      </ErrorBoundary>
+    );
+
+    fireEvent.click(screen.getByText('Try Again'));
+
+    rerender(
+      <ErrorBoundary>
+        <ProblemChild shouldThrow={false} />
+      </ErrorBoundary>
+    );
+
+    expect(screen.getByText('Safe Component')).toBeInTheDocument();
+  });
+
+  test('calls componentDidCatch when error occurs', () => {
+    const spy = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    render(
+      <ErrorBoundary>
+        <ProblemChild shouldThrow={true} />
+      </ErrorBoundary>
+    );
+
+    expect(spy).toHaveBeenCalled();
+
+    spy.mockRestore();
   });
 });
