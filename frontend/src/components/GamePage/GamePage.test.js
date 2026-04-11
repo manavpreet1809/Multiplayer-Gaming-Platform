@@ -1,32 +1,127 @@
 import React from 'react';
-import { screen, waitFor } from '@testing-library/react';
-import { Routes, Route } from 'react-router-dom';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import GamePage from './GamePage';
-import { renderWithAuth } from '../../test/testUtils';
+import { AuthContext } from '../../context/AuthContext';
+import {
+  getGame,
+  createGameWebSocket,
+  leaveGame,
+} from '../../services/gameService';
 
-jest.mock('../../services/gameService');
+const mockNavigate = jest.fn();
 
-const gameService = require('../../services/gameService');
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
+  useParams: () => ({ gameId: '123' }),
+}));
+
+jest.mock('../../services/gameService', () => ({
+  getGame: jest.fn(),
+  createGameWebSocket: jest.fn(),
+  leaveGame: jest.fn(),
+  sendMove: jest.fn(),
+  sendGameChat: jest.fn(),
+  sendSelectPiece: jest.fn(),
+}));
+
+jest.mock('../ChessBoard/ChessBoard', () => () => <div>ChessBoard</div>);
+jest.mock('../TicTacToeBoard/TicTacToeBoard', () => () => <div>TicTacToeBoard</div>);
+jest.mock('../GameResults/GameResults', () => () => <div>GameResults</div>);
+jest.mock('../Chat/Chat', () => () => <div>Chat Component</div>);
 
 describe('GamePage', () => {
+  const renderPage = () =>
+    render(
+      <AuthContext.Provider value={{ user: { username: 'testuser' } }}>
+        <GamePage />
+      </AuthContext.Provider>
+    );
+
   beforeEach(() => {
-    gameService.getGame.mockRejectedValue(new Error('Game not found'));
-    gameService.createGameWebSocket.mockResolvedValue({ close: jest.fn(), send: jest.fn() });
-    gameService.leaveGame.mockResolvedValue(undefined);
-    gameService.sendMove.mockImplementation(() => {});
-    gameService.sendGameChat.mockImplementation(() => {});
-    gameService.sendSelectPiece.mockImplementation(() => {});
+    jest.clearAllMocks();
   });
 
-  test('shows error when getGame fails', async () => {
-    renderWithAuth(
-      <Routes>
-        <Route path="/game/:gameId" element={<GamePage />} />
-      </Routes>,
-      { initialEntries: ['/game/missing'] },
-    );
+  test('shows loading state initially', () => {
+    getGame.mockResolvedValue({});
+    createGameWebSocket.mockResolvedValue({ close: jest.fn() });
+
+    renderPage();
+
+    expect(screen.getByText(/Connecting to game/i)).toBeInTheDocument();
+  });
+
+  test('renders chess board when game type is chess', async () => {
+    getGame.mockResolvedValue({
+      game_type: 'chess',
+      state: { players: { white: 'testuser' }, activeColor: 'white' },
+    });
+
+    createGameWebSocket.mockResolvedValue({ close: jest.fn() });
+
+    renderPage();
+
     await waitFor(() => {
-      expect(screen.getByText(/game not found/i)).toBeInTheDocument();
+      expect(screen.getByText('ChessBoard')).toBeInTheDocument();
+    });
+  });
+
+  test('renders tic tac toe board when game type is tictactoe', async () => {
+    getGame.mockResolvedValue({
+      game_type: 'tictactoe',
+      state: { players: { X: 'testuser' }, currentPlayer: 'X' },
+    });
+
+    createGameWebSocket.mockResolvedValue({ close: jest.fn() });
+
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getByText('TicTacToeBoard')).toBeInTheDocument();
+    });
+  });
+
+  test('toggles chat panel when chat button is clicked', async () => {
+    getGame.mockResolvedValue({
+      game_type: 'chess',
+      state: { players: { white: 'testuser' }, activeColor: 'white' },
+    });
+
+    createGameWebSocket.mockResolvedValue({ close: jest.fn() });
+
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getByText('ChessBoard')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Chat'));
+    expect(screen.getByText('Chat Component')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('Close Chat'));
+    expect(screen.queryByText('Chat Component')).not.toBeInTheDocument();
+  });
+
+  test('calls leaveGame and navigates to dashboard when leaving', async () => {
+    getGame.mockResolvedValue({
+      game_type: 'chess',
+      state: { players: { white: 'testuser' }, activeColor: 'white' },
+    });
+
+    createGameWebSocket.mockResolvedValue({ close: jest.fn() });
+    leaveGame.mockResolvedValue();
+
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getByText('ChessBoard')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText(/Forfeit & Leave/i));
+
+    await waitFor(() => {
+      expect(leaveGame).toHaveBeenCalledWith('123');
+      expect(mockNavigate).toHaveBeenCalledWith('/dashboard');
     });
   });
 });
