@@ -8,6 +8,10 @@ target/
 .env
 *.env.local
 
+### python cache ###
+__pycache__/
+*.pyc
+
 ### IntelliJ IDEA ###
 .idea/
 out/

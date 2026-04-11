@@ -4,60 +4,83 @@ from contextlib import asynccontextmanager
 from pymongo import AsyncMongoClient
 
 # Import the app and modules to patch
+import app.main as main_module
 from app.main import app
-from app.db import validUser_mongo
+from app.db import mongo as validUser_mongo
+from app.db import usersRepo
+from app.db.ConnectionManager import manager
+from app.api import games as games_api
 from app.services import authServices
 
 @pytest.fixture(scope="session", autouse=True)
 def patch_lifespan():
     """
-    Patch the FastAPI lifespan to re-initialize the MongoDB client
-    inside the event loop that TestClient/FastAPI runs in.
-    This is to fix 'RuntimeError: Cannot use AsyncMongoClient in different event loop'
-    This error comes up if tests ran without re-initializing the MongoDB client.
+    Recreate Mongo objects in the test event loop.
+    This avoids cross-loop AsyncMongoClient errors.
     """
     
-    # Store the original lifespan context manager
+    # Keep the original lifespan and wrap it.
     original_lifespan = app.router.lifespan_context
+
+    # main.py awaits close_mongo_connection, but production function is sync.
+    # Provide an async test stub; individual tests can still monkeypatch it.
+    async def _test_close_mongo_connection():
+        return None
+
+    main_module.close_mongo_connection = _test_close_mongo_connection
 
     @asynccontextmanager
     async def new_lifespan_wrapper(app_instance) -> AsyncGenerator[None, None]:
-        # We are now inside the correct running loop.
-        
-        # 1. Initialize a new AsyncMongoClient in this loop
-        #    Use the same URL and DB name from the module
+        # Build a fresh client inside the running test loop.
         new_client = AsyncMongoClient(validUser_mongo.MONGODB_URL)
         new_db = new_client[validUser_mongo.DB_NAME]
         
-        # 2. Patch the module-level variables in validUser_mongo
-        #    so that create_indexes and other functions use the new client.
-        old_client = validUser_mongo.client
+        # Repoint db globals to the test-loop client.
         validUser_mongo.client = new_client
         validUser_mongo.db = new_db
-        validUser_mongo.users_collection = new_db["users"]
-        validUser_mongo.revoked_tokens_collection = new_db["revoked_tokens"]
+        users_collection = new_db["users"]
+        revoked_tokens_collection = new_db["revoked_tokens"]
 
-        # Patch close_mongo_connection to an async no-op since we close manually below.
-        # Must overwrite in both validUser_mongo (source) and main (where it's imported).
-        async def _noop(): pass
-        validUser_mongo.close_mongo_connection = _noop
-        import app.main
-        app.main.close_mongo_connection = _noop
-        
-        # 3. Patch authServices because it imports these collections directly
-        authServices.users_collection = validUser_mongo.users_collection
-        authServices.revoked_tokens_collection = validUser_mongo.revoked_tokens_collection
-        
+        # usersRepo and authServices keep direct references to collections.
+        usersRepo.users_collection = users_collection
+        usersRepo.revoked_tokens_collection = revoked_tokens_collection
+        authServices.users_collection = users_collection
+        authServices.revoked_tokens_collection = revoked_tokens_collection
+
         try:
-            # 4. Delegate to the original lifespan (which calls create_indexes)
+            # Run normal startup/shutdown work with patched objects.
             async with original_lifespan(app_instance) as state:
                 yield state
         finally:
-            # 5. Cleanup
-            # Note: validUser_mongo.close_mongo_connection() in main.py tries to close the client too,
-            # but usually fails to await it. We ensure proper closure here.
+            # Close the test-loop client cleanly.
             await new_client.close()
 
-    # Apply the patch
+    # Swap in the wrapper for tests.
     app.router.lifespan_context = new_lifespan_wrapper
     yield
+
+
+@pytest.fixture(autouse=True)
+def reset_backend_shared_state():
+    """Keep backend tests isolated by resetting shared in-memory state."""
+    storage = getattr(authServices.limiter, "_storage", None)
+    if storage and hasattr(storage, "reset"):
+        storage.reset()
+
+    games_api._games.clear()
+    games_api._lobby_codes.clear()
+    games_api._global_chat.clear()
+    games_api._global_ws.clear()
+    manager.active_connections.clear()
+
+    yield
+
+    storage = getattr(authServices.limiter, "_storage", None)
+    if storage and hasattr(storage, "reset"):
+        storage.reset()
+
+    games_api._games.clear()
+    games_api._lobby_codes.clear()
+    games_api._global_chat.clear()
+    games_api._global_ws.clear()
+    manager.active_connections.clear()
