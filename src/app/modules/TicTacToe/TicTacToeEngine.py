@@ -46,26 +46,28 @@ class TicTacToeEngine(GameEngine):
         return True
 
     def applyMove(self, state: dict, move: TicTacToeMove) -> dict:
+        if state is None or move is None:
+            return state
+
+        board = state["board"]
         pos = move.position
         player = state["currentPlayer"]
+
+
+        if board.getCell(pos) is None:
+            board.setCell(pos, player)
+
+        state["moves"] += 1
+
         players = state["players"]
 
-        # Clone the board so the original state is not mutated
-        new_board = TicTacToeBoard()
-        for r in range(3):
-            for c in range(3):
-                cell = state["board"].grid[r][c]
-                if cell is not None:
-                    new_board.grid[r][c] = cell
 
-        new_board.setCell(pos, player)
+        if player == players[0]:
+            state["currentPlayer"] = players[1]
+        else:
+            state["currentPlayer"] = players[0]
 
-        return {
-            "board": new_board,
-            "players": list(players),
-            "currentPlayer": players[1] if player == players[0] else players[0],
-            "moves": state["moves"] + 1,
-        }
+        return state
 
     def _symbolMap(self, state: dict) -> dict:
         """Build a mapping from player names to 'X'/'O'.
