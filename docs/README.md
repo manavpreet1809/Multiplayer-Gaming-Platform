@@ -1,6 +1,28 @@
-# Starter Documentation Files #
+# Documentation index
 
-## Design Diagrams Overview ##
+## Team and delivery
+
+| Document | Purpose |
+|----------|---------|
+| [LOCAL_DEPLOYMENT_AND_VIDEO.md](./LOCAL_DEPLOYMENT_AND_VIDEO.md) | **Local build** from scratch, env vars, running tests, and **video / demo** tips (multiplayer, screenshot mode). |
+| [videoplanningdoc.md](./videoplanningdoc.md) | Submission video segments and presenter roles. |
+| [project_status.md](./project_status.md) | Short status notes (design vs implementation). |
+| [team.md](./team.md) | Team listing. |
+| [Root README](../README.md) | Main setup: MongoDB, FastAPI, React, scripts, troubleshooting. |
+
+## Design and requirements
+
+| Area | Location |
+|------|----------|
+| Figma / wireframe notes | [figma-wireframe-spec.md](./figma-wireframe-spec.md) |
+| Platform core & auth integration | [platformCoreHowToUse/connectToAuth.md](./platformCoreHowToUse/connectToAuth.md) |
+| Use cases, sequences, state, structure | `docs/01 state/`, `docs/02 structure/`, `docs/03 useCases/`, `docs/04 sequence/` |
+
+---
+
+# Starter documentation (original brief)
+
+## Design diagrams overview ##
 
 The design diagrams in this directory are provided as starter references to help you reason about the system architecture and behavior. They are not guaranteed to be complete or optimal. You are expected to critically review, critique, and adapt these diagrams as part of your design work. If you change or replace any diagram, you should be able to explain why your version better represents the system.
 

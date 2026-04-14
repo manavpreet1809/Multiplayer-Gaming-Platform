@@ -1,0 +1,10 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+	<defs>
+		<image  width="32" height="32" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAgMAAAAOFJJnAAAAAXNSR0IB2cksfwAAAAxQTFRFAAAALgVKZwKJTwRqmuxYeAAAAAR0Uk5TAP///7MtQIgAAAC8SURBVHicY2RgYGC0PwAkgAy2rgIIAybiwN5l8B/IYLxwLjzg1wEg4+lB4wPLQIyX+w86TAMyGKoMGP6HgxTXa0MZ8rc3/IoBMVh/MQRuADEYQxheHwAxRKcyrFoDVvOA4akMWE0Aw2+wGvHna17lgEVCvVdDdL08MO0AAQb75w3PClAY8vfXQGyXf7Aawqhv+L0e4sIGhlUgBmOIVlnCa6DjgQ5keJ22gZFB1GsBw7L1a0BSQO+DpKAOAwA2O1EhxCzTgAAAAABJRU5ErkJggg=="/>
+	</defs>
+	<style>
+	</style>
+	<g id="Black">
+		<use id="Queen" href="#img1" x="0" y="0"/>
+	</g>
+</svg>
