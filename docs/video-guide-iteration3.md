@@ -19,17 +19,17 @@ This document turns the course **Product Showcase** and **Individual Technical D
 
 ### Time budget overview
 
-| Approx. time | Section |
-|--------------|---------|
-| 0:00 - 2:00 | Team introduction |
-| 2:00 - 3:00 | Setup and execution |
-| 3:00 - 5:00 | Multiplayer interface |
-| 5:00 - 7:00 | Matchmaking and lobby |
-| 7:00 - 8:00 | Stubbed network and database |
-| 8:00 - 9:00 | Sample games |
-| 9:00 - 11:00 | Design changes and integration |
-| 11:00 - 13:00 | Test execution |
-| 13:00 - 15:00 | Buffer or optional extras |
+| Approx. time  | Section                        |
+| ------------- | ------------------------------ |
+| 0:00 - 2:00   | Team introduction              |
+| 2:00 - 3:00   | Setup and execution            |
+| 3:00 - 5:00   | Multiplayer interface          |
+| 5:00 - 7:00   | Matchmaking and lobby          |
+| 7:00 - 8:00   | Stubbed network and database   |
+| 8:00 - 9:00   | Sample games                   |
+| 9:00 - 11:00  | Design changes and integration |
+| 11:00 - 13:00 | Test execution                 |
+| 13:00 - 15:00 | Buffer or optional extras      |
 
 ---
 
@@ -57,19 +57,6 @@ This document turns the course **Product Showcase** and **Individual Technical D
 - Follow the **README**: Python venv, `pip install`, Uvicorn at `127.0.0.1:8000`, `npm start` at `localhost:3000`.
 - Root **`.env`** and **`SECRET_KEY`** are required; do not read secrets aloud.
 - If you mention lobbies or live games: **one Uvicorn worker** so in-memory state stays consistent.
-
----
-
-### 3. Multiplayer interface (about 2 minutes)
-
-**On screen**
-
-- **Two browser windows**, or two dev ports (example: `3000` and `3002`), each logged in as a **different user**.
-
-**Say**
-
-- Different origins mean separate storage, so two real sessions.
-- Walk through something that proves two identities (dashboard, profile, or in-game sides).
 
 ---
 
@@ -218,12 +205,12 @@ Align times with the **final** uploaded cut. Example:
 
 ## Cross-reference to course rubric
 
-| Course asks for | Where in this guide |
-|-----------------|---------------------|
-| Group: user perspective | Sections 1-6 (flows before tests) |
-| Group: tests on screen | Section 8 |
-| Individual: contribution and integration | Main body + walkthrough |
-| Individual: real explanation, not narration | Depth checklist |
-| Optional: DB / network | Section 5 |
+| Course asks for                             | Where in this guide               |
+| ------------------------------------------- | --------------------------------- |
+| Group: user perspective                     | Sections 1-6 (flows before tests) |
+| Group: tests on screen                      | Section 8                         |
+| Individual: contribution and integration    | Main body + walkthrough           |
+| Individual: real explanation, not narration | Depth checklist                   |
+| Optional: DB / network                      | Section 5                         |
 
 If your TA gave a stricter template, follow that first; use this document for **content** only.
