@@ -16,13 +16,34 @@ class TicTacToeEngine(GameEngine):
         }
 
     def validateMove(self, state: dict, move: TicTacToeMove) -> bool:
+
+        if state is None or move is None:
+            return False
+
+        if "board" not in state or "currentPlayer" not in state:
+            return False
+
         board = state["board"]
+
+        if not hasattr(move, "position") or move.position is None:
+            return False
+
         pos = move.position
 
         if not (0 <= pos.row < 3 and 0 <= pos.col < 3):
             return False
 
-        return board.getCell(pos) is None
+        if pos.row > 2 or pos.col > 2:
+            return False
+
+        cell = board.getCell(pos)
+        if cell is not None:
+            return False
+
+        if board.getCell(pos) is not None:
+            return False
+
+        return True
 
     def applyMove(self, state: dict, move: TicTacToeMove) -> dict:
         pos = move.position
