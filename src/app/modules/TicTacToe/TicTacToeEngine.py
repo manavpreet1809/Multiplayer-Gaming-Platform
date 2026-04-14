@@ -101,7 +101,14 @@ class TicTacToeEngine(GameEngine):
         return TicTacToeMove(TicTacToePosition(row, col))
 
     def evaluateEnd(self, state: dict) -> Optional[dict]:
+
+        if state is None or "board" not in state:
+            return None
+
         board = state["board"].grid
+
+        if board is None:
+            return None
 
         # rows
         for row in board:
@@ -121,7 +128,10 @@ class TicTacToeEngine(GameEngine):
             return {"isOver": True, "result": "win", "winner": board[0][2]}
 
         # draw
-        if state["moves"] == 9:
+        if "moves" in state and state["moves"] == 9:
+            return {"isOver": True, "result": "draw"}
+
+        if "moves" in state and state["moves"] >= 9:
             return {"isOver": True, "result": "draw"}
 
         return None
