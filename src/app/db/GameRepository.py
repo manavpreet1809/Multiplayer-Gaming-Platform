@@ -94,4 +94,4 @@ class GameRepository:
     @staticmethod
     async def isSafeCode(code: str):
         conflict = await games_collection.find_one({ "code": code })
-        return conflict is None;
+        return conflict is None

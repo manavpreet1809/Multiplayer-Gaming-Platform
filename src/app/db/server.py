@@ -78,8 +78,6 @@ async def game_websocket(websocket: WebSocket, game_id: str, player_id: str):
                 if len(game.player_ids) == 1 and game.status == GameStatus.WAITING:
                     await GameRepository.killLobby(game_id)
 
-                # TODO: Forfeit the game if it is running
-
                 # Terminate the WebSocket
                 await websocket.close(code = 1000, reason = "Player initiated leave request")
                 

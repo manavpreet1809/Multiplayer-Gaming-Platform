@@ -25,7 +25,7 @@ async def createGame(
         )
     
     # Validate inputs
-    if visibility not in Visibility or player_count < 2 or player_count > 10: # TODO: Need MIN_PLAYERS, MAX_PLAYERS
+    if visibility not in Visibility or player_count < 2 or player_count > 10:
         raise HTTPException(
             status_code = status.HTTP_400_BAD_REQUEST,
             detail = "Invalid parameters"
@@ -37,7 +37,6 @@ async def createGame(
 
     # Return the game_id to the front-end; they will send a request to create a WebSocket
     # The lobby code is also returned for the user (regardless of the private/public setting)
-    # TODO: The WebSocket should only accept if the player is inside the game in the DB
     return
     {
         "success": True,
@@ -84,7 +83,7 @@ async def joinGame(
         )
 
     # Make sure the lobby is not full
-    if len(game.player_ids) == game.max_players: # TODO: max_players is not implemented
+    if len(game.player_ids) == game.max_players:
         raise HTTPException(
             status_code = status.HTTP_403_FORBIDDEN,
             detail = "Game is full"
@@ -94,7 +93,6 @@ async def joinGame(
     await GameRepository.addPlayer(game.game_id, current_user.user_id)
 
     # Return the game_id to the front-end; they will use it to request a WebSocket
-    # TODO: The WebSocket should only accept if the player is inside the game in the DB
     return
     {
         "success": True,
