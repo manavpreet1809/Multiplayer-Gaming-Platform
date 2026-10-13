@@ -1,13 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
-
 :root {
   /* Project color palette */
-  --color-primary: #662691;
-  --color-primary-dark: #4e1d6e;
-  --color-primary-light: #ebe8f5;
-  --color-secondary: #BEB8EB;
-  --color-accent: #ADFCF9;
-  --color-accent-teal: #ADFCF9;
+  --color-primary: #31583d;
+  --color-primary-dark: #24432e;
+  --color-primary-light: #edf2ee;
+  --color-secondary: #ced9d0;
+  --color-accent: #dcebe0;
+  --color-accent-teal: #dcebe0;
   --color-warning: #F8F4A6;
   --color-accent-yellow: #F8F4A6;
   --color-accent-red: #F56476;
@@ -29,18 +27,18 @@
   --color-border: #ccc;
 
   /* Translucent helpers */
-  --color-primary-indicator: rgba(102, 38, 145, 0.3);
+  --color-primary-indicator: rgba(49, 88, 61, 0.3);
   --color-warning-translucent: rgba(248, 244, 166, 0.5);
 
   /* Focus / shadow helpers (can't use var() inside rgba yet) */
-  --shadow-primary-focus: 0 0 0 2px rgba(102, 38, 145, 0.2);
-  --shadow-primary-sm: 0 2px 8px rgba(102, 38, 145, 0.15);
-  --shadow-primary-ring: 0 0 0 2px rgba(102, 38, 145, 0.3);
+  --shadow-primary-focus: 0 0 0 2px rgba(49, 88, 61, 0.2);
+  --shadow-primary-sm: 0 2px 8px rgba(49, 88, 61, 0.15);
+  --shadow-primary-ring: 0 0 0 2px rgba(49, 88, 61, 0.3);
 }
 
 body {
   margin: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
