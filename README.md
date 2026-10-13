@@ -1,11 +1,6 @@
 # Online Multiplayer Game Platform
 
-A SENG 300 group project at the University of Calgary. Players sign in, join
-lobbies, and play live turn-based matches.
-
-![Interactive game-board preview](docs/images/board-preview.png)
-
-The screenshot shows the local board preview, not a live multiplayer session.
+A multiplayer platform for account management, game lobbies, matchmaking, and turn-based play. Built as a SENG 300 group project at the University of Calgary, it connects a React interface to a FastAPI backend that manages player actions and match state.
 
 ## Architecture
 
