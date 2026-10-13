@@ -5,22 +5,14 @@ lobbies, and play live turn-based matches.
 
 **Built with:** Python, FastAPI, React, and MongoDB.
 
-## Highlights
+## The player flow
 
-- **Player accounts:** sign in and manage a profile.
-- **Matchmaking:** join lobbies and connect with other players.
-- **Live matches:** handle turns and game completion through the backend.
+Sign in → manage your profile → join a lobby → play a match.
 
-## Project structure
+React handles the interface, FastAPI handles accounts and game actions, and
+MongoDB stores user data. Active matches and lobbies stay in server memory.
 
-```text
-src/        FastAPI backend and backend tests
-frontend/   React interface and frontend tests
-scripts/    Local development helpers
-docs/       Team documentation and demo instructions
-```
-
-## Run locally
+## Bring up the game
 
 Requires Python 3.11+, Node.js 20+, and MongoDB. Use Chrome, Firefox, or Edge.
 
@@ -46,6 +38,8 @@ npm start
 Open [localhost:3000](http://localhost:3000).
 See the [setup guide](docs/LOCAL_DEPLOYMENT_AND_VIDEO.md) for environment values
 and Windows instructions.
+
+## Before merging changes
 
 Run backend tests with `PYTHONPATH=src python -m pytest src/app/test -q`.
 Run frontend tests with `npm test -- --watchAll=false` from `frontend/`.
