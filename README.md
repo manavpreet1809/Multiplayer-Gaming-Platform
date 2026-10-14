@@ -1,4 +1,4 @@
-# Online Multiplayer Game Platform
+# Multiplayer Gaming Platform
 
 A multiplayer platform for account management, game lobbies, matchmaking, and turn-based play. Built as a SENG 300 group project at the University of Calgary, it connects a React interface to a FastAPI backend that manages player actions and match state.
 
